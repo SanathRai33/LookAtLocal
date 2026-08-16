@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEmergency } from '../../../hooks/useEmergency';
+import { useEmergency } from '../../hooks/useEmergency';
 import { ChevronLeft, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 
 const emergencyTypes = [

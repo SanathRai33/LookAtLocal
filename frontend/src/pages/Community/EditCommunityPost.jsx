@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useCommunity } from '../../../hooks/useCommunity';
-import { useAuth } from '../../../context/AuthContext';
+import { useCommunity } from '../../hooks/useCommunity';
+import { useAuth } from '../../context/AuthContext';
 import { ChevronLeft, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 
 const postTypes = [
