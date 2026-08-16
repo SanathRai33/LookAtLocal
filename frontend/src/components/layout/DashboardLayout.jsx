@@ -7,7 +7,7 @@ const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="min-h-screen bg-background-light dark:bg-dark-200 transition-colors duration-200">
+    <div className="min-h-screen transition-colors duration-200 bg-background-light dark:bg-dark-200">
       <Navbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
       <div className="flex pt-16">
         {/* <Sidebar isOpen={sidebarOpen} /> */}

@@ -1,113 +1,231 @@
-import React, { useState, useMemo } from 'react';
-import Breadcrumb from '../../components/common/Breadcrumb';
-import ServicesHeader from './components/ServicesHeader';
-import CategoryFilter from './components/CategoryFilter';
-import ServiceGrid from './components/ServiceGrid';
-import Pagination from './components/Pagination';
-import { mockServices, categories } from './data/mockServices';
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import Breadcrumb from "../../components/common/Breadcrumb";
+import ServicesHeader from "./components/ServicesHeader";
+import CategoryFilter from "./components/CategoryFilter";
+import ServiceGrid from "./components/ServiceGrid";
+import Pagination from "./components/Pagination";
+import { useServices } from "../../hooks/useServices";
+import { useCategories } from "../../hooks/useCategories";
 
 const Services = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [activeCategory, setActiveCategory] = useState('all');
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+  const { services, loading, pagination, getServices } = useServices();
+  const { categories, getCategories } = useCategories();
 
-    // Filter services based on search and category
-    const filteredServices = useMemo(() => {
-        let filtered = mockServices;
+  const [searchParams, setSearchParams] = useSearchParams();
 
-        // Filter by category
-        if (activeCategory !== 'all') {
-            const categoryMap = {
-                'plumbing': 'Plumbing',
-                'electrical': 'Electrical',
-                'cleaning': 'Cleaning',
-                'carpentry': 'Carpentry',
-                'painting': 'Painting',
-                'ac-repair': 'AC Repair',
-                'tutoring': 'Tutoring',
-                'beauty': 'Beauty'
-            };
-            filtered = filtered.filter(
-                service => service.category === categoryMap[activeCategory]
-            );
-        }
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("search") || ""
+  );
 
-        // Filter by search
-        if (searchQuery.trim()) {
-            const query = searchQuery.toLowerCase().trim();
-            filtered = filtered.filter(
-                service =>
-                    service.name.toLowerCase().includes(query) ||
-                    service.title.toLowerCase().includes(query) ||
-                    service.category.toLowerCase().includes(query) ||
-                    service.description.toLowerCase().includes(query) ||
-                    service.provider.name.toLowerCase().includes(query) ||
-                    service.tags.some(tag => tag.toLowerCase().includes(query))
-            );
-        }
+  const [filters, setFilters] = useState({
+    pricingType: searchParams.get("pricingType") || "",
+    minPrice: searchParams.get("minPrice") || "",
+    maxPrice: searchParams.get("maxPrice") || "",
+    isNegotiable: searchParams.get("isNegotiable") || "",
+  });
 
-        return filtered;
-    }, [activeCategory, searchQuery]);
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const activeCategory = searchParams.get("categoryId") || "all";
+  const sortBy = searchParams.get("sort") || "newest";
 
-    // Pagination
-    const totalPages = Math.ceil(filteredServices.length / itemsPerPage);
-    const paginatedServices = useMemo(() => {
-        const start = (currentPage - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        return filteredServices.slice(start, end);
-    }, [filteredServices, currentPage]);
+  const itemsPerPage = 10;
 
-    // Reset page when filters change
-    const handleFilterChange = (category) => {
-        setActiveCategory(category);
-        setCurrentPage(1);
+  useEffect(() => {
+    getCategories({
+      module: "SERVICE",
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchServices();
+  }, [
+    currentPage,
+    activeCategory,
+    sortBy,
+    searchParams.get("search"),
+    searchParams.get("pricingType"),
+    searchParams.get("minPrice"),
+    searchParams.get("maxPrice"),
+    searchParams.get("isNegotiable"),
+  ]);
+
+  useEffect(() => {
+    setSearchQuery(searchParams.get("search") || "");
+
+    setFilters({
+      pricingType: searchParams.get("pricingType") || "",
+      minPrice: searchParams.get("minPrice") || "",
+      maxPrice: searchParams.get("maxPrice") || "",
+      isNegotiable: searchParams.get("isNegotiable") || "",
+    });
+  }, [searchParams]);
+
+  const fetchServices = async () => {
+    const params = {
+      page: currentPage,
+      limit: itemsPerPage,
+      sort: sortBy,
     };
 
-    const handleSearchChange = (e) => {
-        setSearchQuery(e.target.value);
-        setCurrentPage(1);
-    };
+    const search = searchParams.get("search");
+    const pricingType = searchParams.get("pricingType");
+    const minPrice = searchParams.get("minPrice");
+    const maxPrice = searchParams.get("maxPrice");
+    const isNegotiable = searchParams.get("isNegotiable");
 
-    // Breadcrumb items
-    const breadcrumbItems = [
-        { label: 'Home', path: '/' },
-        { label: 'Local Services' }
-    ];
+    if (search?.trim()) {
+      params.search = search.trim();
+    }
 
-    return (
-        <div className="min-h-screen py-6 bg-gray-50 dark:bg-slate-900 md:py-8">
-            <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                {/* Breadcrumb */}
-                <div className="mb-6">
-                    <Breadcrumb items={breadcrumbItems} />
-                </div>
+    if (activeCategory !== "all") {
+      params.categoryId = activeCategory;
+    }
 
-                {/* Header */}
-                <ServicesHeader
-                    searchQuery={searchQuery}
-                    setSearchQuery={handleSearchChange}
-                    totalCount={filteredServices.length}
-                />
+    if (pricingType) {
+      params.pricingType = pricingType;
+    }
 
-                {/* Category Filter */}
-                <CategoryFilter
-                    activeCategory={activeCategory}
-                    setActiveCategory={handleFilterChange}
-                />
+    if (minPrice !== null && minPrice !== "") {
+      params.minPrice = Number(minPrice);
+    }
 
-                {/* Service Grid */}
-                <ServiceGrid services={paginatedServices} variant="default" />
+    if (maxPrice !== null && maxPrice !== "") {
+      params.maxPrice = Number(maxPrice);
+    }
 
-                {/* Pagination */}
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                />
-            </div>
+    if (isNegotiable !== null && isNegotiable !== "") {
+      params.isNegotiable = isNegotiable === "true";
+    }
+
+    await getServices(params);
+  };
+
+  const updateParams = (updates) => {
+    const params = new URLSearchParams(searchParams);
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (
+        value === undefined ||
+        value === null ||
+        value === "" ||
+        value === "all"
+      ) {
+        params.delete(key);
+      } else {
+        params.set(key, String(value));
+      }
+    });
+
+    setSearchParams(params);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    updateParams({
+      search: searchQuery.trim(),
+      page: 1,
+    });
+  };
+
+  const handleCategoryChange = (categoryId) => {
+    updateParams({
+      categoryId,
+      page: 1,
+    });
+  };
+
+  const handleFilterChange = (name, value) => {
+    setFilters((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  };
+
+  const handleApplyFilters = () => {
+    updateParams({
+      pricingType: filters.pricingType,
+      minPrice: filters.minPrice,
+      maxPrice: filters.maxPrice,
+      isNegotiable: filters.isNegotiable,
+      page: 1,
+    });
+  };
+
+  const handleClearFilters = () => {
+    setSearchParams({});
+  };
+
+  const handlePageChange = (page) => {
+    updateParams({
+      page,
+    });
+  };
+
+  const handleSortChange = (sort) => {
+    updateParams({
+      sort,
+      page: 1,
+    });
+  };
+
+  const breadcrumbItems = [
+    {
+      label: "Home",
+      path: "/",
+    },
+    {
+      label: "Local Services",
+    },
+  ];
+
+  return (
+    <div className="min-h-screen py-6 bg-gray-50 dark:bg-slate-900 md:py-8">
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="mb-6">
+          <Breadcrumb items={breadcrumbItems} />
         </div>
-    );
+
+        <ServicesHeader
+          searchQuery={searchQuery}
+          setSearchQuery={handleSearchChange}
+          onSearch={handleSearchSubmit}
+          totalCount={pagination?.total || 0}
+          sortBy={sortBy}
+          onSortChange={handleSortChange}
+          loading={loading}
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onApplyFilters={handleApplyFilters}
+          onClearFilters={handleClearFilters}
+        />
+
+        <CategoryFilter
+          categories={categories}
+          activeCategory={activeCategory}
+          setActiveCategory={handleCategoryChange}
+          loading={loading}
+        />
+
+        <ServiceGrid
+          services={services}
+          loading={loading}
+          variant="default"
+        />
+
+        {pagination && pagination.totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={pagination.totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Services;

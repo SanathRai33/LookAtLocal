@@ -8,11 +8,6 @@ import ListingsHeader from './components/ListingsHeader';
 import ListingTabs from './components/ListingTabs';
 import ListingsList from './components/ListingsList';
 
-import {
-    listingTabs,
-    listings as initialListings,
-} from './data/listingsMockData';
-
 const MyListings = () => {
     const navigate = useNavigate();
 

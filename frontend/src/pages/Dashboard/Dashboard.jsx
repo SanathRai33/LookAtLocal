@@ -1,27 +1,35 @@
 import React from 'react';
-
 import HeroSection from './components/HeroSection';
 import CategorySection from './components/CategorySection';
-import FeaturedListings from './components/FeaturedListings';
+import LatestListings from './components/LatestListings';
 import PopularServices from './components/PopularServices';
-import Testimonials from './components/Testimonials';
+import HowLookAtLocalWorks from './components/HowLookAtLocalWorks';
 import CommunityCTA from './components/CommunityCTA';
+import { usePublicStats } from '../../hooks/usePublicStats';
 
 const Dashboard = () => {
+  const { stats: publicStats, publicData, loading, latestLoading, } = usePublicStats();
+
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900">
       <div className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8 xl:px-10">
-        <HeroSection />
+        <HeroSection cities={publicStats?.activeLocations} />
 
         <CategorySection />
 
-        <FeaturedListings />
+        <LatestListings
+          listings={publicData}
+          loading={latestLoading}
+        />
 
-        <PopularServices />
+        <HowLookAtLocalWorks />
+        
+        {/* <PopularServices /> */}
 
-        <Testimonials />
-
-        <CommunityCTA />
+        <CommunityCTA
+          stats={publicStats}
+          loading={loading}
+        />
       </div>
     </div>
   );

@@ -3,13 +3,22 @@
 @tailwind components;
 @tailwind utilities;
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  
+  scrollbar-width: none; 
+}
+
 @layer base {
   * {
     @apply border-border;
   }
   
   body {
-    @apply bg-background-light dark:bg-dark-200 text-text-primary dark:text-white transition-colors duration-200;
+    @apply transition-colors duration-200 bg-background-light dark:bg-dark-200 text-text-primary dark:text-white;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
   
@@ -23,7 +32,7 @@
   }
   
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+    @apply bg-gray-300 rounded-full dark:bg-gray-700;
   }
   
   ::-webkit-scrollbar-thumb:hover {
@@ -33,11 +42,11 @@
 
 @layer components {
   .container-custom {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply px-4 mx-auto max-w-7xl sm:px-6 lg:px-8;
   }
   
   .card {
-    @apply bg-white dark:bg-dark-100 rounded-2xl shadow-soft border border-border dark:border-gray-800 transition-all duration-200 hover:shadow-soft-lg;
+    @apply transition-all duration-200 bg-white border dark:bg-dark-100 rounded-2xl shadow-soft border-border dark:border-gray-800 hover:shadow-soft-lg;
   }
   
   .btn-primary {
@@ -53,7 +62,7 @@
   }
   
   .input-field {
-    @apply w-full px-4 py-3 bg-background-light dark:bg-dark-200 border border-border dark:border-gray-700 rounded-xl text-text-primary dark:text-white placeholder:text-text-secondary dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200;
+    @apply w-full px-4 py-3 transition-colors duration-200 border bg-background-light dark:bg-dark-200 border-border dark:border-gray-700 rounded-xl text-text-primary dark:text-white placeholder:text-text-secondary dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
   }
   
   .badge {
@@ -73,11 +82,11 @@
   }
   
   .badge-danger {
-    @apply bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-300;
+    @apply text-red-700 bg-red-100 dark:bg-red-950/50 dark:text-red-300;
   }
   
   .badge-success {
-    @apply bg-green-100 dark:bg-green-950/50 text-green-700 dark:text-green-300;
+    @apply text-green-700 bg-green-100 dark:bg-green-950/50 dark:text-green-300;
   }
 }
 

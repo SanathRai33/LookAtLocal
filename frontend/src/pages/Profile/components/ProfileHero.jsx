@@ -3,6 +3,15 @@ import { Link } from 'react-router-dom';
 import { Layers3, Plus } from 'lucide-react';
 
 const ProfileHero = ({ user }) => {
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  };
+
+  const defaultAvatar = `https://imgs.search.brave.com/-GCk2mBn6m74iB_ns6xH234FVFDhehynprQ7osz0fgs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/bWFnbmlmaWMuY29t/L3ByZW1pdW0tcGhv/dG8vYnJpZ2h0LWZ1/bi1jYXJ0b29uLWZh/Y2UtaGFwcHktbWFu/LXdpdGgtY2xlYW5f/MTI4MzU5NS0zMzE2/Mi5qcGc_c2VtdD1h/aXNfaHlicmlkJnc9/NzQwJnE9ODA`;
+
   return (
     <section className="relative overflow-hidden rounded-[28px] bg-gradient-to-r from-blue-600 via-blue-600 to-indigo-600">
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-indigo-800/20" />
@@ -18,49 +27,43 @@ const ProfileHero = ({ user }) => {
       <div className="relative z-10 px-6 py-8 sm:px-8 lg:px-10 lg:py-9">
         <div className="flex items-center gap-4">
           <img
-            src={user.avatar}
-            alt={user.name}
-            className="h-16 w-16 rounded-full border-2 border-white object-cover sm:h-18 sm:w-18"
+            src={user?.profileImageUrl || defaultAvatar}
+            alt={user?.fullName || 'User'}
+            className="object-cover w-16 h-16 border-2 border-white rounded-full sm:h-18 sm:w-18"
           />
 
           <div>
             <p className="text-sm text-blue-100 sm:text-base">
-              Good morning,
+              {getGreeting()},
             </p>
 
             <h1 className="flex items-center gap-2 text-2xl font-bold text-white sm:text-3xl">
-              {user.name}
+              {user?.fullName || 'User'}
               <span>👋</span>
             </h1>
           </div>
         </div>
 
         <p className="mt-5 text-base text-blue-50 sm:text-lg">
-          You have{' '}
-          <span className="font-semibold text-white">
-            {user.unreadMessages} unread messages
-          </span>{' '}
-          and{' '}
-          <span className="font-semibold text-white">
-            {user.newListingViews} new listing views
-          </span>{' '}
-          today.
+          Welcome to your profile dashboard. 
+          {/* {user?.isEmailVerified ? '✅' : '⚠️'}  */}
+          {/* {user?.isEmailVerified ? ' Email verified' : ' Please verify your email'} */}
         </p>
 
-        <div className="mt-6 flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 mt-6">
           <Link
-            to="/listings/create"
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-medium text-gray-950 transition hover:bg-gray-100 sm:text-base"
+            to="/create"
+            className="inline-flex items-center justify-center h-12 gap-2 px-5 text-sm font-medium transition bg-white rounded-xl text-gray-950 hover:bg-gray-100 sm:text-base"
           >
-            <Plus className="h-5 w-5" />
-            Post Listing
+            <Plus className="w-5 h-5" />
+            Post New
           </Link>
 
           <Link
-            to="/my-listings"
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/15 px-5 text-sm font-medium text-white backdrop-blur-sm transition hover:bg-white/20 sm:text-base"
+            to="/my-posts"
+            className="inline-flex items-center justify-center h-12 gap-2 px-5 text-sm font-medium text-white transition border rounded-xl border-white/30 bg-white/15 backdrop-blur-sm hover:bg-white/20 sm:text-base"
           >
-            <Layers3 className="h-5 w-5" />
+            <Layers3 className="w-5 h-5" />
             My Listings
           </Link>
         </div>

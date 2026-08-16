@@ -100,9 +100,9 @@ const NoticeCard = ({ notice }) => {
                 </p>
 
                 {/* Tags */}
-                {tags && tags.length > 0 && (
+                {tags && tags?.length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
-                        {tags.map((tag, index) => (
+                        {tags?.map((tag, index) => (
                             <span key={index} className="flex items-center gap-1 text-xs bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-400 px-2.5 py-1 rounded-full">
                                 <Tag className="w-3 h-3" />
                                 {tag}

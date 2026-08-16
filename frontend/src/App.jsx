@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
-import { AuthProvider } from './hooks/useAuth';
+import { AuthProvider } from './context/AuthContext';
 import Loader from './components/common/Loader';
 import { routes } from './routes';
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import ThemeToggle from './ThemeToggle';
 import {
@@ -29,6 +29,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   // Handle scroll effect
   useEffect(() => {
@@ -44,17 +45,19 @@ const Navbar = () => {
     setIsOpen(false);
   }, [location]);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    await logout();
+    setIsLoggingOut(false);
     setIsDropdownOpen(false);
+    navigate('/login');
   };
 
   const navLinks = [
     { to: '/services', label: 'Services', icon: Wrench },
     { to: '/rentals', label: 'Rentals', icon: ShoppingBag },
-    { to: '/marketplace', label: 'Buy & Sell', icon: ShoppingBag },
-    { to: '/properties', label: 'Spaces', icon: Building },
+    { to: '/products', label: 'Buy & Sell', icon: ShoppingBag },
+    { to: '/spaces', label: 'Spaces', icon: Building },
     { to: '/jobs', label: 'Jobs', icon: Briefcase },
     { to: '/community', label: 'Community', icon: Users },
     { to: '/emergency', label: 'Emergency', icon: AlertCircle },
@@ -66,8 +69,8 @@ const Navbar = () => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex justify-center ${isScrolled
-        ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-sm'
-        : 'bg-white dark:bg-slate-900'
+      ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-sm'
+      : 'bg-white dark:bg-slate-900'
       } border-b border-gray-200 dark:border-gray-800`}>
       <div className="px-4 max-auto max-w-[1420px] sm:px-6 lg:px-6">
         <div className="flex items-center justify-between h-16 gap-16">
@@ -94,8 +97,8 @@ const Navbar = () => {
                   key={link.to}
                   to={link.to}
                   className={`px-3 py-2 w-fit rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-1.5 ${isActive(link.to)
-                      ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50'
+                    ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50'
                     }`}
                 >
                   <link.icon className="w-4 h-4" />
@@ -124,10 +127,10 @@ const Navbar = () => {
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="flex items-center space-x-2 p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors duration-200"
                   >
-                    {user?.profileImage ? (
+                    {user?.profileImageUrl ? (
                       <img
-                        src={user.profileImage}
-                        alt={user.name}
+                        src={user.profileImageUrl}
+                        alt={user?.fullName}
                         className="object-cover w-8 h-8 border-2 border-blue-500 rounded-full"
                       />
                     ) : (
@@ -144,7 +147,7 @@ const Navbar = () => {
                     <div className="absolute right-0 z-50 w-56 py-2 mt-2 origin-top-right bg-white border border-gray-200 shadow-lg dark:bg-slate-800 rounded-xl dark:border-gray-700 animate-slide-down">
                       <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                         <p className="text-sm font-medium text-gray-900 dark:text-white">
-                          {user?.name || 'User'}
+                          {user?.fullName || 'User'}
                         </p>
                         <p className="text-xs text-gray-500 truncate dark:text-gray-400">
                           {user?.email || 'user@example.com'}
@@ -153,7 +156,7 @@ const Navbar = () => {
 
                       <Link
                         to="/profile"
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-200 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 cursor-pointer"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-200 cursor-pointer dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
                         onClick={() => setIsDropdownOpen(false)}
                       >
                         <User className="w-4 h-4 mr-3" />
@@ -162,7 +165,7 @@ const Navbar = () => {
 
                       <Link
                         to="/"
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-200 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 cursor-pointer"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-200 cursor-pointer dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
                         onClick={() => setIsDropdownOpen(false)}
                       >
                         <Home className="w-4 h-4 mr-3" />
@@ -171,7 +174,7 @@ const Navbar = () => {
 
                       <Link
                         to="/settings"
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-200 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 cursor-pointer"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-200 cursor-pointer dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
                         onClick={() => setIsDropdownOpen(false)}
                       >
                         <svg className="w-4 h-4 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -237,8 +240,8 @@ const Navbar = () => {
                     key={link.to}
                     to={link.to}
                     className={`flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${isActive(link.to)
-                        ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
+                      ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
                       }`}
                   >
                     <link.icon className="w-5 h-5 mr-3" />
@@ -257,7 +260,7 @@ const Navbar = () => {
                 </Link>
 
                 <Link
-                  to="/dashboard"
+                  to="/"
                   className="flex items-center px-4 py-3 text-sm font-medium text-gray-700 transition-all duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 cu"
                 >
                   <Home className="w-5 h-5 mr-3" />

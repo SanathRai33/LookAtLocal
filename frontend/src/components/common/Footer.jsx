@@ -1,15 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Facebook, 
-  Twitter, 
-  Instagram, 
-  Linkedin,
   MapPin,
   Phone,
   Mail,
   Heart
 } from 'lucide-react';
+import { FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/fa";
+
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -37,30 +35,23 @@ const Footer = () => {
                 <a 
                   href="#" 
                   className="p-2 text-gray-600 transition-all duration-200 bg-gray-100 rounded-lg dark:bg-slate-800 dark:text-gray-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50 dark:hover:text-blue-400"
-                  aria-label="Facebook"
-                >
-                  <Facebook className="w-4 h-4" />
-                </a>
-                <a 
-                  href="#" 
-                  className="p-2 text-gray-600 transition-all duration-200 bg-gray-100 rounded-lg dark:bg-slate-800 dark:text-gray-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50 dark:hover:text-blue-400"
                   aria-label="Twitter"
                 >
-                  <Twitter className="w-4 h-4" />
+                  <FaTwitter className="w-4 h-4" />
                 </a>
                 <a 
                   href="#" 
                   className="p-2 text-gray-600 transition-all duration-200 bg-gray-100 rounded-lg dark:bg-slate-800 dark:text-gray-400 hover:bg-pink-50 hover:text-pink-600 dark:hover:bg-pink-950/50 dark:hover:text-pink-400"
                   aria-label="Instagram"
                 >
-                  <Instagram className="w-4 h-4" />
+                  <FaInstagram className="w-4 h-4" />
                 </a>
                 <a 
                   href="#" 
                   className="p-2 text-gray-600 transition-all duration-200 bg-gray-100 rounded-lg dark:bg-slate-800 dark:text-gray-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50 dark:hover:text-blue-400"
                   aria-label="LinkedIn"
                 >
-                  <Linkedin className="w-4 h-4" />
+                  <FaLinkedinIn className="w-4 h-4" />
                 </a>
               </div>
             </div>

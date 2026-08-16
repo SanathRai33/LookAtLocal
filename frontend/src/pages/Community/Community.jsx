@@ -1,121 +1,203 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Breadcrumb from '../../components/common/Breadcrumb';
 import CommunityHeader from './components/CommunityHeader';
-import CategoryFilter from './components/CategoryFilter';
-import NoticeGrid from './components/NoticeGrid';
-import { mockNotices, categories, getCategoryCounts } from './data/mockNotices';
-import { Pin, AlertCircle } from 'lucide-react';
+import CommunityFilter from './components/CommunityFilter';
+import CommunityGrid from './components/CommunityGrid';
+import { useCommunity } from '../../hooks/useCommunity';
 
 const Community = () => {
-    const [activeCategory, setActiveCategory] = useState('all');
+  const { posts, loading, pagination, getCommunityPosts } = useCommunity();
 
-    // Filter notices based on category
-    const filteredNotices = useMemo(() => {
-        let filtered = mockNotices;
+  const [searchParams, setSearchParams] = useSearchParams();
 
-        // Filter by category
-        if (activeCategory !== 'all') {
-            const categoryMap = {
-                'apartment': 'Apartment',
-                'event': 'Event',
-                'lost-found': 'Lost & Found',
-                'notice': 'Notice'
-            };
-            filtered = filtered.filter(
-                notice => notice.category === categoryMap[activeCategory]
-            );
-        }
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get('search') || ''
+  );
 
-        // Sort: Pinned first, then by urgency, then by date
-        return [...filtered].sort((a, b) => {
-            if (a.isPinned && !b.isPinned) return -1;
-            if (!a.isPinned && b.isPinned) return 1;
-            if (a.isUrgent && !b.isUrgent) return -1;
-            if (!a.isUrgent && b.isUrgent) return 1;
-            return 0;
-        });
-    }, [activeCategory]);
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const activeFilter = searchParams.get('postType') || 'all';
+  const isMine = searchParams.get('isMine') === 'true';
+  const showClosed = searchParams.get('showClosed') === 'true';
+  const sortBy = searchParams.get('sort') || 'newest';
 
-    // Get pinned and urgent counts
-    const pinnedCount = useMemo(() => {
-        return mockNotices.filter(n => n.isPinned).length;
-    }, []);
+  const itemsPerPage = 10;
 
-    const urgentCount = useMemo(() => {
-        return mockNotices.filter(n => n.isUrgent).length;
-    }, []);
+  const filterOptions = [
+    { id: 'all', label: 'All' },
+    { id: 'EVENT', label: 'Events' },
+    { id: 'ANNOUNCEMENT', label: 'Announcements' },
+    { id: 'LOST_FOUND', label: 'Lost & Found' },
+    { id: 'ALERT', label: 'Alerts' },
+    { id: 'GENERAL', label: 'General' },
+  ];
 
-    // Breadcrumb items
-    const breadcrumbItems = [
-        { label: 'Home', path: '/' },
-        { label: 'Community' }
-    ];
+  useEffect(() => {
+    fetchPosts();
+  }, [
+    currentPage,
+    activeFilter,
+    isMine,
+    showClosed,
+    sortBy,
+    searchParams.get('search'),
+  ]);
 
-    return (
-        <div className="min-h-screen py-6 bg-gray-50 dark:bg-slate-900 md:py-8">
-            <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                {/* Breadcrumb */}
-                <div className="mb-6">
-                    <Breadcrumb items={breadcrumbItems} />
-                </div>
+  useEffect(() => {
+    setSearchQuery(searchParams.get('search') || '');
+  }, [searchParams]);
 
-                {/* Header */}
-                <CommunityHeader />
+  const fetchPosts = async () => {
+    const params = {
+      page: currentPage,
+      limit: itemsPerPage,
+      sort: sortBy,
+      isMine: isMine ? 'true' : 'false',
+      showClosed: showClosed ? 'true' : 'false',
+    };
 
-                {/* Info Banner */}
-                {(pinnedCount > 0 || urgentCount > 0) && (
-                    <div className="flex flex-wrap gap-3 mb-6">
-                        {pinnedCount > 0 && (
-                            <div className="flex items-center gap-2 px-4 py-2 border border-yellow-200 bg-yellow-50 dark:bg-yellow-950/30 dark:border-yellow-800 rounded-xl">
-                                <Pin className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
-                                <span className="text-sm text-yellow-700 dark:text-yellow-300">
-                                    {pinnedCount} pinned {pinnedCount === 1 ? 'notice' : 'notices'}
-                                </span>
-                            </div>
-                        )}
-                        {urgentCount > 0 && (
-                            <div className="flex items-center gap-2 px-4 py-2 border border-red-200 bg-red-50 dark:bg-red-950/30 dark:border-red-800 rounded-xl">
-                                <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400" />
-                                <span className="text-sm text-red-700 dark:text-red-300">
-                                    {urgentCount} urgent {urgentCount === 1 ? 'notice' : 'notices'}
-                                </span>
-                            </div>
-                        )}
-                    </div>
-                )}
+    const search = searchParams.get('search');
 
-                {/* Category Filter */}
-                <CategoryFilter
-                    activeCategory={activeCategory}
-                    setActiveCategory={setActiveCategory}
-                />
+    if (search?.trim()) {
+      params.search = search.trim();
+    }
 
-                {/* Results Count */}
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Showing <span className="font-medium text-gray-700 dark:text-gray-300">{filteredNotices.length}</span> notices
-                        {activeCategory !== 'all' && (
-                            <span> in <span className="font-medium text-gray-700 dark:text-gray-300">
-                                {categories.find(c => c.id === activeCategory)?.label}
-                            </span></span>
-                        )}
-                    </p>
-                    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                        <span className="flex items-center gap-1">
-                            📌 {mockNotices.filter(n => n.isPinned).length} pinned
-                        </span>
-                        <span className="w-px h-4 bg-gray-300 dark:bg-gray-600"></span>
-                        <span className="flex items-center gap-1">
-                            ⚡ {mockNotices.filter(n => n.isUrgent).length} urgent
-                        </span>
-                    </div>
-                </div>
+    if (activeFilter !== 'all') {
+      params.postType = activeFilter;
+    }
 
-                {/* Notice Grid */}
-                <NoticeGrid notices={filteredNotices} />
-            </div>
+    await getCommunityPosts(params);
+  };
+
+  const updateParams = (updates) => {
+    const params = new URLSearchParams(searchParams);
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (
+        value === undefined ||
+        value === null ||
+        value === '' ||
+        value === 'all' ||
+        value === false
+      ) {
+        params.delete(key);
+      } else {
+        params.set(key, String(value));
+      }
+    });
+
+    setSearchParams(params);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    updateParams({
+      search: searchQuery.trim(),
+      page: 1,
+    });
+  };
+
+  const handleFilterChange = (filterId) => {
+    updateParams({
+      postType: filterId,
+      page: 1,
+    });
+  };
+
+  const handleMineToggle = () => {
+    updateParams({
+      isMine: !isMine,
+      page: 1,
+    });
+  };
+
+  const handleShowClosedToggle = () => {
+    updateParams({
+      showClosed: !showClosed,
+      page: 1,
+    });
+  };
+
+  const handleSortChange = (sort) => {
+    updateParams({
+      sort,
+      page: 1,
+    });
+  };
+
+  const handlePageChange = (page) => {
+    updateParams({
+      page,
+    });
+  };
+
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Community' },
+  ];
+
+  return (
+    <div className="min-h-screen py-6 bg-gray-50 dark:bg-slate-900 md:py-8">
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="mb-6">
+          <Breadcrumb items={breadcrumbItems} />
         </div>
-    );
+
+        <CommunityHeader
+          searchQuery={searchQuery}
+          setSearchQuery={handleSearchChange}
+          onSearch={handleSearchSubmit}
+          totalCount={pagination?.total || 0}
+          sortBy={sortBy}
+          onSortChange={handleSortChange}
+          loading={loading}
+          isMine={isMine}
+          onMineToggle={handleMineToggle}
+        />
+
+        <CommunityFilter
+          filters={filterOptions}
+          activeFilter={activeFilter}
+          setActiveFilter={handleFilterChange}
+          showClosed={showClosed}
+          onShowClosedToggle={handleShowClosedToggle}
+        />
+
+        <CommunityGrid
+          posts={posts}
+          loading={loading}
+          onPostDeleted={fetchPosts}
+        />
+
+        {pagination && pagination.totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-8">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="p-2 text-gray-600 transition border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-700 dark:text-gray-400 dark:hover:bg-slate-800"
+            >
+              ←
+            </button>
+
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              Page {currentPage} of {pagination.totalPages}
+            </span>
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === pagination.totalPages}
+              className="p-2 text-gray-600 transition border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-700 dark:text-gray-400 dark:hover:bg-slate-800"
+            >
+              →
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Community;

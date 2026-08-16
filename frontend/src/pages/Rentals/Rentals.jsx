@@ -1,92 +1,189 @@
-import React, { useState, useMemo } from 'react';
-import Breadcrumb from '../../components/common/Breadcrumb';
-import RentalHeader from './components/RentalHeader';
-import CategoryFilter from './components/CategoryFilter';
-import RentalGrid from './components/RentalGrid';
-import { mockRentals, categories } from './data/mockData.js';
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import Breadcrumb from "../../components/common/Breadcrumb";
+import RentalHeader from "./components/RentalHeader";
+import CategoryFilter from "./components/CategoryFilter";
+import RentalGrid from "./components/RentalGrid";
+import { useRentals } from "../../hooks/useRentals";
+import { useCategories } from "../../hooks/useCategories";
 
 const Rentals = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState('all');
+  const { rentals, loading, pagination, getRentals } = useRentals();
+  const { categories, getCategories } = useCategories();
 
-  const filteredRentals = useMemo(() => {
-    let filtered = mockRentals;
+  const [searchParams, setSearchParams] = useSearchParams();
 
-    if (activeCategory !== 'all') {
-      const categoryMap = {
-        'camera': 'Camera',
-        'vehicle': 'Vehicle',
-        'power-tools': 'Power Tools',
-        'electronics': 'Electronics',
-        'furniture': 'Furniture',
-        'events': 'Events'
-      };
-      filtered = filtered.filter(
-        rental => rental.category === categoryMap[activeCategory]
-      );
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("search") || ""
+  );
+
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const activeCategory = searchParams.get("categoryId") || "all";
+  const sortBy = searchParams.get("sort") || "newest";
+
+  const itemsPerPage = 12;
+
+  useEffect(() => {
+    getCategories({
+      module: "RENTAL",
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchRentals();
+  }, [
+    currentPage,
+    activeCategory,
+    sortBy,
+    searchParams.get("search"),
+  ]);
+
+  useEffect(() => {
+    setSearchQuery(searchParams.get("search") || "");
+  }, [searchParams]);
+
+  const fetchRentals = async () => {
+    const params = {
+      page: currentPage,
+      limit: itemsPerPage,
+      sort: sortBy,
+    };
+
+    const search = searchParams.get("search");
+
+    if (search?.trim()) {
+      params.search = search.trim();
     }
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(
-        rental => 
-          rental.title.toLowerCase().includes(query) ||
-          rental.category.toLowerCase().includes(query) ||
-          rental.owner.name.toLowerCase().includes(query) ||
-          rental.description.toLowerCase().includes(query)
-      );
+    if (activeCategory !== "all") {
+      params.categoryId = activeCategory;
     }
 
-    return filtered;
-  }, [activeCategory, searchQuery]);
+    await getRentals(params);
+  };
+
+  const updateParams = (updates) => {
+    const params = new URLSearchParams(searchParams);
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (
+        value === undefined ||
+        value === null ||
+        value === "" ||
+        value === "all"
+      ) {
+        params.delete(key);
+      } else {
+        params.set(key, String(value));
+      }
+    });
+
+    setSearchParams(params);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    updateParams({
+      search: searchQuery.trim(),
+      page: 1,
+    });
+  };
+
+  const handleCategoryChange = (categoryId) => {
+    updateParams({
+      categoryId,
+      page: 1,
+    });
+  };
+
+  const handlePageChange = (page) => {
+    updateParams({
+      page,
+    });
+  };
+
+  const handleSortChange = (sort) => {
+    updateParams({
+      sort,
+      page: 1,
+    });
+  };
 
   const breadcrumbItems = [
-    { label: 'Rental Marketplace' }
+    {
+      label: "Home",
+      path: "/",
+    },
+    {
+      label: "Rental Marketplace",
+    },
   ];
-
-  const getCategoryCount = (categoryId) => {
-    if (categoryId === 'all') return mockRentals.length;
-    const categoryMap = {
-      'camera': 'Camera',
-      'vehicle': 'Vehicle',
-      'power-tools': 'Power Tools',
-      'electronics': 'Electronics',
-      'furniture': 'Furniture',
-      'events': 'Events'
-    };
-    return mockRentals.filter(r => r.category === categoryMap[categoryId]).length;
-  };
 
   return (
     <div className="min-h-screen py-6 bg-gray-50 dark:bg-slate-900 md:py-8">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-
-        <div className="mb-6 ">
+        <div className="mb-6">
           <Breadcrumb items={breadcrumbItems} />
         </div>
 
-        <RentalHeader 
+        <RentalHeader
           searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
+          setSearchQuery={handleSearchChange}
+          onSearch={handleSearchSubmit}
+          totalCount={pagination?.total || 0}
+          sortBy={sortBy}
+          onSortChange={handleSortChange}
+          loading={loading}
         />
 
-        <CategoryFilter 
+        <CategoryFilter
+          categories={categories}
           activeCategory={activeCategory}
-          setActiveCategory={setActiveCategory}
+          setActiveCategory={handleCategoryChange}
+          loading={loading}
         />
 
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Showing <span className="font-medium text-gray-700 dark:text-gray-300">{filteredRentals.length}</span> items
-            {activeCategory !== 'all' && (
-              <span> in <span className="font-medium text-gray-700 dark:text-gray-300">
-                {categories.find(c => c.id === activeCategory)?.label}
-              </span></span>
-            )}
+            Showing{" "}
+            <span className="font-medium text-gray-700 dark:text-gray-300">
+              {rentals.length}
+            </span>{" "}
+            items
           </p>
         </div>
 
-        <RentalGrid rentals={filteredRentals} />
+        <RentalGrid
+          rentals={rentals}
+          loading={loading}
+        />
+
+        {pagination && pagination.totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-8">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="p-2 text-gray-600 transition border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-700 dark:text-gray-400 dark:hover:bg-slate-800"
+            >
+              ←
+            </button>
+
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              Page {currentPage} of {pagination.totalPages}
+            </span>
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === pagination.totalPages}
+              className="p-2 text-gray-600 transition border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-700 dark:text-gray-400 dark:hover:bg-slate-800"
+            >
+              →
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

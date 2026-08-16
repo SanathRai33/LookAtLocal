@@ -1,7 +1,17 @@
 import React from 'react';
 import RentalCard from './RentalCard';
+import { Loader2 } from 'lucide-react';
 
-const RentalGrid = ({ rentals }) => {
+const RentalGrid = ({ rentals, loading }) => {
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+        <span className="ml-3 text-gray-500 dark:text-gray-400">Loading rentals...</span>
+      </div>
+    );
+  }
+
   if (rentals.length === 0) {
     return (
       <div className="py-16 text-center">

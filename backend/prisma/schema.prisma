@@ -1,0 +1,1227 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ======================================================
+// ENUMS
+// ======================================================
+
+// --------------------
+// USER
+// --------------------
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+  DEACTIVATED
+}
+
+// --------------------
+// CATEGORY
+// --------------------
+
+enum CategoryModule {
+  SERVICE
+  RENTAL
+  PRODUCT
+  SPACE
+  JOB
+}
+
+// --------------------
+// SERVICE
+// --------------------
+
+enum PricingType {
+  HOURLY
+  DAILY
+  FIXED
+}
+
+enum ServiceListingStatus {
+  DRAFT
+  PENDING
+  ACTIVE
+  REJECTED
+  CLOSED
+}
+
+enum ServiceBookingStatus {
+  REQUESTED
+  ACCEPTED
+  REJECTED
+  CANCELLED
+  IN_PROGRESS
+  COMPLETED
+}
+
+// --------------------
+// RENTAL
+// --------------------
+
+enum ItemCondition {
+  NEW
+  LIKE_NEW
+  GOOD
+  FAIR
+  POOR
+}
+
+enum RentalDeliveryOption {
+  PICKUP
+  OWNER_DELIVERY
+  BOTH
+}
+
+enum RentalListingStatus {
+  DRAFT
+  PENDING
+  ACTIVE
+  REJECTED
+  CLOSED
+}
+
+enum RentalBookingStatus {
+  REQUESTED
+  ACCEPTED
+  REJECTED
+  CANCELLED
+  ACTIVE
+  COMPLETED
+}
+
+// --------------------
+// PRODUCT
+// --------------------
+
+enum ProductDeliveryOption {
+  PICKUP
+  SELLER_DELIVERY
+  BOTH
+}
+
+enum ProductListingStatus {
+  DRAFT
+  PENDING
+  ACTIVE
+  RESERVED
+  SOLD
+  REJECTED
+  CLOSED
+}
+
+enum ProductTransactionStatus {
+  REQUESTED
+  ACCEPTED
+  CANCELLED
+  COMPLETED
+}
+
+// --------------------
+// SPACE
+// --------------------
+
+enum SpaceType {
+  SHOP
+  OFFICE
+  ROOM
+  PG
+  WAREHOUSE
+  PARKING
+}
+
+enum SpaceListingStatus {
+  DRAFT
+  PENDING
+  ACTIVE
+  REJECTED
+  CLOSED
+}
+
+enum SpacePricingType {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum SpaceUnitStatus {
+  AVAILABLE
+  RESERVED
+  OCCUPIED
+}
+
+// --------------------
+// JOB
+// --------------------
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  DAILY_WAGE
+}
+
+enum SalaryType {
+  HOURLY
+  DAILY
+  MONTHLY
+  YEARLY
+}
+
+enum JobListingStatus {
+  DRAFT
+  PENDING
+  ACTIVE
+  CLOSED
+  REJECTED
+}
+
+enum JobApplicationStatus {
+  APPLIED
+  REVIEWING
+  SHORTLISTED
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+// --------------------
+// EMERGENCY
+// --------------------
+
+enum EmergencyType {
+  BLOOD
+  MEDICAL
+  ACCIDENT
+  VOLUNTEER
+  OTHER
+}
+
+enum EmergencyUrgency {
+  NORMAL
+  URGENT
+  CRITICAL
+}
+
+enum EmergencyRequestStatus {
+  ACTIVE
+  RESOLVED
+  CANCELLED
+  EXPIRED
+}
+
+enum EmergencyResponseStatus {
+  OFFERED
+  ACCEPTED
+  DECLINED
+  WITHDRAWN
+  COMPLETED
+}
+
+// --------------------
+// COMMUNITY
+// --------------------
+
+enum CommunityPostType {
+  EVENT
+  ANNOUNCEMENT
+  LOST_FOUND
+  ALERT
+  GENERAL
+}
+
+enum CommunityPostStatus {
+  PENDING
+  ACTIVE
+  REJECTED
+  CLOSED
+}
+
+// --------------------
+// GENERIC ENTITY TYPES
+// --------------------
+
+enum ListingImageEntityType {
+  SERVICE
+  RENTAL
+  PRODUCT
+  SPACE
+  COMMUNITY
+}
+
+enum FavoriteEntityType {
+  SERVICE
+  RENTAL
+  PRODUCT
+  SPACE
+  JOB
+  COMMUNITY
+}
+
+enum ReviewEntityType {
+  SERVICE
+  RENTAL
+}
+
+enum ReportEntityType {
+  USER
+  SERVICE
+  RENTAL
+  PRODUCT
+  SPACE
+  JOB
+  EMERGENCY
+  COMMUNITY
+}
+
+enum ReportReason {
+  SPAM
+  FRAUD
+  DUPLICATE
+  INAPPROPRIATE
+  MISLEADING
+  OTHER
+}
+
+enum ReportStatus {
+  OPEN
+  REVIEWING
+  RESOLVED
+  DISMISSED
+}
+
+enum PointsTransactionType {
+  EARNED
+  REDEEMED
+  ADJUSTED
+  EXPIRED
+}
+
+enum PointsActionType {
+  SERVICE_COMPLETED
+  RENTAL_COMPLETED
+  PRODUCT_SOLD
+  JOB_COMPLETED
+  EMERGENCY_HELP
+  COMMUNITY_CONTRIBUTION
+  ADMIN_ADJUSTMENT
+}
+
+// ======================================================
+// 01. USERS
+// ======================================================
+
+model User {
+  id              String  @id @default(uuid()) @db.Uuid
+  fullName        String  @map("full_name")
+  email           String  @unique
+  phone           String? @unique
+  passwordHash    String  @map("password_hash")
+  profileImageUrl String? @map("profile_image_url")
+  bio             String?
+
+  role   UserRole   @default(USER)
+  status UserStatus @default(ACTIVE)
+
+  statusReason    String?   @map("status_reason")
+  statusChangedBy String?   @map("status_changed_by") @db.Uuid
+  statusChangedAt DateTime? @map("status_changed_at")
+
+  isEmailVerified Boolean @default(false) @map("is_email_verified")
+  isPhoneVerified Boolean @default(false) @map("is_phone_verified")
+
+  // Default/profile location
+  addressLine String?  @map("address_line")
+  locality    String?
+  city        String?
+  state       String?
+  postalCode  String?  @map("postal_code")
+  latitude    Decimal? @db.Decimal(10, 7)
+  longitude   Decimal? @db.Decimal(10, 7)
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Self relation
+  statusChangedByUser User?  @relation("UserStatusChangedBy", fields: [statusChangedBy], references: [id], onDelete: SetNull)
+  statusChangedUsers  User[] @relation("UserStatusChangedBy")
+
+  // Services
+  serviceListings ServiceListing[] @relation("ServiceProvider")
+  serviceBookings ServiceBooking[] @relation("ServiceCustomer")
+
+  // Rentals
+  rentalListings RentalListing[] @relation("RentalOwner")
+  rentalBookings RentalBooking[] @relation("RentalRenter")
+
+  // Products
+  productListings  ProductListing[]     @relation("ProductSeller")
+  productSales     ProductTransaction[] @relation("ProductTransactionSeller")
+  productPurchases ProductTransaction[] @relation("ProductTransactionBuyer")
+
+  // Spaces
+  spaceListings SpaceListing[] @relation("SpaceOwner")
+
+  // Jobs
+  jobListings     JobListing[]     @relation("JobPoster")
+  jobApplications JobApplication[] @relation("JobApplicant")
+
+  // Emergency
+  emergencyRequests  EmergencyRequest[]  @relation("EmergencyRequester")
+  emergencyResponses EmergencyResponse[] @relation("EmergencyResponder")
+
+  // Community
+  communityPosts     CommunityPost[]     @relation("CommunityAuthor")
+  eventConfirmations EventConfirmation[]
+
+  // Shared
+  favorites       Favorite[]
+  reviewsWritten  Review[]       @relation("ReviewWriter")
+  reviewsReceived Review[]       @relation("ReviewReceiver")
+  reportsCreated  Report[]       @relation("ReportCreator")
+  reportsReviewed Report[]       @relation("ReportReviewer")
+  notifications   Notification[]
+
+  // Admin
+  adminAuditLogs          AdminAuditLog[]  @relation("AdminAuditActor")
+  reviewedServiceListings ServiceListing[] @relation("ServiceReviewer")
+
+  // Rewards
+  pointsTransactions PointsTransaction[]
+
+  // Sessions
+  sessions UserSession[]
+
+  // Password reset
+  passwordResetTokens PasswordResetToken[]
+
+  @@index([status])
+  @@index([city])
+  @@index([postalCode])
+  @@index([createdAt])
+  @@map("users")
+}
+
+// ======================================================
+// 02. CATEGORIES
+// ======================================================
+
+model Category {
+  id     String         @id @default(uuid()) @db.Uuid
+  name   String
+  slug   String
+  icon   String?
+  module CategoryModule
+
+  parentId String? @map("parent_id") @db.Uuid
+
+  isActive  Boolean @default(true) @map("is_active")
+  sortOrder Int     @default(0) @map("sort_order")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children Category[] @relation("CategoryHierarchy")
+
+  serviceListings ServiceListing[]
+  rentalListings  RentalListing[]
+  productListings ProductListing[]
+  spaceListings   SpaceListing[]
+  jobListings     JobListing[]
+
+  @@unique([module, slug])
+  @@index([module])
+  @@index([parentId])
+  @@index([isActive])
+  @@map("categories")
+}
+
+// ======================================================
+// 03. SERVICE LISTINGS
+// ======================================================
+
+model ServiceListing {
+  id         String @id @default(uuid()) @db.Uuid
+  providerId String @map("provider_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+
+  title           String
+  description     String
+  experienceYears Int?   @map("experience_years")
+
+  pricingType  PricingType @map("pricing_type")
+  price        Decimal     @db.Decimal(10, 2)
+  isNegotiable Boolean     @default(false) @map("is_negotiable")
+  isAvailable  Boolean     @default(true) @map("is_available")
+
+  addressLine String? @map("address_line")
+  locality    String?
+  city        String
+  state       String
+  postalCode  String? @map("postal_code")
+
+  latitude  Decimal? @db.Decimal(10, 7)
+  longitude Decimal? @db.Decimal(10, 7)
+
+  status          ServiceListingStatus @default(PENDING)
+  rejectionReason String?              @map("rejection_reason")
+  reviewedBy      String?              @map("reviewed_by") @db.Uuid
+  reviewedAt      DateTime?            @map("reviewed_at")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  provider User     @relation("ServiceProvider", fields: [providerId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+  reviewer User?    @relation("ServiceReviewer", fields: [reviewedBy], references: [id], onDelete: SetNull)
+
+  bookings ServiceBooking[]
+
+  @@index([providerId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([city])
+  @@index([postalCode])
+  @@index([isAvailable])
+  @@index([createdAt])
+  @@index([reviewedBy])
+  @@map("service_listings")
+}
+
+// ======================================================
+// 04. SERVICE BOOKINGS
+// ======================================================
+
+model ServiceBooking {
+  id         String @id @default(uuid()) @db.Uuid
+  serviceId  String @map("service_id") @db.Uuid
+  customerId String @map("customer_id") @db.Uuid
+
+  scheduledAt DateTime @map("scheduled_at")
+
+  addressLine String  @map("address_line")
+  locality    String?
+  city        String
+  state       String
+  postalCode  String? @map("postal_code")
+
+  latitude  Decimal? @db.Decimal(10, 7)
+  longitude Decimal? @db.Decimal(10, 7)
+
+  customerNote String?  @map("customer_note")
+  agreedPrice  Decimal? @map("agreed_price") @db.Decimal(10, 2)
+
+  status      ServiceBookingStatus @default(REQUESTED)
+  completedAt DateTime?            @map("completed_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  service  ServiceListing @relation(fields: [serviceId], references: [id])
+  customer User           @relation("ServiceCustomer", fields: [customerId], references: [id])
+
+  @@index([serviceId])
+  @@index([customerId])
+  @@index([status])
+  @@index([city])
+  @@index([postalCode])
+  @@index([scheduledAt])
+  @@map("service_bookings")
+}
+
+// ======================================================
+// 05. RENTAL LISTINGS
+// ======================================================
+
+model RentalListing {
+  id         String @id @default(uuid()) @db.Uuid
+  ownerId    String @map("owner_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+
+  title       String
+  description String
+
+  pricePerDay   Decimal @map("price_per_day") @db.Decimal(10, 2)
+  depositAmount Decimal @default(0) @map("deposit_amount") @db.Decimal(10, 2)
+  isNegotiable  Boolean @default(false) @map("is_negotiable")
+
+  condition ItemCondition
+  quantity  Int           @default(1)
+
+  deliveryOption RentalDeliveryOption @map("delivery_option")
+
+  addressLine String? @map("address_line")
+  locality    String?
+  city        String
+  state       String
+  postalCode  String? @map("postal_code")
+
+  latitude  Decimal? @db.Decimal(10, 7)
+  longitude Decimal? @db.Decimal(10, 7)
+
+  isAvailable Boolean             @default(true) @map("is_available")
+  status      RentalListingStatus @default(PENDING)
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  owner    User     @relation("RentalOwner", fields: [ownerId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  bookings RentalBooking[]
+
+  @@index([ownerId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([city])
+  @@index([isAvailable])
+  @@index([createdAt])
+  @@map("rental_listings")
+}
+
+// ======================================================
+// 06. RENTAL BOOKINGS
+// ======================================================
+
+model RentalBooking {
+  id       String @id @default(uuid()) @db.Uuid
+  rentalId String @map("rental_id") @db.Uuid
+  renterId String @map("renter_id") @db.Uuid
+
+  startDate DateTime @map("start_date")
+  endDate   DateTime @map("end_date")
+
+  quantity Int @default(1)
+
+  pricePerDay   Decimal @map("price_per_day") @db.Decimal(10, 2)
+  totalAmount   Decimal @map("total_amount") @db.Decimal(10, 2)
+  depositAmount Decimal @default(0) @map("deposit_amount") @db.Decimal(10, 2)
+
+  status      RentalBookingStatus @default(REQUESTED)
+  completedAt DateTime?           @map("completed_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  rental RentalListing @relation(fields: [rentalId], references: [id])
+  renter User          @relation("RentalRenter", fields: [renterId], references: [id])
+
+  @@index([rentalId])
+  @@index([renterId])
+  @@index([status])
+  @@index([startDate, endDate])
+  @@map("rental_bookings")
+}
+
+// ======================================================
+// 07. PRODUCT LISTINGS
+// ======================================================
+
+model ProductListing {
+  id         String @id @default(uuid()) @db.Uuid
+  sellerId   String @map("seller_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+
+  title       String
+  description String
+
+  price        Decimal @db.Decimal(10, 2)
+  isNegotiable Boolean @default(false) @map("is_negotiable")
+
+  condition      ItemCondition
+  deliveryOption ProductDeliveryOption @map("delivery_option")
+
+  addressLine String? @map("address_line")
+  locality    String?
+  city        String
+  state       String
+  postalCode  String? @map("postal_code")
+
+  latitude  Decimal? @db.Decimal(10, 7)
+  longitude Decimal? @db.Decimal(10, 7)
+
+  status ProductListingStatus @default(PENDING)
+  soldAt DateTime?            @map("sold_at")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  seller   User     @relation("ProductSeller", fields: [sellerId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  transactions ProductTransaction[]
+
+  @@index([sellerId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([city])
+  @@index([createdAt])
+  @@map("product_listings")
+}
+
+// ======================================================
+// 08. PRODUCT TRANSACTIONS
+// ======================================================
+
+model ProductTransaction {
+  id        String @id @default(uuid()) @db.Uuid
+  productId String @map("product_id") @db.Uuid
+  sellerId  String @map("seller_id") @db.Uuid
+  buyerId   String @map("buyer_id") @db.Uuid
+
+  agreedPrice Decimal? @map("agreed_price") @db.Decimal(10, 2)
+
+  status      ProductTransactionStatus @default(REQUESTED)
+  completedAt DateTime?                @map("completed_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  product ProductListing @relation(fields: [productId], references: [id])
+  seller  User           @relation("ProductTransactionSeller", fields: [sellerId], references: [id])
+  buyer   User           @relation("ProductTransactionBuyer", fields: [buyerId], references: [id])
+
+  @@index([productId])
+  @@index([sellerId])
+  @@index([buyerId])
+  @@index([status])
+  @@map("product_transactions")
+}
+
+// ======================================================
+// 09. SPACE LISTINGS
+// ======================================================
+
+model SpaceListing {
+  id         String @id @default(uuid()) @db.Uuid
+  ownerId    String @map("owner_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+
+  title       String
+  description String
+
+  spaceType SpaceType @map("space_type")
+
+  addressLine String? @map("address_line")
+  locality    String?
+  city        String
+  state       String
+  postalCode  String? @map("postal_code")
+
+  latitude  Decimal? @db.Decimal(10, 7)
+  longitude Decimal? @db.Decimal(10, 7)
+
+  status SpaceListingStatus @default(PENDING)
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  owner    User     @relation("SpaceOwner", fields: [ownerId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  units SpaceUnit[]
+
+  @@index([ownerId])
+  @@index([categoryId])
+  @@index([spaceType])
+  @@index([status])
+  @@index([city])
+  @@index([createdAt])
+  @@map("space_listings")
+}
+
+// ======================================================
+// 10. SPACE UNITS
+// ======================================================
+
+model SpaceUnit {
+  id             String @id @default(uuid()) @db.Uuid
+  spaceListingId String @map("space_listing_id") @db.Uuid
+
+  unitNumber String?  @map("unit_number")
+  floor      String?
+  areaSqft   Decimal? @map("area_sqft") @db.Decimal(10, 2)
+
+  pricingType   SpacePricingType @map("pricing_type")
+  price         Decimal          @db.Decimal(10, 2)
+  depositAmount Decimal          @default(0) @map("deposit_amount") @db.Decimal(10, 2)
+
+  availableFrom DateTime?       @map("available_from")
+  status        SpaceUnitStatus @default(AVAILABLE)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  spaceListing SpaceListing @relation(fields: [spaceListingId], references: [id])
+
+  @@index([spaceListingId])
+  @@index([status])
+  @@index([availableFrom])
+  @@map("space_units")
+}
+
+// ======================================================
+// 11. JOB LISTINGS
+// ======================================================
+
+model JobListing {
+  id         String @id @default(uuid()) @db.Uuid
+  postedBy   String @map("posted_by") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+
+  title       String
+  description String
+  companyName String @map("company_name")
+
+  jobType JobType @map("job_type")
+
+  salaryMin  Decimal?    @map("salary_min") @db.Decimal(12, 2)
+  salaryMax  Decimal?    @map("salary_max") @db.Decimal(12, 2)
+  salaryType SalaryType? @map("salary_type")
+
+  benefits           String?
+  experienceRequired String? @map("experience_required")
+  vacancies          Int     @default(1)
+
+  addressLine String? @map("address_line")
+  locality    String?
+  city        String
+  state       String
+  postalCode  String? @map("postal_code")
+
+  latitude  Decimal? @db.Decimal(10, 7)
+  longitude Decimal? @db.Decimal(10, 7)
+
+  applicationDeadline DateTime? @map("application_deadline")
+
+  status JobListingStatus @default(PENDING)
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  poster   User     @relation("JobPoster", fields: [postedBy], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  applications JobApplication[]
+
+  @@index([postedBy])
+  @@index([categoryId])
+  @@index([jobType])
+  @@index([status])
+  @@index([city])
+  @@index([applicationDeadline])
+  @@index([createdAt])
+  @@map("job_listings")
+}
+
+// ======================================================
+// 12. JOB APPLICATIONS
+// ======================================================
+
+model JobApplication {
+  id          String @id @default(uuid()) @db.Uuid
+  jobId       String @map("job_id") @db.Uuid
+  applicantId String @map("applicant_id") @db.Uuid
+
+  message   String?
+  resumeUrl String? @map("resume_url")
+
+  status JobApplicationStatus @default(APPLIED)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  job       JobListing @relation(fields: [jobId], references: [id])
+  applicant User       @relation("JobApplicant", fields: [applicantId], references: [id])
+
+  @@unique([jobId, applicantId])
+  @@index([applicantId])
+  @@index([status])
+  @@map("job_applications")
+}
+
+// ======================================================
+// 13. EMERGENCY REQUESTS
+// ======================================================
+
+model EmergencyRequest {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @map("user_id") @db.Uuid
+
+  emergencyType EmergencyType @map("emergency_type")
+
+  title       String
+  description String
+
+  urgency EmergencyUrgency @default(NORMAL)
+
+  addressLine String? @map("address_line")
+  locality    String?
+  city        String?
+  state       String?
+  postalCode  String? @map("postal_code")
+
+  latitude  Decimal? @db.Decimal(10, 7)
+  longitude Decimal? @db.Decimal(10, 7)
+
+  contactPhone String @map("contact_phone")
+
+  status EmergencyRequestStatus @default(ACTIVE)
+
+  expiresAt  DateTime  @map("expires_at")
+  resolvedAt DateTime? @map("resolved_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  requester User @relation("EmergencyRequester", fields: [userId], references: [id])
+
+  responses EmergencyResponse[]
+
+  @@index([userId])
+  @@index([emergencyType])
+  @@index([urgency])
+  @@index([status])
+  @@index([expiresAt])
+  @@index([createdAt])
+  @@map("emergency_requests")
+}
+
+// ======================================================
+// 14. EMERGENCY RESPONSES
+// ======================================================
+
+model EmergencyResponse {
+  id          String @id @default(uuid()) @db.Uuid
+  requestId   String @map("request_id") @db.Uuid
+  responderId String @map("responder_id") @db.Uuid
+
+  message String?
+  status  EmergencyResponseStatus @default(OFFERED)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  request   EmergencyRequest @relation(fields: [requestId], references: [id])
+  responder User             @relation("EmergencyResponder", fields: [responderId], references: [id])
+
+  @@unique([requestId, responderId])
+  @@index([responderId])
+  @@index([status])
+  @@map("emergency_responses")
+}
+
+// ======================================================
+// 15. COMMUNITY POSTS
+// ======================================================
+
+model CommunityPost {
+  id       String @id @default(uuid()) @db.Uuid
+  authorId String @map("author_id") @db.Uuid
+
+  postType CommunityPostType @map("post_type")
+
+  title       String
+  description String
+
+  startsAt DateTime? @map("starts_at")
+  endsAt   DateTime? @map("ends_at")
+
+  locationName String?  @map("location_name")
+  address      String?
+  latitude     Decimal? @db.Decimal(10, 7)
+  longitude    Decimal? @db.Decimal(10, 7)
+
+  isPinned Boolean @default(false) @map("is_pinned")
+
+  status    CommunityPostStatus @default(PENDING)
+  expiresAt DateTime?           @map("expires_at")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  author User @relation("CommunityAuthor", fields: [authorId], references: [id])
+
+  confirmations EventConfirmation[]
+
+  @@index([authorId])
+  @@index([postType])
+  @@index([status])
+  @@index([startsAt])
+  @@index([expiresAt])
+  @@index([createdAt])
+  @@map("community_posts")
+}
+
+// ======================================================
+// 16. EVENT CONFIRMATIONS
+// ======================================================
+
+model EventConfirmation {
+  id     String @id @default(uuid()) @db.Uuid
+  postId String @map("post_id") @db.Uuid
+  userId String @map("user_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post CommunityPost @relation(fields: [postId], references: [id])
+  user User          @relation(fields: [userId], references: [id])
+
+  @@unique([postId, userId])
+  @@index([userId])
+  @@map("event_confirmations")
+}
+
+// ======================================================
+// 17. LISTING IMAGES
+// ======================================================
+
+model ListingImage {
+  id String @id @default(uuid()) @db.Uuid
+
+  entityType ListingImageEntityType @map("entity_type")
+  entityId   String                 @map("entity_id") @db.Uuid
+
+  imageUrl  String  @map("image_url")
+  publicId  String? @map("public_id")
+  sortOrder Int     @default(0) @map("sort_order")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([entityType, entityId])
+  @@index([entityType, entityId, sortOrder])
+  @@map("listing_images")
+}
+
+// ======================================================
+// 18. FAVORITES
+// ======================================================
+
+model Favorite {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @map("user_id") @db.Uuid
+
+  entityType FavoriteEntityType @map("entity_type")
+  entityId   String             @map("entity_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, entityType, entityId])
+  @@index([entityType, entityId])
+  @@map("favorites")
+}
+
+// ======================================================
+// 19. REVIEWS
+// ======================================================
+
+model Review {
+  id String @id @default(uuid()) @db.Uuid
+
+  reviewerId String @map("reviewer_id") @db.Uuid
+  revieweeId String @map("reviewee_id") @db.Uuid
+
+  entityType ReviewEntityType @map("entity_type")
+  entityId   String           @map("entity_id") @db.Uuid
+
+  transactionId String @map("transaction_id") @db.Uuid
+
+  rating  Int
+  comment String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  reviewer User @relation("ReviewWriter", fields: [reviewerId], references: [id])
+  reviewee User @relation("ReviewReceiver", fields: [revieweeId], references: [id])
+
+  @@unique([reviewerId, entityType, transactionId])
+  @@index([reviewerId])
+  @@index([revieweeId])
+  @@index([entityType, entityId])
+  @@index([entityType, transactionId])
+  @@map("reviews")
+}
+
+// ======================================================
+// 20. REPORTS
+// ======================================================
+
+model Report {
+  id String @id @default(uuid()) @db.Uuid
+
+  reporterId String @map("reporter_id") @db.Uuid
+
+  entityType ReportEntityType @map("entity_type")
+  entityId   String           @map("entity_id") @db.Uuid
+
+  reason      ReportReason
+  description String?
+
+  status ReportStatus @default(OPEN)
+
+  reviewedBy     String?   @map("reviewed_by") @db.Uuid
+  reviewedAt     DateTime? @map("reviewed_at")
+  resolutionNote String?   @map("resolution_note")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  reporter User  @relation("ReportCreator", fields: [reporterId], references: [id])
+  reviewer User? @relation("ReportReviewer", fields: [reviewedBy], references: [id], onDelete: SetNull)
+
+  @@index([reporterId])
+  @@index([entityType, entityId])
+  @@index([status])
+  @@index([reviewedBy])
+  @@index([createdAt])
+  @@map("reports")
+}
+
+// ======================================================
+// 21. NOTIFICATIONS
+// ======================================================
+
+model Notification {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @map("user_id") @db.Uuid
+
+  type    String
+  title   String
+  message String
+
+  entityType String? @map("entity_type")
+  entityId   String? @map("entity_id") @db.Uuid
+
+  readAt DateTime? @map("read_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([userId, readAt])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+// ======================================================
+// 22. ADMIN AUDIT LOGS
+// ======================================================
+
+model AdminAuditLog {
+  id      String @id @default(uuid()) @db.Uuid
+  adminId String @map("admin_id") @db.Uuid
+
+  action String
+
+  entityType String  @map("entity_type")
+  entityId   String? @map("entity_id") @db.Uuid
+
+  oldData Json? @map("old_data") @db.JsonB
+  newData Json? @map("new_data") @db.JsonB
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  admin User @relation("AdminAuditActor", fields: [adminId], references: [id])
+
+  @@index([adminId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("admin_audit_logs")
+}
+
+// ======================================================
+// 23. POINTS TRANSACTIONS
+// ======================================================
+
+model PointsTransaction {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @map("user_id") @db.Uuid
+
+  points Int
+
+  transactionType PointsTransactionType @map("transaction_type")
+  actionType      PointsActionType      @map("action_type")
+
+  referenceType String? @map("reference_type")
+  referenceId   String? @map("reference_id") @db.Uuid
+
+  description String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, actionType, referenceType, referenceId])
+  @@index([userId])
+  @@index([userId, createdAt])
+  @@index([transactionType])
+  @@index([actionType])
+  @@index([referenceType, referenceId])
+  @@map("points_transactions")
+}
+
+// ======================================================
+// 24. USER SESSIONS
+// ======================================================
+
+model UserSession {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @map("user_id") @db.Uuid
+
+  refreshTokenHash String @unique @map("refresh_token_hash")
+
+  userAgent String? @map("user_agent")
+  ipAddress String? @map("ip_address")
+
+  expiresAt  DateTime  @map("expires_at")
+  lastUsedAt DateTime? @map("last_used_at")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  revokedAt DateTime? @map("revoked_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([revokedAt])
+  @@map("user_sessions")
+}
+
+model PasswordResetToken {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @map("user_id") @db.Uuid
+
+  tokenHash String @unique @map("token_hash")
+
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
+}
