@@ -68,6 +68,7 @@ const Settings = React.lazy(() => import('./pages/Settings/Settings'));
 const CreatePost = React.lazy(() => import('./pages/Profile/CreatePost'));
 const MyPosts = React.lazy(() => import('./pages/Profile/MyPosts'));
 const CompleteAdress = React.lazy(() => import('./pages/Profile/CompleteAddress'));
+const PublicProfile = React.lazy(() => import('./pages/Profile/PublicProfile'));
 
 // Admin Pages
 const AdminLayout = React.lazy(() => import('./components/layout/AdminLayout'));
@@ -206,6 +207,20 @@ export const routes = [
       {
         path: '/complete-address',
         element: <CompleteAdress />,
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <MainLayout />,
+        children: [
+          {
+            path: '/users/:userId',
+            element: <PublicProfile />,
+          },
+        ],
       },
     ],
   },

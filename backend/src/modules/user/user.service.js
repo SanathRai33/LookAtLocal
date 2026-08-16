@@ -29,6 +29,9 @@ const privateProfileSelect = {
 const publicProfileSelect = {
   id: true,
   fullName: true,
+  phone: true,
+  email: true,
+  status: true,
   profileImageUrl: true,
   bio: true,
   locality: true,
@@ -152,7 +155,71 @@ const getPublicProfile = async (userId) => {
     throw new AppError("User profile not found", 404);
   }
 
-  return user;
+  const [services, rentals, products, spaces, jobs] = await Promise.all([
+    prisma.serviceListing.findMany({
+      where: {
+        providerId: userId,
+        status: "ACTIVE",
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+
+    prisma.rentalListing.findMany({
+      where: {
+        ownerId: userId,
+        status: "ACTIVE",
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+
+    prisma.productListing.findMany({
+      where: {
+        sellerId: userId,
+        status: "ACTIVE",
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+
+    prisma.spaceListing.findMany({
+      where: {
+        ownerId: userId,
+        status: "ACTIVE",
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+
+    prisma.jobListing.findMany({
+      where: {
+        postedBy: userId,
+        status: "ACTIVE",
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+  ]);
+
+  return {
+    ...user,
+    services,
+    rentals,
+    products,
+    spaces,
+    jobs,
+  };
 };
 
 const deleteMyAccount = async (userId) => {
