@@ -176,7 +176,7 @@ const MyProducts = () => {
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage all your product listings</p>
           </div>
           <Link
-            to="/marketplace/create"
+            to="/product/create"
             className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white transition rounded-xl bg-gray-950 hover:bg-gray-800 dark:bg-blue-600 dark:hover:bg-blue-700"
           >
             <Plus className="w-5 h-5" /> Sell Item
@@ -268,7 +268,7 @@ const MyProducts = () => {
             </p>
             {!appliedSearch && filterStatus === 'ALL' && (
               <Link
-                to="/marketplace/create"
+                to="/product/create"
                 className="mt-4 inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white transition rounded-xl bg-gray-950 hover:bg-gray-800 dark:bg-blue-600 dark:hover:bg-blue-700"
               >
                 <Plus className="w-5 h-5" /> Sell Item
@@ -339,10 +339,10 @@ const MyProducts = () => {
                   </div>
 
                   <div className={`flex gap-2 ${viewMode === 'grid' ? 'pt-3 border-t border-gray-100 dark:border-slate-800' : 'sm:border-l sm:pl-4 border-gray-100 dark:border-slate-800'}`}>
-                    <button onClick={() => navigate(`/marketplace/${product.id}`)} className="p-2 text-gray-400 transition rounded-lg hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-slate-800 dark:hover:text-gray-300">
+                    <button onClick={() => navigate(`/product/${product.id}`)} className="p-2 text-gray-400 transition rounded-lg hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-slate-800 dark:hover:text-gray-300">
                       <Eye className="w-4 h-4" />
                     </button>
-                    <button onClick={() => navigate(`/marketplace/edit/${product.id}`)} className="p-2 text-gray-400 transition rounded-lg hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-slate-800 dark:hover:text-gray-300">
+                    <button onClick={() => navigate(`/product/edit/${product.id}`)} className="p-2 text-gray-400 transition rounded-lg hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-slate-800 dark:hover:text-gray-300">
                       <Edit className="w-4 h-4" />
                     </button>
                     <button

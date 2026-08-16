@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useJobs } from '../../../hooks/useJobs';
-import { useCategories } from '../../../hooks/useCategories';
+import { useJobs } from '../../hooks/useJobs';
+import { useCategories } from '../../hooks/useCategories';
 import {
   Loader2,
   AlertCircle,
@@ -125,7 +125,7 @@ const EditJob = () => {
       if (result.success) {
         setSuccess(true);
         setTimeout(() => {
-          navigate('/my-jobs');
+          navigate('/jobs/my-jobs');
         }, 2000);
       } else {
         setError(result.error);
@@ -161,7 +161,7 @@ const EditJob = () => {
             </p>
           </div>
           <button
-            onClick={() => navigate('/my-jobs')}
+            onClick={() => navigate('/jobs/my-jobs')}
             className="p-2 text-gray-500 transition rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800"
           >
             <X className="w-6 h-6" />

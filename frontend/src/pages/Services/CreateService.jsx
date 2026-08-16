@@ -94,7 +94,7 @@ const CreateService = () => {
 
       const result = await createService(submitData);
       if (result.success) {
-        navigate('/my-services');
+        navigate('/services/my-services');
       } else {
         setError(result.error);
       }

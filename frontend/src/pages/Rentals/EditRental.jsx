@@ -117,7 +117,7 @@ const EditRental = () => {
             if (result.success) {
                 setSuccess(true);
                 setTimeout(() => {
-                    navigate('/my-rentals');
+                    navigate('/rentals/my-rentals');
                 }, 2000);
             } else {
                 setError(result.error);
@@ -508,7 +508,7 @@ const EditRental = () => {
 
                         <button
                             type="button"
-                            onClick={() => navigate('/my-rentals')}
+                            onClick={() => navigate('/rentals/my-rentals')}
                             disabled={saving}
                             className="flex h-12 min-w-[140px] items-center justify-center rounded-2xl border border-gray-300 bg-white text-base font-semibold text-gray-700 transition hover:bg-gray-50 disabled:opacity-70 disabled:cursor-not-allowed dark:border-slate-700 dark:bg-slate-900 dark:text-gray-300 dark:hover:bg-slate-800"
                         >
