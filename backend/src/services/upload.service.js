@@ -1,5 +1,5 @@
 const cloudinary = require("../config/cloudinary");
-const AppError = require("../utils/AppError");
+const AppError = require("../utils/appError");
 
 const uploadImage = (file, folder = "lookatlocal") => {
   if (!file?.buffer) {

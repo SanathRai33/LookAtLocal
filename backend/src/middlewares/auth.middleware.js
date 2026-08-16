@@ -1,5 +1,5 @@
 const prisma = require("../config/prisma");
-const AppError = require("../utils/AppError");
+const AppError = require("../utils/appError");
 const { verifyAccessToken } = require("../utils/jwt");
 
 const authenticate = async (req, res, next) => {

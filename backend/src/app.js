@@ -24,7 +24,7 @@ const emergencyRoutes = require("./modules/emergency/emergency.routes");
 const adminRoutes = require("./modules/admin/admin.routes");
 const communityRoutes = require("./modules/community/community.routes");
 
-const ApiResponse = require("./utils/ApiResponse");
+const ApiResponse = require("./utils/apiResponse");
 const notFoundHandler = require("./middlewares/notFound.middleware");
 const errorHandler = require("./middlewares/error.middleware");
 const { apiLimiter } = require("./middlewares/rateLimit.middleware");

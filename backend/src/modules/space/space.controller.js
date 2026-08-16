@@ -1,5 +1,5 @@
 const asyncHandler = require("../../utils/asyncHandler");
-const ApiResponse = require("../../utils/ApiResponse");
+const ApiResponse = require("../../utils/apiResponse");
 const spaceService = require("./space.service");
 
 const createSpace = asyncHandler(async (req, res) => {

@@ -1,5 +1,5 @@
 const prisma = require("../../config/prisma");
-const AppError = require("../../utils/AppError");
+const AppError = require("../../utils/appError");
 
 const { getPagination, getPaginationMeta } = require("../../utils/pagination");
 

@@ -1,5 +1,5 @@
 const asyncHandler = require("../../utils/asyncHandler");
-const ApiResponse = require("../../utils/ApiResponse");
+const ApiResponse = require("../../utils/apiResponse");
 const jobService = require("./job.service");
 
 const createJob = asyncHandler(async (req, res) => {

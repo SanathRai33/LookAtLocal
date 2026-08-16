@@ -1,5 +1,5 @@
 const prisma = require("../../config/prisma");
-const AppError = require("../../utils/AppError");
+const AppError = require("../../utils/appError");
 const { uploadImage, deleteImage } = require("../../services/upload.service");
 
 const privateProfileSelect = {

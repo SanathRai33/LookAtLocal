@@ -1,5 +1,5 @@
 const asyncHandler = require("../../utils/asyncHandler");
-const ApiResponse = require("../../utils/ApiResponse");
+const ApiResponse = require("../../utils/apiResponse");
 const communityService = require("./community.service");
 
 const createCommunityPost = asyncHandler(async (req, res) => {

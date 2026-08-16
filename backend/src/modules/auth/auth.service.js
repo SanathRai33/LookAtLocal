@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 
 const prisma = require("../../config/prisma");
-const AppError = require("../../utils/AppError");
+const AppError = require("../../utils/appError");
 
 const { createAuthSession } = require("./auth-session.service");
 const {

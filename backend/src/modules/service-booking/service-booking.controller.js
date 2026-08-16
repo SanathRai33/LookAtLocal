@@ -1,6 +1,6 @@
 const asyncHandler = require("../../utils/asyncHandler");
 
-const ApiResponse = require("../../utils/ApiResponse");
+const ApiResponse = require("../../utils/apiResponse");
 
 const bookingService = require("./service-booking.service");
 

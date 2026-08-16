@@ -1,5 +1,5 @@
 const asyncHandler = require("../../utils/asyncHandler");
-const ApiResponse = require("../../utils/ApiResponse");
+const ApiResponse = require("../../utils/apiResponse");
 const adminService = require("./admin.service");
 
 const getDashboardStats = asyncHandler(async (req, res) => {

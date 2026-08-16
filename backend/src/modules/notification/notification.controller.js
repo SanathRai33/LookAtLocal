@@ -1,5 +1,5 @@
 const asyncHandler = require("../../utils/asyncHandler");
-const ApiResponse = require("../../utils/ApiResponse");
+const ApiResponse = require("../../utils/apiResponse");
 const notificationService = require("./notification.service");
 
 const getMyNotifications = asyncHandler(async (req, res) => {

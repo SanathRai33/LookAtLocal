@@ -1,4 +1,4 @@
-const AppError = require("../utils/AppError");
+const AppError = require("../utils/appError");
 
 const requireAdmin = (req, res, next) => {
   if (!req.user) {
