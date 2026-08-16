@@ -1,217 +1,163 @@
-Look@Local
+# Look@Local
 
-A local-first community platform that connects people with nearbyservices, rentals, products, spaces, jobs, community updates, andemergency requests.
+> A local-first community platform that connects people with nearby
+> services, rentals, products, spaces, jobs, community updates, and
+> emergency requests.
 
-Overview
+## Overview
 
 Look@Local brings multiple local-use cases into one platform:
 
-Services
+-   Services
+-   Rentals
+-   Buy & Sell
+-   Spaces / Properties
+-   Jobs
+-   Community
+-   Emergency requests
+-   User profiles and listings
+-   Admin management
 
-Rentals
+The project uses React and Vite for the frontend, Node.js and Express
+for the backend, Prisma with PostgreSQL for data access, and Cloudinary
+for image storage.
 
-Buy & Sell
+## Tech Stack
 
-Spaces / Properties
+### Frontend
 
-Jobs
+-   React
+-   Vite
+-   React Router
+-   Tailwind CSS
+-   Axios
+-   Lucide React
 
-Community
+### Backend
 
-Emergency requests
+-   Node.js
+-   Express
+-   Prisma
+-   PostgreSQL
+-   JWT
+-   Nodemailer
+-   Cloudinary
+-   Multer
+-   Zod
+-   Helmet
+-   CORS
+-   Express Rate Limit
+-   Morgan
 
-User profiles and listings
+### Infrastructure
 
-Admin management
+-   GitHub
+-   Vercel
+-   Render
+-   Neon PostgreSQL
+-   Cloudinary
 
-The project uses React and Vite for the frontend, Node.js and Expressfor the backend, Prisma with PostgreSQL for data access, and Cloudinaryfor image storage.
+## Main Features
 
-Tech Stack
-
-Frontend
-
-React
-
-Vite
-
-React Router
-
-Tailwind CSS
-
-Axios
-
-Lucide React
-
-Backend
-
-Node.js
-
-Express
-
-Prisma
-
-PostgreSQL
-
-JWT
-
-Nodemailer
-
-Cloudinary
-
-Multer
-
-Zod
-
-Helmet
-
-CORS
-
-Express Rate Limit
-
-Morgan
-
-Infrastructure
-
-GitHub
-
-Vercel
-
-Render
-
-Neon PostgreSQL
-
-Cloudinary
-
-Main Features
-
-Services
+### Services
 
 Users can browse, create, edit, and manage local service listings.
 
 Categories include:
 
-Electrician
+-   Electrician
+-   Plumber
+-   Carpenter
+-   Cleaning
+-   Gardening
+-   Appliance Repair
 
-Plumber
+### Rentals
 
-Carpenter
+Users can discover and manage rental listings for items such as tools,
+machinery, vehicles, electronics, and event equipment.
 
-Cleaning
-
-Gardening
-
-Appliance Repair
-
-Rentals
-
-Users can discover and manage rental listings for items such as tools,machinery, vehicles, electronics, and event equipment.
-
-Buy & Sell
+### Buy & Sell
 
 Users can create and manage marketplace listings.
 
 Categories include:
 
-Electronics
+-   Electronics
+-   Furniture
+-   Appliances
+-   Vehicles
+-   Other
 
-Furniture
-
-Appliances
-
-Vehicles
-
-Other
-
-Spaces
+### Spaces
 
 Users can discover and manage spaces such as:
 
-Shops
-
-Offices
-
-Warehouses
+-   Shops
+-   Offices
+-   Warehouses
 
 The platform also supports space unit management.
 
-Jobs
+### Jobs
 
 Users can browse and manage local job listings.
 
 Categories include:
 
-Skilled Work
+-   Skilled Work
+-   Delivery
+-   Sales
+-   Office Work
+-   Part Time
 
-Delivery
+### Community
 
-Sales
+Users can create and manage community posts for local information and
+alerts.
 
-Office Work
-
-Part Time
-
-Community
-
-Users can create and manage community posts for local information andalerts.
-
-Emergency
+### Emergency
 
 Users can create and manage emergency requests.
 
-User Accounts
+### User Accounts
 
 The application includes:
 
-Registration
+-   Registration
+-   Login
+-   Protected routes
+-   User profiles
+-   Profile editing
+-   Address management
+-   Complete-address flow
+-   Password reset
+-   Change password
+-   Email verification
+-   Public profiles
+-   User listings
 
-Login
+Location is an important part of the platform because local relevance is
+one of its core goals.
 
-Protected routes
-
-User profiles
-
-Profile editing
-
-Address management
-
-Complete-address flow
-
-Password reset
-
-Change password
-
-Email verification
-
-Public profiles
-
-User listings
-
-Location is an important part of the platform because local relevance isone of its core goals.
-
-Admin
+### Admin
 
 The admin area includes:
 
-Admin dashboard
-
-User management
-
-Listing approvals
-
-Analytics
-
-Emergency requests
-
-Reports
-
-Categories
-
-Admin settings
+-   Admin dashboard
+-   User management
+-   Listing approvals
+-   Analytics
+-   Emergency requests
+-   Reports
+-   Categories
+-   Admin settings
 
 Admin routes are protected separately from normal user routes.
 
-Project Structure
+## Project Structure
 
+``` text
 LookAtLocal/
 ├── backend/
 │   ├── prisma/
@@ -244,35 +190,41 @@ LookAtLocal/
 │   └── ...
 │
 └── README.md
+```
 
-Getting Started
+## Getting Started
 
-Prerequisites
+### Prerequisites
 
 Install:
 
-Node.js
+-   Node.js
+-   npm
+-   PostgreSQL for local development
 
-npm
+### Clone
 
-PostgreSQL for local development
-
-Clone
-
+``` bash
 git clone https://github.com/SanathRai33/LookAtLocal.git
 cd LookAtLocal
+```
 
-Backend Setup
+## Backend Setup
 
+``` bash
 cd backend
 npm install
+```
 
 Create:
 
+``` text
 backend/.env
+```
 
 Example:
 
+``` env
 NODE_ENV=development
 PORT=5000
 
@@ -297,70 +249,98 @@ SMTP_FROM=your_email
 CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+```
 
 Never commit real credentials.
 
-Prisma
+### Prisma
 
 Generate the Prisma client:
 
+``` bash
 npx prisma generate
+```
 
 Run local migrations:
 
+``` bash
 npx prisma migrate dev
+```
 
 Check migration status:
 
+``` bash
 npx prisma migrate status
+```
 
 Apply production migrations:
 
+``` bash
 npx prisma migrate deploy
+```
 
 Seed categories:
 
+``` bash
 npm run seed
+```
 
-Start Backend
+### Start Backend
 
 Development:
 
+``` bash
 npm run dev
+```
 
 Production:
 
+``` bash
 npm start
+```
 
 Local API:
 
+``` text
 http://localhost:5000/api/v1
+```
 
-Frontend Setup
+## Frontend Setup
 
+``` bash
 cd frontend
 npm install
+```
 
 Create:
 
+``` text
 frontend/.env
+```
 
 Example:
 
+``` env
 VITE_API_URL=http://localhost:5000/api/v1
+```
 
 Start:
 
+``` bash
 npm run dev
+```
 
 Build:
 
+``` bash
 npm run build
+```
 
-API Architecture
+## API Architecture
 
 The backend follows a modular request flow:
 
+``` text
 Frontend
    ↓
 API
@@ -376,9 +356,11 @@ Service
 Prisma
    ↓
 PostgreSQL
+```
 
 The frontend generally follows:
 
+``` text
 Component / Page
    ↓
 Hook
@@ -386,87 +368,102 @@ Hook
 API Service
    ↓
 Backend API
+```
 
 This keeps UI, API communication, and business logic separated.
 
-Authentication
+## Authentication
 
 The application separates:
 
-Authentication routes
-
-Protected user routes
-
-Admin routes
+-   Authentication routes
+-   Protected user routes
+-   Admin routes
 
 Admin routes require administrator privileges.
 
-Location
+## Location
 
 Location data can include:
 
-City
+-   City
+-   State
+-   Postal code
 
-State
+Listings can be prioritized according to the user's location so that
+locally relevant content appears first.
 
-Postal code
+## Images
 
-Listings can be prioritized according to the user's location so thatlocally relevant content appears first.
+Listing and profile images are handled using Cloudinary. Image URLs are
+stored with the relevant application data instead of storing image files
+directly in PostgreSQL.
 
-Images
-
-Listing and profile images are handled using Cloudinary. Image URLs arestored with the relevant application data instead of storing image filesdirectly in PostgreSQL.
-
-Categories
+## Categories
 
 Initial categories are defined in:
 
+``` text
 backend/prisma/seed.js
+```
 
-The seed uses Prisma upsert, allowing categories to be inserted orupdated safely.
+The seed uses Prisma `upsert`, allowing categories to be inserted or
+updated safely.
 
-Production Deployment
+## Production Deployment
 
-Backend --- Render
+### Backend --- Render
 
 The backend is deployed on Render.
 
 Production API:
 
+``` text
 https://lookatlocal-api.onrender.com
+```
 
 Health endpoint:
 
+``` text
 https://lookatlocal-api.onrender.com/api/v1/health
+```
 
 Typical Render configuration:
 
+``` text
 Root Directory: backend
 Build Command: npm install && npx prisma generate
 Start Command: npm start
+```
 
 Production environment variables must be configured in Render.
 
-Database --- Neon
+### Database --- Neon
 
 The production PostgreSQL database is hosted on Neon.
 
 Apply migrations:
 
+``` bash
 npx prisma migrate deploy
+```
 
-Frontend --- Vercel
+### Frontend --- Vercel
 
 The frontend is deployed on Vercel.
 
 Production API variable:
 
+``` env
 VITE_API_URL=https://lookatlocal-api.onrender.com/api/v1
+```
 
-React Router on Vercel
+## React Router on Vercel
 
-Look@Local is a React single-page application. Direct access andrefreshes on routes such as:
+Look@Local is a React single-page application. Direct access and
+refreshes on routes such as:
 
+``` text
 /services
 /rentals
 /products
@@ -476,15 +473,19 @@ Look@Local is a React single-page application. Direct access andrefreshes on rou
 /emergency
 /admin
 /admin/users
+```
 
 require Vercel to serve the React entry point.
 
 The frontend contains:
 
+``` text
 frontend/vercel.json
+```
 
 with:
 
+``` json
 {
   "rewrites": [
     {
@@ -493,11 +494,13 @@ with:
     }
   ]
 }
+```
 
-Useful Commands
+## Useful Commands
 
-Backend
+### Backend
 
+``` bash
 npm install
 npm run dev
 npm start
@@ -506,52 +509,69 @@ npx prisma generate
 npx prisma migrate dev
 npx prisma migrate deploy
 npx prisma migrate status
+```
 
-Frontend
+### Frontend
 
+``` bash
 npm install
 npm run dev
 npm run build
+```
 
-Environment Variables
+## Environment Variables
 
 Do not commit:
 
+``` text
 .env
+```
 
-Use .env.example to document required variables.
+Use `.env.example` to document required variables.
 
-Production secrets belong in the hosting provider's environment-variablesettings.
+Production secrets belong in the hosting provider's environment-variable
+settings.
 
-Git Workflow
+## Git Workflow
 
+``` bash
 git status
 git add .
 git commit -m "feat: description"
 git push origin main
+```
 
-Changes pushed to the configured branch can trigger automaticdeployments on Vercel and Render.
+Changes pushed to the configured branch can trigger automatic
+deployments on Vercel and Render.
 
-Current Deployment
+## Current Deployment
 
-Part            Platform
+  Part            Platform
+  --------------- -----------------
+  Frontend        Vercel
+  Backend         Render
+  Database        Neon PostgreSQL
+  Image Storage   Cloudinary
+  Source Code     GitHub
 
-Frontend        VercelBackend         RenderDatabase        Neon PostgreSQLImage Storage   CloudinarySource Code     GitHub
+## Project Goal
 
-Project Goal
+Look@Local aims to make local discovery simpler by bringing useful
+community services and opportunities into one platform.
 
-Look@Local aims to make local discovery simpler by bringing usefulcommunity services and opportunities into one platform.
+Users should be able to find nearby services, rent items, buy and sell
+products, discover spaces, find jobs, share community information, and
+access emergency-related functionality from a single application.
 
-Users should be able to find nearby services, rent items, buy and sellproducts, discover spaces, find jobs, share community information, andaccess emergency-related functionality from a single application.
+## Author
 
-Author
-
-Sanath Rai
+**Sanath Rai**
 
 Full Stack Developer
 
 GitHub: https://github.com/SanathRai33/LookAtLocal
 
-License
+## License
 
-This project is currently a personal project. Add an appropriateopen-source license before distributing it under a specific license.
+This project is currently a personal project. Add an appropriate
+open-source license before distributing it under a specific license.
