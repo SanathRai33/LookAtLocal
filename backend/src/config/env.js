@@ -23,6 +23,7 @@ const env = {
   jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
   refreshCookieMaxAge: Number(process.env.REFRESH_COOKIE_MAX_AGE) || 7 * 24 * 60 * 60 * 1000, 
   passwordResetExpiresMinutes: Number(process.env.PASSWORD_RESET_EXPIRES_MINUTES) || 15,
+  emailVerificationExpiresMinutes: Number(process.env.EMAIL_VERIFICATION_EXPIRES_MINUTES) || 15,
   smtpHost: process.env.SMTP_HOST,
   smtpPort: Number(process.env.SMTP_PORT) || 587,
   smtpSecure: process.env.SMTP_SECURE === "true",
@@ -32,6 +33,7 @@ const env = {
   cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
   cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
+  
 };
 
 module.exports = env;

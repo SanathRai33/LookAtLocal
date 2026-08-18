@@ -24,10 +24,10 @@ const registerSchema = z.object({
         .string()
         .min(6, "Password must be at least 6 characters")
         .max(72, "Password cannot exceed 72 characters"),
-        // .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-        // .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-        // .regex(/\d/, "Password must contain at least one number")
-        // .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
+      // .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+      // .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+      // .regex(/\d/, "Password must contain at least one number")
+      // .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
 
       confirmPassword: z.string(),
 
@@ -138,10 +138,27 @@ const resetPasswordSchema = z.object({
   query: z.object({}).optional(),
 });
 
+const verifyEmailSchema = z.object({
+  body: z.object({
+    token: z.string().min(1, "Verification token is required"),
+  }),
+
+  params: z.object({}).optional(),
+  query: z.object({}).optional(),
+});
+
+const resendVerificationSchema = z.object({
+  body: z.object({}).optional(),
+  params: z.object({}).optional(),
+  query: z.object({}).optional(),
+});
+
 module.exports = {
   registerSchema,
   loginSchema,
   changePasswordSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  verifyEmailSchema,
+  resendVerificationSchema
 };

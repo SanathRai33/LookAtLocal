@@ -45,30 +45,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-const refreshUser = async () => {
-  try {
-    const response = await userApi.getMyProfile();
+  const refreshUser = async () => {
+    try {
+      const response = await userApi.getMyProfile();
 
-    const userData = response.data.data;
+      const userData = response.data.data;
 
-    setUser(userData);
-    setIsAuthenticated(true);
+      setUser(userData);
+      setIsAuthenticated(true);
 
-    return {
-      success: true,
-      data: userData,
-    };
-  } catch (error) {
-    setUser(null);
-    setIsAuthenticated(false);
+      return {
+        success: true,
+        data: userData,
+      };
+    } catch (error) {
+      setUser(null);
+      setIsAuthenticated(false);
 
-    return {
-      success: false,
-      error:
-        error.response?.data?.message || 'Failed to fetch profile',
-    };
-  }
-};
+      return {
+        success: false,
+        error:
+          error.response?.data?.message || 'Failed to fetch profile',
+      };
+    }
+  };
 
   const login = async (email, password) => {
     try {
@@ -192,14 +192,18 @@ const refreshUser = async () => {
     }
   };
 
-  const resendVerificationEmail = async () => {
+  const sendVerificationEmail = async () => {
     try {
-      await authApi.resendVerificationEmail();
-      return { success: true };
+      await authApi.sendVerificationEmail();
+
+      return {
+        success: true,
+        message: "Verification email sent successfully.",
+      };
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.message || 'Failed to resend verification email'
+        error: error.response?.data?.message || "Failed to send verification email",
       };
     }
   };
@@ -220,7 +224,7 @@ const refreshUser = async () => {
       resetPassword,
       updateUser,
       verifyEmail,
-      resendVerificationEmail,
+      sendVerificationEmail
     }}>
       {children}
     </AuthContext.Provider>

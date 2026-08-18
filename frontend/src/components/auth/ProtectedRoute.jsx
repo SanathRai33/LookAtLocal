@@ -36,8 +36,6 @@ const ProtectedRoute = ({ requireAdmin = false }) => {
         user?.state &&
         user?.postalCode;
 
-    // Force users without an address to complete it.
-    // But don't redirect if they are already on /complete-address.
     if (!hasRequiredAddress && !isCompleteAddressPage) {
         return <Navigate to="/complete-address" replace />;
     }

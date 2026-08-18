@@ -1,16 +1,17 @@
 const bcrypt = require("bcryptjs");
 
 const prisma = require("../../config/prisma");
+const env = require("../../config/env");
 const AppError = require("../../utils/appError");
-
-const { createAuthSession } = require("./auth-session.service");
+const { hashToken, generateSecureToken } = require("../../utils/token");
 const {
   generateAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
 } = require("../../utils/jwt");
-const { hashToken, generateSecureToken } = require("../../utils/token");
-const env = require("../../config/env");
+
+const { sendEmailVerificationEmail } = require("../../services/email.service");
+const { createAuthSession } = require("./auth-session.service");
 
 const safeUserSelect = {
   id: true,
@@ -498,6 +499,155 @@ const resetPassword = async (token, newPassword) => {
   ]);
 };
 
+const sendVerificationEmail = async (userId) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      id: true,
+      fullName: true,
+      email: true,
+      isEmailVerified: true,
+      status: true,
+      deletedAt: true,
+    },
+  });
+
+  if (!user) {
+    throw new AppError("User account not found", 404);
+  }
+
+  if (user.deletedAt) {
+    throw new AppError("This account is no longer available", 403);
+  }
+
+  if (user.status !== "ACTIVE") {
+    throw new AppError("This account is not active", 403);
+  }
+
+  if (user.isEmailVerified) {
+    throw new AppError("Your email is already verified", 400);
+  }
+
+  const verificationToken = generateSecureToken();
+  const tokenHash = hashToken(verificationToken);
+
+  const expiresAt = new Date(
+    Date.now() + env.emailVerificationExpiresMinutes * 60 * 1000,
+  );
+
+  await prisma.$transaction(async (tx) => {
+    await tx.emailVerificationToken.deleteMany({
+      where: {
+        userId: user.id,
+        usedAt: null,
+      },
+    });
+
+    await tx.emailVerificationToken.create({
+      data: {
+        userId: user.id,
+        tokenHash,
+        expiresAt,
+      },
+    });
+  });
+
+  await sendEmailVerificationEmail({
+    email: user.email,
+    fullName: user.fullName,
+    verificationToken,
+  });
+
+  return {
+    email: user.email,
+    expiresAt,
+  };
+};
+
+const verifyEmail = async (token) => {
+  if (!token) {
+    throw new AppError("Verification token is required", 400);
+  }
+
+  const tokenHash = hashToken(token);
+
+  const verificationRecord = await prisma.emailVerificationToken.findUnique({
+    where: {
+      tokenHash,
+    },
+  });
+
+  if (!verificationRecord) {
+    throw new AppError("Invalid verification link", 400);
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: verificationRecord.userId,
+    },
+    select: {
+      id: true,
+      fullName: true,
+      email: true,
+      isEmailVerified: true,
+      status: true,
+      deletedAt: true,
+    },
+  });
+
+  if (!user || user.deletedAt) {
+    throw new AppError("User account not found", 404);
+  }
+
+  if (user.status !== "ACTIVE") {
+    throw new AppError("This account is not active", 403);
+  }
+
+  if (user.isEmailVerified) {
+    return {
+      alreadyVerified: true,
+      email: user.email,
+    };
+  }
+
+  if (verificationRecord.usedAt) {
+    throw new AppError("This verification link has already been used", 400);
+  }
+
+  if (verificationRecord.expiresAt <= new Date()) {
+    throw new AppError("This verification link has expired", 400);
+  }
+
+  const now = new Date();
+
+  await prisma.$transaction([
+    prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        isEmailVerified: true,
+      },
+    }),
+
+    prisma.emailVerificationToken.update({
+      where: {
+        id: verificationRecord.id,
+      },
+      data: {
+        usedAt: now,
+      },
+    }),
+  ]);
+
+  return {
+    alreadyVerified: false,
+    email: user.email,
+  };
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -507,4 +657,6 @@ module.exports = {
   changePassword,
   forgotPassword,
   resetPassword,
+  sendVerificationEmail,
+  verifyEmail,
 };

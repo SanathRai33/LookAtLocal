@@ -18,6 +18,7 @@ import {
     Award,
     Shield,
     Users,
+    ShieldCheck,
 } from 'lucide-react';
 import { userApi } from '../../api/user.api';
 
@@ -338,7 +339,7 @@ const PublicProfile = () => {
                                     </div>
                                 )}
 
-                                {user.isEmailVerified && (
+                                {user?.isEmailVerified && (
                                     <div className="absolute bottom-0 right-0 p-0.5 bg-white rounded-full dark:bg-slate-800">
                                         <div className="p-0.5 bg-emerald-500 rounded-full">
                                             <Shield className="w-4 h-4 text-white" />
@@ -405,20 +406,20 @@ const PublicProfile = () => {
                         <div className="flex flex-wrap items-center gap-4 mt-4">
                             {user.isEmailVerified && (
                                 <span className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
-                                    <Shield className="w-4 h-4" />
+                                    <ShieldCheck className="w-4 h-4" />
                                     Email verified
                                 </span>
                             )}
 
                             {user.isPhoneVerified && (
                                 <span className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
-                                    <Shield className="w-4 h-4" />
+                                    <ShieldCheck className="w-4 h-4" />
                                     Phone verified
                                 </span>
                             )}
 
                             {user.status && (
-                                <span className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                                <span className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
                                     <Users className="w-4 h-4" />
                                     {user.status === 'ACTIVE'
                                         ? 'Active member'

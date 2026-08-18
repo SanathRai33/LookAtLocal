@@ -110,6 +110,25 @@ const resetPassword = asyncHandler(async (req, res) => {
   );
 });
 
+const sendVerificationEmail = asyncHandler(async (req, res) => {
+  const result = await authService.sendVerificationEmail(req.user.id);
+
+  return ApiResponse.success(
+    res,
+    200,
+    "Verification email sent successfully",
+    result,
+  );
+});
+
+const verifyEmail = asyncHandler(async (req, res) => {
+  const result = await authService.verifyEmail(req.body.token);
+
+  const message = result.alreadyVerified ? "Email is already verified" : "Email verified successfully";
+
+  return ApiResponse.success(res, 200, message, result);
+});
+
 module.exports = {
   register,
   login,
@@ -119,4 +138,6 @@ module.exports = {
   changePassword,
   forgotPassword,
   resetPassword,
+  sendVerificationEmail,
+  verifyEmail
 };

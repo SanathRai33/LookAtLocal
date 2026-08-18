@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Layers3, Plus } from 'lucide-react';
+import { Layers3, Plus, ShieldCheck, TriangleAlert } from 'lucide-react';
 
 const ProfileHero = ({ user }) => {
   const getGreeting = () => {
@@ -44,10 +44,10 @@ const ProfileHero = ({ user }) => {
           </div>
         </div>
 
-        <p className="mt-5 text-base text-blue-50 sm:text-lg">
-          Welcome to your profile dashboard. 
-          {/* {user?.isEmailVerified ? '✅' : '⚠️'}  */}
-          {/* {user?.isEmailVerified ? ' Email verified' : ' Please verify your email'} */}
+        <p className="flex mt-5 text-base text-blue-50 sm:text-lg">
+          Welcome to your profile dashboard. <br/>
+          {user?.isEmailVerified ? <ShieldCheck/> : <TriangleAlert />} 
+          {user?.isEmailVerified ? ' Email verified' : ' Please verify your email'}
         </p>
 
         <div className="flex flex-wrap gap-3 mt-6">

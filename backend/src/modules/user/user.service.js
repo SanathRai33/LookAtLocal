@@ -32,6 +32,8 @@ const publicProfileSelect = {
   phone: true,
   email: true,
   status: true,
+  isEmailVerified: true,
+  isPhoneVerified: true,
   profileImageUrl: true,
   bio: true,
   locality: true,

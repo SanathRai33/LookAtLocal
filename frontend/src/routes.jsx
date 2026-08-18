@@ -64,11 +64,18 @@ const Profile = React.lazy(() => import('./pages/Profile/Profile'));
 const EditProfile = React.lazy(() => import('./pages/Profile/EditProfile'));
 const EditAddress = React.lazy(() => import('./pages/Profile/EditAddress'));
 const MyListings = React.lazy(() => import('./pages/MyListings/MyListings'));
-const Settings = React.lazy(() => import('./pages/Settings/Settings'));
 const CreatePost = React.lazy(() => import('./pages/Profile/CreatePost'));
 const MyPosts = React.lazy(() => import('./pages/Profile/MyPosts'));
 const CompleteAdress = React.lazy(() => import('./pages/Profile/CompleteAddress'));
 const PublicProfile = React.lazy(() => import('./pages/Profile/PublicProfile'));
+
+// Setting
+const Settings = React.lazy(() => import('./pages/Settings/Settings'));
+const SettingsVerifyEmail = React.lazy(() => import('./pages/Settings/SettingsVerifyEmail'));
+const EmailSettings = React.lazy(() => import('./pages/Settings/EmailSettings'));
+const PhoneSettings = React.lazy(() => import('./pages/Settings/PhoneSettings'));
+const PrivacySettings = React.lazy(() => import('./pages/Settings/PrivacySettings'));
+const DeleteAccount = React.lazy(() => import('./pages/Settings/DeleteAccount'));
 
 // Admin Pages
 const AdminLayout = React.lazy(() => import('./components/layout/AdminLayout'));
@@ -80,6 +87,11 @@ const EmergencyRequests = React.lazy(() => import('./pages/Admin/EmergencyReques
 const Reports = React.lazy(() => import('./pages/Admin/Reports'));
 const Categories = React.lazy(() => import('./pages/Admin/Categories'));
 const AdminSettings = React.lazy(() => import('./pages/Admin/AdminSettings'));
+
+// Public Pages
+const Help = React.lazy(() => import('./pages/Public/Help'));
+const Terms = React.lazy(() => import('./pages/Public/Terms'));
+const PrivacyPolicy = React.lazy(() => import('./pages/Public/Privacy'));
 
 // Not Found
 const NotFound = React.lazy(() => import('./pages/NotFound/NotFound'));
@@ -114,6 +126,19 @@ export const routes = [
     children: [
       { index: true, element: <ResetPassword /> }
     ]
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        children: [
+          {
+            path: "/verify-email",
+            element: <VerifyEmail />,
+          },
+        ],
+      },
+    ],
   },
 
   // Protected User Routes
@@ -690,20 +715,7 @@ export const routes = [
     ],
   },
 
-  // {
-  //   element: <ProtectedRoute />,
-  //   children: [
-  //     {
-  //       element: <MainLayout />,
-  //       children: [
-  //         {
-  //           path: '/my-listings',
-  //           element: <MyListings />,
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
+  // Settings Routes
   {
     element: <ProtectedRoute />,
     children: [
@@ -740,12 +752,70 @@ export const routes = [
         children: [
           {
             path: '/settings/verify-email',
-            element: <VerifyEmail />,
+            element: <SettingsVerifyEmail />,
           },
         ],
       },
     ],
   },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <MainLayout />,
+        children: [
+          {
+            path: '/settings/email',
+            element: <EmailSettings />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <MainLayout />,
+        children: [
+          {
+            path: '/settings/phone',
+            element: <PhoneSettings />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <MainLayout />,
+        children: [
+          {
+            path: '/setting/privacy',
+            element: <PrivacySettings />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        element: <MainLayout />,
+        children: [
+          {
+            path: '/settings/delete-account',
+            element: <DeleteAccount />,
+          },
+        ],
+      },
+    ],
+  },
+
+
 
   // Admin Routes
   {
@@ -766,6 +836,20 @@ export const routes = [
         ],
       },
     ],
+  },
+
+  // Public Routes
+  {
+    path: '/help',
+    element: <Help />,
+  },
+    {
+    path: '/terms',
+    element: <Terms />,
+  },
+    {
+    path: '/privacy',
+    element: <PrivacyPolicy />,
   },
 
   // 404 - Catch all
