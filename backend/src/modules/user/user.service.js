@@ -224,6 +224,47 @@ const getPublicProfile = async (userId) => {
   };
 };
 
+const updateMyAccountStatus = async (userId, status) => {
+  const now = new Date();
+
+  const currentUser = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      id: true,
+      status: true,
+      deletedAt: true,
+    },
+  });
+
+  if (!currentUser) {
+    throw new AppError("User account not found", 404);
+  }
+
+  if (!["ACTIVE", "DEACTIVATED"].includes(status)) {
+    throw new AppError("Invalid account status", 400);
+  }
+
+  if (currentUser.status === status) {
+    throw new AppError(`Account is already ${status.toLowerCase()}`, 400);
+  }
+
+  const user = await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      status,
+      deletedAt: null,
+      statusChangedAt: now,
+    },
+    select: privateProfileSelect,
+  });
+
+  return user;
+};
+
 const deleteMyAccount = async (userId) => {
   const now = new Date();
 
@@ -255,5 +296,6 @@ module.exports = {
   updateMyProfile,
   updateAvatar,
   getPublicProfile,
+  updateMyAccountStatus,
   deleteMyAccount,
 };

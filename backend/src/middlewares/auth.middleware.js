@@ -59,9 +59,9 @@ const authenticate = async (req, res, next) => {
       throw new AppError("Your account has been banned", 403);
     }
 
-    if (user.status === "DEACTIVATED") {
-      throw new AppError("Your account is deactivated", 403);
-    }
+    // if (user.status === "DEACTIVATED") {
+    //   throw new AppError("Your account is deactivated", 403);
+    // }
 
     req.user = user;
     req.sessionId = payload.sessionId;

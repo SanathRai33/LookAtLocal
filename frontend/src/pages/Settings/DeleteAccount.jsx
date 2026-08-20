@@ -12,23 +12,41 @@ import {
     CheckCircle2,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import { useUser } from '../../hooks/useUser'
 
 const DeleteAccount = () => {
     const { user } = useAuth();
+    const { updateMyAccountStatus, loading } = useUser();
 
     const [showDeleteConfirmation, setShowDeleteConfirmation] =
         useState(false);
 
     const [confirmationText, setConfirmationText] = useState("");
 
-    const handleDeactivate = () => {
-        // Backend implementation will be added later.
-        alert("Account deactivation will be available soon.");
+    const handleDeactivate = async () => {
+        const confirmed = window.confirm(
+            "Are you sure you want to deactivate your account?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        const result = await updateMyAccountStatus("DEACTIVATED");
+
+        if (!result.success) {
+            alert(result.error);
+            return;
+        }
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        window.location.href = "/login";
     };
 
     const handleDelete = () => {
-        // Backend implementation will be added later.
-        alert("Account deletion will be available soon.");
+        alert("For now we don't have much users so we will not allow you to delete the account.");
     };
 
     const canDelete = confirmationText === "DELETE";
@@ -44,7 +62,7 @@ const DeleteAccount = () => {
                     <ArrowLeft className="w-4 h-4" />
                     Back to Settings
                 </Link>
-                
+
                 <div className="mb-8">
                     <div className="flex items-center gap-4">
                         <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-xl dark:bg-red-900/30">
@@ -79,7 +97,7 @@ const DeleteAccount = () => {
                         </p>
                     </div>
                 </div>
-                
+
                 <div className="p-6 mb-6 bg-white border border-gray-200 shadow-sm rounded-2xl dark:bg-slate-900 dark:border-slate-800">
                     <div className="flex items-start gap-4">
                         <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 bg-gray-100 rounded-lg dark:bg-slate-800">
@@ -162,10 +180,12 @@ const DeleteAccount = () => {
                         <button
                             type="button"
                             onClick={handleDeactivate}
-                            className="inline-flex items-center justify-center w-full gap-2 px-5 py-3 mt-6 text-sm font-medium text-gray-900 transition-colors border border-gray-300 rounded-lg sm:w-auto hover:bg-gray-50 dark:border-slate-700 dark:text-white dark:hover:bg-slate-800"
+                            disabled={loading}
+                            className="inline-flex items-center justify-center w-full gap-2 px-5 py-3 mt-6 text-sm font-medium text-gray-900 transition-colors border border-gray-300 rounded-lg sm:w-auto hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-700 dark:text-white dark:hover:bg-slate-800"
                         >
                             <ShieldOff className="w-4 h-4" />
-                            Deactivate Account
+
+                            {loading ? "Deactivating..." : "Deactivate Account"}
                         </button>
                     </div>
                 </section>
@@ -326,14 +346,14 @@ const WarningItem = ({
         <div className="flex items-start gap-4">
             <div
                 className={`flex items-center justify-center flex-shrink-0 w-9 h-9 rounded-lg ${danger
-                        ? "bg-red-100 dark:bg-red-900/30"
-                        : "bg-amber-100 dark:bg-amber-900/30"
+                    ? "bg-red-100 dark:bg-red-900/30"
+                    : "bg-amber-100 dark:bg-amber-900/30"
                     }`}
             >
                 <Icon
                     className={`w-4 h-4 ${danger
-                            ? "text-red-600 dark:text-red-400"
-                            : "text-amber-600 dark:text-amber-400"
+                        ? "text-red-600 dark:text-red-400"
+                        : "text-amber-600 dark:text-amber-400"
                         }`}
                 />
             </div>
@@ -341,8 +361,8 @@ const WarningItem = ({
             <div>
                 <h3
                     className={`text-sm font-semibold ${danger
-                            ? "text-red-900 dark:text-red-300"
-                            : "text-gray-900 dark:text-white"
+                        ? "text-red-900 dark:text-red-300"
+                        : "text-gray-900 dark:text-white"
                         }`}
                 >
                     {title}

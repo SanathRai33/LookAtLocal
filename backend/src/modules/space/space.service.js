@@ -5,7 +5,6 @@ const { getPagination, getPaginationMeta } = require("../../utils/pagination");
 
 const { uploadImages, deleteImages } = require("../../services/upload.service");
 
-
 const spaceSelect = {
   id: true,
   ownerId: true,
@@ -330,6 +329,11 @@ const getSpaces = async (userId, filters) => {
   const where = {
     status: "ACTIVE",
     deletedAt: null,
+
+    owner: {
+      status: "ACTIVE",
+      deletedAt: null,
+    },
   };
 
   if (user.postalCode) {
@@ -461,8 +465,12 @@ const getSpaceById = async (spaceId, userId) => {
   const space = await prisma.spaceListing.findFirst({
     where: {
       id: spaceId,
-
       deletedAt: null,
+
+      owner: {
+        status: "ACTIVE",
+        deletedAt: null,
+      },
 
       OR: [
         {
@@ -610,10 +618,7 @@ const updateSpace = async (spaceId, userId, data) => {
     Object.prototype.hasOwnProperty.call(data, field),
   );
 
-  if (
-    requiresReview &&
-    ["ACTIVE", "REJECTED"].includes(existingSpace.status)
-  ) {
+  if (requiresReview && ["ACTIVE", "REJECTED"].includes(existingSpace.status)) {
     updateData.status = "PENDING";
   }
 

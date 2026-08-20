@@ -5,7 +5,6 @@ const { getPagination, getPaginationMeta } = require("../../utils/pagination");
 
 const { uploadImages, deleteImages } = require("../../services/upload.service");
 
-
 const productSelect = {
   id: true,
   sellerId: true,
@@ -303,6 +302,11 @@ const getProducts = async (userId, filters) => {
       in: ["ACTIVE", "RESERVED"],
     },
     deletedAt: null,
+
+    seller: {
+      status: "ACTIVE",
+      deletedAt: null,
+    },
   };
 
   if (user.postalCode) {
@@ -435,19 +439,16 @@ const getProductById = async (productId, userId) => {
     where: {
       id: productId,
 
+      status: {
+        in: ["ACTIVE", "RESERVED"],
+      },
+
       deletedAt: null,
 
-      OR: [
-        {
-          status: {
-            in: ["ACTIVE", "RESERVED"],
-          },
-        },
-
-        {
-          sellerId: userId,
-        },
-      ],
+      seller: {
+        status: "ACTIVE",
+        deletedAt: null,
+      },
     },
 
     select: productSelect,
@@ -458,6 +459,7 @@ const getProductById = async (productId, userId) => {
   }
 
   const [result] = await enrichProducts([product], userId);
+
   const similarProducts = await getSellerOtherProducts(
     product.sellerId,
     product.id,

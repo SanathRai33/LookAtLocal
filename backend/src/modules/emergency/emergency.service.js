@@ -66,11 +66,15 @@ const createEmergencyRequest = async ({ userId, data }) => {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
   const useCurrentLocation = data.useCurrentLocation || false;
-  const addressLine = useCurrentLocation ? data.currentAddress : user.addressLine;
+  const addressLine = useCurrentLocation
+    ? data.currentAddress
+    : user.addressLine;
   const locality = useCurrentLocation ? data.currentLocality : user.locality;
   const city = useCurrentLocation ? data.currentCity : user.city;
   const state = useCurrentLocation ? data.currentState : user.state;
-  const postalCode = useCurrentLocation ? data.currentPostalCode : user.postalCode;
+  const postalCode = useCurrentLocation
+    ? data.currentPostalCode
+    : user.postalCode;
   const latitude = useCurrentLocation ? data.currentLatitude : user.latitude;
   const longitude = useCurrentLocation ? data.currentLongitude : user.longitude;
 
@@ -109,22 +113,19 @@ const createEmergencyRequest = async ({ userId, data }) => {
 };
 
 const getEmergencyRequests = async (userId, filters) => {
-  const {
-    search,
-    emergencyType,
-    urgency,
-    status,
-    city,
-    sort,
-    page,
-    limit,
-  } = filters;
+  const { search, emergencyType, urgency, status, city, sort, page, limit } =
+    filters;
 
   const pagination = getPagination(page, limit);
 
   const where = {
     status: {
       in: ["ACTIVE", "RESOLVED"],
+    },
+
+    requester: {
+      status: "ACTIVE",
+      deletedAt: null,
     },
   };
 
@@ -269,7 +270,13 @@ const getEmergencyRequestById = async (emergencyId, userId) => {
   const emergency = await prisma.emergencyRequest.findFirst({
     where: {
       id: emergencyId,
+
+      requester: {
+        status: "ACTIVE",
+        deletedAt: null,
+      },
     },
+
     select: emergencySelect,
   });
 
@@ -305,7 +312,13 @@ const updateEmergencyRequest = async (emergencyId, userId, data) => {
 
   const updateData = {};
 
-  const allowedFields = ["title", "description", "urgency", "contactPhone", "emergencyType"];
+  const allowedFields = [
+    "title",
+    "description",
+    "urgency",
+    "contactPhone",
+    "emergencyType",
+  ];
 
   allowedFields.forEach((field) => {
     if (data[field] !== undefined) {

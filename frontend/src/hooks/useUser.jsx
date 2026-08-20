@@ -56,6 +56,39 @@ export const useUser = () => {
         }
     };
 
+    const updateMyAccountStatus = async (status) => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const response =
+                await userApi.updateMyAccountStatus(status);
+
+            const userData = response.data.data;
+
+            setUser(userData);
+
+            return {
+                success: true,
+                data: userData,
+                message: response.data.message,
+            };
+        } catch (error) {
+            const errorMessage =
+                error.response?.data?.message ||
+                "Failed to update account status";
+
+            setError(errorMessage);
+
+            return {
+                success: false,
+                error: errorMessage,
+            };
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const getPublicProfile = async (userId) => {
         setLoading(true);
         setError(null);
@@ -72,11 +105,12 @@ export const useUser = () => {
     };
 
     return {
-        getMyProfile,
-        updateMyProfile,
-        deleteMyAccount,
-        getPublicProfile,
-        loading,
-        error,
-    };
+    getMyProfile,
+    updateMyProfile,
+    updateMyAccountStatus,
+    deleteMyAccount,
+    getPublicProfile,
+    loading,
+    error,
+};
 };

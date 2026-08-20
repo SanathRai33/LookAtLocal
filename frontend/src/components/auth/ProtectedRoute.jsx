@@ -27,6 +27,16 @@ const ProtectedRoute = ({ requireAdmin = false }) => {
         return <Navigate to="/" replace />;
     }
 
+    const isReactivatePage =
+        location.pathname === "/settings/reactivate-account";
+
+    if (user?.status === "DEACTIVATED") {
+        if (isReactivatePage) {
+            return <Outlet />;
+        }
+        return (<Navigate to="/settings/reactivate-account" replace />);
+    }
+
     const isCompleteAddressPage =
         location.pathname === '/complete-address';
 

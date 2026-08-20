@@ -334,8 +334,13 @@ const getRentals = async (userId, filters) => {
   const pagination = getPagination(page, limit);
 
   const where = {
-    deletedAt: null,
     status: "ACTIVE",
+    deletedAt: null,
+
+    owner: {
+      status: "ACTIVE",
+      deletedAt: null,
+    },
   };
 
   if (typeof isAvailable === "boolean") {
@@ -482,18 +487,13 @@ const getRentalById = async (rentalId, userId) => {
   const rental = await prisma.rentalListing.findFirst({
     where: {
       id: rentalId,
-
+      status: "ACTIVE",
       deletedAt: null,
 
-      OR: [
-        {
-          status: "ACTIVE",
-        },
-
-        {
-          ownerId: userId,
-        },
-      ],
+      owner: {
+        status: "ACTIVE",
+        deletedAt: null,
+      },
     },
 
     select: rentalSelect,
@@ -504,6 +504,7 @@ const getRentalById = async (rentalId, userId) => {
   }
 
   const [result] = await enrichRentals([rental], userId);
+
   const similarRentals = await getOwnerOtherRentals(
     rental.ownerId,
     rental.id,

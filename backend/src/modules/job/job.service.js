@@ -264,6 +264,11 @@ const getJobs = async (userId, filters) => {
   const where = {
     status: "ACTIVE",
     deletedAt: null,
+
+    poster: {
+      status: "ACTIVE",
+      deletedAt: null,
+    },
   };
 
   if (user.postalCode) {
@@ -389,6 +394,12 @@ const getJobById = async (jobId, userId) => {
     where: {
       id: jobId,
       deletedAt: null,
+
+      poster: {
+        status: "ACTIVE",
+        deletedAt: null,
+      },
+      
       OR: [
         {
           status: "ACTIVE",

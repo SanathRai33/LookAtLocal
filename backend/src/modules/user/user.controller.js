@@ -16,7 +16,6 @@ const updateMyProfile = asyncHandler(async (req, res) => {
 });
 
 const updateAvatar = asyncHandler(async (req, res) => {
-  
   const user = await userService.updateAvatar(req.user.id, req.file);
 
   return ApiResponse.success(
@@ -38,6 +37,20 @@ const getPublicProfile = asyncHandler(async (req, res) => {
   );
 });
 
+const updateMyAccountStatus = asyncHandler(async (req, res) => {
+  const user = await userService.updateMyAccountStatus(
+    req.user.id,
+    req.body.status,
+  );
+
+  const message =
+    req.body.status === "DEACTIVATED"
+      ? "Account deactivated successfully"
+      : "Account reactivated successfully";
+
+  return ApiResponse.success(res, 200, message, user);
+});
+
 const deleteMyAccount = asyncHandler(async (req, res) => {
   await userService.deleteMyAccount(req.user.id);
 
@@ -49,5 +62,6 @@ module.exports = {
   updateMyProfile,
   updateAvatar,
   getPublicProfile,
+  updateMyAccountStatus,
   deleteMyAccount,
 };

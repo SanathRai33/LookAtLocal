@@ -112,20 +112,17 @@ const createCommunityPost = async ({ userId, data }) => {
 };
 
 const getCommunityPosts = async (userId, filters) => {
-  const {
-    search,
-    postType,
-    isMine,
-    showClosed,
-    sort,
-    page,
-    limit,
-  } = filters;
+  const { search, postType, isMine, showClosed, sort, page, limit } = filters;
 
   const pagination = getPagination(page, limit);
 
   const where = {
     deletedAt: null,
+
+    author: {
+      status: "ACTIVE",
+      deletedAt: null,
+    },
   };
 
   if (isMine === "true") {
@@ -228,6 +225,12 @@ const getCommunityPostById = async (postId, userId) => {
       id: postId,
       deletedAt: null,
     },
+
+    author: {
+      status: "ACTIVE",
+      deletedAt: null,
+    },
+
     select: {
       ...postSelect,
       _count: {

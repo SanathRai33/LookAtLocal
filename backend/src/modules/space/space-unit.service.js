@@ -84,6 +84,11 @@ const getSpaceUnits = async (spaceId, userId, filters) => {
       id: spaceId,
       deletedAt: null,
 
+      // provider: {
+      //   status: "ACTIVE",
+      //   deletedAt: null,
+      // },
+
       OR: [
         {
           status: "ACTIVE",
@@ -170,8 +175,12 @@ const getSpaceUnitById = async (spaceId, unitId, userId) => {
   const unit = await prisma.spaceUnit.findFirst({
     where: {
       id: unitId,
-
       spaceListingId: spaceId,
+
+      // provider: {
+      //   status: "ACTIVE",
+      //   deletedAt: null,
+      // },
 
       spaceListing: {
         deletedAt: null,

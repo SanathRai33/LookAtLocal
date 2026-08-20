@@ -76,7 +76,19 @@ const userIdParamSchema = z.object({
   query: z.object({}).optional(),
 });
 
+const updateAccountStatusSchema = z.object({
+  body: z.object({
+    status: z.enum(["ACTIVE", "DEACTIVATED"], {
+      message: "Status must be ACTIVE or DEACTIVATED",
+    }),
+  }),
+
+  params: z.object({}).optional(),
+  query: z.object({}).optional(),
+});
+
 module.exports = {
   updateProfileSchema,
   userIdParamSchema,
+  updateAccountStatusSchema
 };

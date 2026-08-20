@@ -203,11 +203,7 @@ const enrichServices = async (services, userId) => {
   });
 };
 
-const getProviderOtherServices = async (
-  providerId,
-  currentServiceId,
-  userId,
-) => {
+const getProviderOtherServices = async ( providerId, currentServiceId, userId ) => {
   const services = await prisma.serviceListing.findMany({
     where: {
       providerId,
@@ -351,6 +347,11 @@ const getServices = async (userId, filters) => {
     status: "ACTIVE",
     isAvailable: true,
     deletedAt: null,
+
+    provider: {
+      status: "ACTIVE",
+      deletedAt: null,
+    },
   };
 
   if (user.postalCode) {
@@ -475,6 +476,11 @@ const getServiceById = async (serviceId, userId) => {
       id: serviceId,
       deletedAt: null,
 
+      provider: {
+        status: "ACTIVE",
+        deletedAt: null,
+      },
+
       OR: [
         {
           status: "ACTIVE",
@@ -517,8 +523,8 @@ const getMyServices = async (userId, filters) => {
   };
 
   if (status) {
-  where.status = status;
-}
+    where.status = status;
+  }
 
   if (search) {
     where.OR = [

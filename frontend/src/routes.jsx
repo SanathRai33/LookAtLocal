@@ -76,6 +76,7 @@ const EmailSettings = React.lazy(() => import('./pages/Settings/EmailSettings'))
 const PhoneSettings = React.lazy(() => import('./pages/Settings/PhoneSettings'));
 const PrivacySettings = React.lazy(() => import('./pages/Settings/PrivacySettings'));
 const DeleteAccount = React.lazy(() => import('./pages/Settings/DeleteAccount'));
+const ReactivateAccount = React.lazy(() => import('./pages/Settings/ReactivateAccount'));
 
 // Admin Pages
 const AdminLayout = React.lazy(() => import('./components/layout/AdminLayout'));
@@ -809,6 +810,19 @@ export const routes = [
           {
             path: '/settings/delete-account',
             element: <DeleteAccount />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        children: [
+          {
+            path: "/settings/reactivate-account",
+            element: <ReactivateAccount />,
           },
         ],
       },
