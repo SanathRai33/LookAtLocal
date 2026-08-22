@@ -247,14 +247,14 @@ const EmergencyCard = ({ request, onStatusChange }) => {
                                 <Phone className="w-4 h-4" />
                                 Contact Now
                             </button>
-                            <button className="px-4 py-2.5 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-sm font-medium rounded-xl transition-all duration-200 flex items-center gap-2">
+                            {/* <button className="px-4 py-2.5 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-sm font-medium rounded-xl transition-all duration-200 flex items-center gap-2">
                                 <Share2 className="w-4 h-4" />
                                 Share
                             </button>
                             <button className="px-4 py-2.5 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-sm font-medium rounded-xl transition-all duration-200 flex items-center gap-2">
                                 <MessageCircle className="w-4 h-4" />
                                 Message
-                            </button>
+                            </button> */}
                         </div>
                     )}
                 </div>

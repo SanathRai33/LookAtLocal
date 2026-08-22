@@ -578,9 +578,7 @@ const deleteJob = async (jobId, userId) => {
   const job = await prisma.jobListing.findFirst({
     where: {
       id: jobId,
-
       postedBy: userId,
-
       deletedAt: null,
     },
 
@@ -588,7 +586,12 @@ const deleteJob = async (jobId, userId) => {
       applications: {
         where: {
           status: {
-            in: ["APPLIED", "REVIEWING", "SHORTLISTED", "ACCEPTED"],
+            in: [
+              "APPLIED",
+              "REVIEWING",
+              "SHORTLISTED",
+              "ACCEPTED",
+            ],
           },
         },
       },
@@ -609,14 +612,9 @@ const deleteJob = async (jobId, userId) => {
     );
   }
 
-  await prisma.jobListing.update({
+  await prisma.jobListing.delete({
     where: {
       id: jobId,
-    },
-
-    data: {
-      deletedAt: new Date(),
-      status: "CLOSED",
     },
   });
 

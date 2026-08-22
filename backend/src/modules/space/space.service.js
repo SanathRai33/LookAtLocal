@@ -641,9 +641,7 @@ const deleteSpace = async (spaceId, userId) => {
   const space = await prisma.spaceListing.findFirst({
     where: {
       id: spaceId,
-
       ownerId: userId,
-
       deletedAt: null,
     },
 
@@ -653,6 +651,10 @@ const deleteSpace = async (spaceId, userId) => {
           status: {
             in: ["RESERVED", "OCCUPIED"],
           },
+        },
+        select: {
+          id: true,
+          status: true,
         },
       },
     },
@@ -672,51 +674,43 @@ const deleteSpace = async (spaceId, userId) => {
     );
   }
 
+  const images = await prisma.listingImage.findMany({
+    where: {
+      entityType: "SPACE",
+      entityId: spaceId,
+    },
+
+    select: {
+      publicId: true,
+    },
+  });
+
   await prisma.$transaction(async (tx) => {
-    const images = await tx.listingImage.findMany({
+    await tx.spaceUnit.deleteMany({
+      where: {
+        spaceListingId: spaceId,
+      },
+    });
+
+    await tx.listingImage.deleteMany({
       where: {
         entityType: "SPACE",
-
         entityId: spaceId,
       },
     });
 
-    if (images.length > 0) {
-      await deleteImages(images.map((image) => image.publicId).filter(Boolean));
-
-      await tx.listingImage.deleteMany({
-        where: {
-          entityType: "SPACE",
-
-          entityId: spaceId,
-        },
-      });
-    }
-
-    await tx.spaceListing.update({
+    await tx.spaceListing.delete({
       where: {
         id: spaceId,
       },
-
-      data: {
-        deletedAt: new Date(),
-        status: "CLOSED",
-      },
-    });
-
-    await tx.spaceUnit.updateMany({
-      where: {
-        spaceListingId: spaceId,
-        status: {
-          in: ["AVAILABLE", "RESERVED"],
-        },
-      },
-
-      data: {
-        status: "RESERVED",
-      },
     });
   });
+
+  const publicIds = images.map((image) => image.publicId).filter(Boolean);
+
+  if (publicIds.length > 0) {
+    await deleteImages(publicIds);
+  }
 
   return;
 };

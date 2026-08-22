@@ -717,9 +717,7 @@ const deleteRental = async (rentalId, userId) => {
   const rental = await prisma.rentalListing.findFirst({
     where: {
       id: rentalId,
-
       ownerId: userId,
-
       deletedAt: null,
     },
 
@@ -745,35 +743,40 @@ const deleteRental = async (rentalId, userId) => {
     );
   }
 
+  // Get images before deleting the listing.
+  const images = await prisma.listingImage.findMany({
+    where: {
+      entityType: "RENTAL",
+      entityId: rentalId,
+    },
+    select: {
+      publicId: true,
+    },
+  });
+
   await prisma.$transaction(async (tx) => {
-    const images = await tx.listingImage.findMany({
+    // Delete listing images.
+    await tx.listingImage.deleteMany({
       where: {
         entityType: "RENTAL",
         entityId: rentalId,
       },
     });
 
-    if (images.length > 0) {
-      await deleteImages(images.map((image) => image.publicId).filter(Boolean));
-
-      await tx.listingImage.deleteMany({
-        where: {
-          entityType: "RENTAL",
-          entityId: rentalId,
-        },
-      });
-    }
-
-    await tx.rentalListing.update({
+    // Delete the rental itself.
+    await tx.rentalListing.delete({
       where: {
         id: rentalId,
       },
-
-      data: {
-        deletedAt: new Date(),
-      },
     });
   });
+
+  // Delete Cloudinary images after successful DB deletion.
+  const publicIds = images.map((image) => image.publicId).filter(Boolean);
+
+  if (publicIds.length > 0) {
+    await deleteImages(publicIds);
+  }
 
   return;
 };

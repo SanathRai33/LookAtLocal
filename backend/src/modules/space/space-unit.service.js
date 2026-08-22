@@ -268,9 +268,7 @@ const deleteSpaceUnit = async (spaceId, unitId, userId) => {
   const unit = await prisma.spaceUnit.findFirst({
     where: {
       id: unitId,
-
       spaceListingId: spaceId,
-
       status: {
         in: ["AVAILABLE", "RESERVED"],
       },

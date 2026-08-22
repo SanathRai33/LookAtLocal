@@ -76,12 +76,12 @@ const SpaceCard = ({ space }) => {
                     </div>
                 )}
 
-                <button
+                {/* <button
                     onClick={() => setIsWishlisted(!isWishlisted)}
                     className="absolute p-2 transition-all duration-200 rounded-full bottom-3 right-3 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm hover:scale-110"
                 >
                     <Heart className={`h-5 w-5 ${isWishlisted || isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600 dark:text-gray-400'}`} />
-                </button>
+                </button> */}
             </div>
 
             <div className="p-4">

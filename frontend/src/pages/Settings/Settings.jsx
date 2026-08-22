@@ -20,11 +20,14 @@ import {
     HelpCircle,
     FileText,
     ShieldCheck,
-    UserX
+    UserX,
+    Clock,
+    Sparkles,
+    Construction
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { FaGithub, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 const Settings = () => {
     const navigate = useNavigate();
@@ -69,6 +72,7 @@ const Settings = () => {
                     description: 'Manage phone number',
                     icon: Smartphone,
                     to: '/settings/phone',
+                    tag: { label: 'Coming Soon', variant: 'blue' }
                 },
             ],
         },
@@ -88,18 +92,18 @@ const Settings = () => {
                 {
                     id: 'language',
                     label: 'Language',
-                    description: 'Change your language preference (Comming soon)',
+                    description: 'Change your language preference',
                     icon: Languages,
                     to: '#',
-                    // to: '/settings/language',
+                    tag: { label: 'Coming Soon', variant: 'blue' }
                 },
                 {
                     id: 'notifications',
                     label: 'Notifications',
-                    description: 'Manage notification preferences (Next version)',
+                    description: 'Manage notification preferences',
                     icon: Bell,
-                    // to: '/settings/notifications',
                     to: '#',
+                    tag: { label: 'Next Version', variant: 'purple' }
                 },
             ],
         },
@@ -114,6 +118,7 @@ const Settings = () => {
                     description: 'Control your privacy preferences',
                     icon: ShieldCheck,
                     to: '/settings/privacy',
+                    tag: { label: 'Coming Soon', variant: 'blue' }
                 },
                 {
                     id: 'sessions',
@@ -121,6 +126,7 @@ const Settings = () => {
                     description: 'Manage your active sessions',
                     icon: Database,
                     to: '/settings/sessions',
+                    tag: { label: 'Next Version', variant: 'purple' }
                 },
                 {
                     id: 'two-factor',
@@ -128,6 +134,7 @@ const Settings = () => {
                     description: 'Add an extra layer of security',
                     icon: Shield,
                     to: '/settings/2fa',
+                    tag: { label: 'Next Version', variant: 'purple' }
                 },
                 {
                     id: 'delete-account',
@@ -136,6 +143,7 @@ const Settings = () => {
                     icon: UserX,
                     to: '/settings/delete-account',
                     danger: true,
+                    tag: { label: 'Working On', variant: 'yellow' }
                 },
             ],
         },
@@ -168,6 +176,29 @@ const Settings = () => {
             ],
         },
     ];
+
+    const renderTag = (tag) => {
+        const variants = {
+            blue: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+            purple: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+            green: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
+            orange: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
+            yellow: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
+        };
+
+        return (
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium ${variants[tag.variant] || variants.blue}`}>
+                {tag.variant === 'purple' ? (
+                    <Sparkles className="w-2.5 h-2.5" />
+                ) : tag.variant === 'blue' ? (
+                    <Clock className="w-2.5 h-2.5" />
+                ) : (
+                    <Construction className="w-2.5 h-2.5" />
+                )}
+                {tag.label}
+            </span>
+        );
+    };
 
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950">
@@ -205,8 +236,8 @@ const Settings = () => {
                                 </p>
                                 <div className="flex items-center gap-2 mt-3">
                                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user?.status === 'ACTIVE'
-                                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
-                                            : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'
+                                        ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
+                                        : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'
                                         }`}>
                                         {user?.status || 'Active'}
                                     </span>
@@ -255,23 +286,26 @@ const Settings = () => {
                                                 className={`flex items-center justify-between p-4 transition cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 ${item.danger ? 'hover:bg-red-50 dark:hover:bg-red-950/20' : ''
                                                     }`}
                                             >
-                                                <div className="flex items-center gap-3">
-                                                    <div className={`p-2 rounded-lg ${item.danger
-                                                            ? 'bg-red-50 dark:bg-red-950/30'
-                                                            : 'bg-gray-100 dark:bg-slate-800'
+                                                <div className="flex items-center min-w-0 gap-3">
+                                                    <div className={`p-2 rounded-lg flex-shrink-0 ${item.danger
+                                                        ? 'bg-red-50 dark:bg-red-950/30'
+                                                        : 'bg-gray-100 dark:bg-slate-800'
                                                         }`}>
                                                         <Icon className={`w-4 h-4 ${item.danger
-                                                                ? 'text-red-600 dark:text-red-400'
-                                                                : 'text-gray-600 dark:text-gray-300'
+                                                            ? 'text-red-600 dark:text-red-400'
+                                                            : 'text-gray-600 dark:text-gray-300'
                                                             }`} />
                                                     </div>
-                                                    <div>
-                                                        <p className={`text-sm font-medium ${item.danger
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex flex-wrap items-center gap-2">
+                                                            <p className={`text-sm font-medium ${item.danger
                                                                 ? 'text-red-600 dark:text-red-400'
                                                                 : 'text-gray-950 dark:text-white'
-                                                            }`}>
-                                                            {item.label}
-                                                        </p>
+                                                                }`}>
+                                                                {item.label}
+                                                            </p>
+                                                            {item.tag && renderTag(item.tag)}
+                                                        </div>
                                                         <p className="text-xs text-gray-500 dark:text-gray-400">
                                                             {item.description}
                                                         </p>
@@ -281,14 +315,14 @@ const Settings = () => {
                                                 {item.onClick ? (
                                                     <button
                                                         onClick={item.onClick}
-                                                        className="p-1 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-slate-700"
+                                                        className="flex-shrink-0 p-1 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-slate-700"
                                                     >
                                                         <ChevronRight className="w-4 h-4 text-gray-400" />
                                                     </button>
                                                 ) : (
                                                     <Link
                                                         to={item.to}
-                                                        className={`p-1 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-slate-700 ${item.danger ? 'hover:bg-red-100 dark:hover:bg-red-950/50' : ''
+                                                        className={`p-1 rounded-lg flex-shrink-0 cursor-pointer hover:bg-gray-200 dark:hover:bg-slate-700 ${item.danger ? 'hover:bg-red-100 dark:hover:bg-red-950/50' : ''
                                                             }`}
                                                         onClick={(e) => {
                                                             if (item.to === '#') {
@@ -297,8 +331,8 @@ const Settings = () => {
                                                         }}
                                                     >
                                                         <ChevronRight className={`w-4 h-4 ${item.danger
-                                                                ? 'text-red-600 dark:text-red-400'
-                                                                : 'text-gray-400'
+                                                            ? 'text-red-600 dark:text-red-400'
+                                                            : 'text-gray-400'
                                                             }`} />
                                                     </Link>
                                                 )}
@@ -312,29 +346,23 @@ const Settings = () => {
                         {/* Social Links */}
                         <div className="pt-4 text-center">
                             <div className="flex items-center justify-center gap-4">
-                                <a
-                                    href="#"
-                                    className="p-2 transition rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-800"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                <a target='_blank' rel="noopener noreferrer" href="https://github.com/SanathRai33"
+                                    className="p-2 text-gray-600 transition-all duration-200 bg-gray-100 rounded-lg dark:bg-slate-800 dark:text-gray-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50 dark:hover:text-blue-400"
+                                    aria-label="GitHub"
                                 >
-                                    <FaGithub className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                                    <FaGithub className="w-4 h-4" />
                                 </a>
-                                <a
-                                    href="#"
-                                    className="p-2 transition rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-800"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                <a target='_blank' rel="noopener noreferrer" href="https://www.instagram.com/sannu_rai33/"
+                                    className="p-2 text-gray-600 transition-all duration-200 bg-gray-100 rounded-lg dark:bg-slate-800 dark:text-gray-400 hover:bg-pink-50 hover:text-pink-600 dark:hover:bg-pink-950/50 dark:hover:text-pink-400"
+                                    aria-label="Instagram"
                                 >
-                                    <FaTwitter className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                                    <FaInstagram className="w-4 h-4" />
                                 </a>
-                                <a
-                                    href="#"
-                                    className="p-2 transition rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-800"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                <a target='_blank' rel="noopener noreferrer" href="https://www.linkedin.com/in/sanath-rai33/"
+                                    className="p-2 text-gray-600 transition-all duration-200 bg-gray-100 rounded-lg dark:bg-slate-800 dark:text-gray-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50 dark:hover:text-blue-400"
+                                    aria-label="LinkedIn"
                                 >
-                                    <FaLinkedin className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                                    <FaLinkedin className="w-4 h-4" />
                                 </a>
                             </div>
                             <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">

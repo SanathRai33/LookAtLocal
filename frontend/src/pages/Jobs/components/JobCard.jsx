@@ -119,12 +119,12 @@ const JobCard = ({ job, idx }) => {
                   {title}
                 </h3>
               </Link>
-              <button
+              {/* <button
                 onClick={() => setIsSaved(!isSaved)}
                 className="flex-shrink-0 p-2 transition-colors duration-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"
               >
                 <Heart className={`h-5 w-5 ${isSaved ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
-              </button>
+              </button> */}
             </div>
             <div className="flex items-center gap-2 mt-0.5">
               <span className="font-medium text-gray-700 dark:text-gray-300">{companyName}</span>

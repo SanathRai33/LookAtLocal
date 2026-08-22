@@ -324,12 +324,9 @@ const deleteCommunityPost = async (postId, userId) => {
     );
   }
 
-  await prisma.communityPost.update({
+  await prisma.communityPost.delete({
     where: {
       id: postId,
-    },
-    data: {
-      deletedAt: new Date(),
     },
   });
 

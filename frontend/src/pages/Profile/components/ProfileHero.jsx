@@ -44,19 +44,21 @@ const ProfileHero = ({ user }) => {
           </div>
         </div>
 
-        <p className="flex mt-5 text-base text-blue-50 sm:text-lg">
-          Welcome to your profile dashboard. <br/>
-          {user?.isEmailVerified ? <ShieldCheck/> : <TriangleAlert />} 
-          {user?.isEmailVerified ? ' Email verified' : ' Please verify your email'}
+        <p className="mt-5 text-base text-blue-50 sm:text-lg">
+          <div>Welcome to your profile dashboard.</div>
+          <div className='flex gap-1 mt-1'>
+            {user?.isEmailVerified ? <ShieldCheck /> : <TriangleAlert />} 
+            {user?.isEmailVerified ? '  Email verified' : '  Please verify your email'}
+          </div>
         </p>
 
         <div className="flex flex-wrap gap-3 mt-6">
           <Link
-            to="/create"
+            to="/profile/edit-info"
             className="inline-flex items-center justify-center h-12 gap-2 px-5 text-sm font-medium transition bg-white rounded-xl text-gray-950 hover:bg-gray-100 sm:text-base"
           >
             <Plus className="w-5 h-5" />
-            Post New
+            Edit Profile
           </Link>
 
           <Link

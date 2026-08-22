@@ -195,7 +195,7 @@ const CommunityCard = ({ post, onPostDeleted }) => {
                   <img
                     src={author.profileImageUrl}
                     alt={author.fullName}
-                    className="w-5 h-5 rounded-full object-cover"
+                    className="object-cover w-5 h-5 rounded-full"
                   />
                 ) : (
                   <div className="flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-blue-600 rounded-full">
@@ -234,7 +234,7 @@ const CommunityCard = ({ post, onPostDeleted }) => {
           </div>
 
           <div className="flex items-center justify-between pt-3 mt-3 border-t border-gray-100 dark:border-gray-700">
-            <button
+            {/* <button
               onClick={() => setLiked(!liked)}
               className="flex items-center gap-1.5 text-sm transition hover:text-red-500"
             >
@@ -246,7 +246,7 @@ const CommunityCard = ({ post, onPostDeleted }) => {
               <span className="text-gray-600 dark:text-gray-300">
                 {likeCount || 0}
               </span>
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

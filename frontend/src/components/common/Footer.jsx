@@ -6,7 +6,7 @@ import {
   Mail,
   Heart
 } from 'lucide-react';
-import { FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/fa";
+import { FaInstagram, FaLinkedinIn, FaGithub } from "react-icons/fa";
 
 
 const Footer = () => {
@@ -32,22 +32,19 @@ const Footer = () => {
               
               {/* Social Icons */}
               <div className="flex items-center mt-4 space-x-3">
-                <a 
-                  href="#" 
+                <a target='_blank' rel="noopener noreferrer" href="https://github.com/SanathRai33" 
                   className="p-2 text-gray-600 transition-all duration-200 bg-gray-100 rounded-lg dark:bg-slate-800 dark:text-gray-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50 dark:hover:text-blue-400"
                   aria-label="Twitter"
                 >
-                  <FaTwitter className="w-4 h-4" />
+                  <FaGithub className="w-4 h-4" />
                 </a>
-                <a 
-                  href="#" 
+                <a target='_blank' rel="noopener noreferrer" href="https://www.instagram.com/sannu_rai33/" 
                   className="p-2 text-gray-600 transition-all duration-200 bg-gray-100 rounded-lg dark:bg-slate-800 dark:text-gray-400 hover:bg-pink-50 hover:text-pink-600 dark:hover:bg-pink-950/50 dark:hover:text-pink-400"
                   aria-label="Instagram"
                 >
                   <FaInstagram className="w-4 h-4" />
                 </a>
-                <a target='_blank' rel="noopener noreferrer"
-                  href="https://www.linkedin.com/in/sanath-rai33/" 
+                <a target='_blank' rel="noopener noreferrer" href="https://www.linkedin.com/in/sanath-rai33/" 
                   className="p-2 text-gray-600 transition-all duration-200 bg-gray-100 rounded-lg dark:bg-slate-800 dark:text-gray-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/50 dark:hover:text-blue-400"
                   aria-label="LinkedIn"
                 >
@@ -73,12 +70,12 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/marketplace" className="text-sm text-gray-600 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                  <Link to="/products" className="text-sm text-gray-600 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
                     Buy & Sell
                   </Link>
                 </li>
                 <li>
-                  <Link to="/properties" className="text-sm text-gray-600 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                  <Link to="/spaces" className="text-sm text-gray-600 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
                     Spaces
                   </Link>
                 </li>
@@ -106,11 +103,11 @@ const Footer = () => {
                     Notice Board
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link to="/events" className="text-sm text-gray-600 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
                     Events
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
 
@@ -121,18 +118,18 @@ const Footer = () => {
               </h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="/dashboard" className="text-sm text-gray-600 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                  <Link to="/" className="text-sm text-gray-600 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
                     Dashboard
                   </Link>
                 </li>
                 <li>
-                  <Link to="/my-listings" className="text-sm text-gray-600 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                  <Link to="/my-posts" className="text-sm text-gray-600 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
                     My Listings
                   </Link>
                 </li>
                 <li>
-                  <Link to="/favorites" className="text-sm text-gray-600 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
-                    Favorites
+                  <Link to="/create" className="text-sm text-gray-600 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                    Create New
                   </Link>
                 </li>
                 <li>
@@ -159,8 +156,11 @@ const Footer = () => {
               <Link to="/terms" className="text-sm text-gray-500 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
                 Terms of Service
               </Link>
-              <Link to="/cookies" className="text-sm text-gray-500 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+              {/* <Link to="/cookies" className="text-sm text-gray-500 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
                 Cookie Policy
+              </Link> */}
+              <Link to="/help" className="text-sm text-gray-500 transition-colors duration-200 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                Help Center
               </Link>
             </div>
           </div>

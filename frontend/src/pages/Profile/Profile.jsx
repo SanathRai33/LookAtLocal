@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import ProfileHero from './components/ProfileHero';
-import StatsGrid from './components/StatsGrid';
+// import StatsGrid from './components/StatsGrid';
 import QuickActions from './components/QuickActions';
-import NearbyOpportunities from './components/NearbyOpportunities';
+// import NearbyOpportunities from './components/NearbyOpportunities';
 import ProfileSidebar from './components/ProfileSidebar';
 
 const Profile = () => {
@@ -69,10 +69,10 @@ const Profile = () => {
   const updateProfileStrength = (userData) => {
     const tasks = [
       { id: 1, label: 'Add profile photo', completed: !!userData.profileImageUrl },
-      { id: 2, label: 'Verify mobile number', completed: userData.isPhoneVerified || false },
-      { id: 2, label: 'Verify email id', completed: userData.isEmailVerified || false },
-      { id: 3, label: 'Add bio & skills', completed: !!userData.bio },
-      { id: 4, label: 'Upload ID proof', completed: false },
+      { id: 2, label: 'Verify phone', completed: userData.isPhoneVerified || false },
+      { id: 2, label: 'Verify email', completed: userData.isEmailVerified || false },
+      { id: 3, label: 'Add bio', completed: !!userData.bio },
+      // { id: 4, label: 'Upload ID proof', completed: false },
     ];
     
     const completedTasks = tasks.filter(task => task.completed).length;
@@ -106,7 +106,7 @@ const Profile = () => {
 
             <QuickActions />
 
-            <NearbyOpportunities opportunities={opportunities} />
+            {/* <NearbyOpportunities opportunities={opportunities} /> */}
           </main>
 
           <ProfileSidebar

@@ -615,9 +615,7 @@ const deleteProduct = async (productId, userId) => {
   const product = await prisma.productListing.findFirst({
     where: {
       id: productId,
-
       sellerId: userId,
-
       deletedAt: null,
     },
 
@@ -646,38 +644,40 @@ const deleteProduct = async (productId, userId) => {
     );
   }
 
+  // Get images before deleting the listing.
+  const images = await prisma.listingImage.findMany({
+    where: {
+      entityType: "PRODUCT",
+      entityId: productId,
+    },
+    select: {
+      publicId: true,
+    },
+  });
+
   await prisma.$transaction(async (tx) => {
-    const images = await tx.listingImage.findMany({
+    // Delete listing images.
+    await tx.listingImage.deleteMany({
       where: {
         entityType: "PRODUCT",
-
         entityId: productId,
       },
     });
 
-    if (images.length > 0) {
-      await deleteImages(images.map((image) => image.publicId).filter(Boolean));
-
-      await tx.listingImage.deleteMany({
-        where: {
-          entityType: "PRODUCT",
-
-          entityId: productId,
-        },
-      });
-    }
-
-    await tx.productListing.update({
+    // Delete the product itself.
+    await tx.productListing.delete({
       where: {
         id: productId,
       },
-
-      data: {
-        deletedAt: new Date(),
-        status: "CLOSED",
-      },
     });
   });
+
+  // Delete Cloudinary images after successful DB deletion.
+  const publicIds = images.map((image) => image.publicId).filter(Boolean);
+
+  if (publicIds.length > 0) {
+    await deleteImages(publicIds);
+  }
 
   return;
 };

@@ -135,7 +135,7 @@ const JobDetails = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  {/* <div className="flex gap-2">
                     <button
                       onClick={() => setIsSaved(!isSaved)}
                       className="p-2 transition-colors duration-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"
@@ -145,7 +145,7 @@ const JobDetails = () => {
                     <button className="p-2 transition-colors duration-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
                       <Share2 className="w-5 h-5 text-gray-400" />
                     </button>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-4 mt-4">

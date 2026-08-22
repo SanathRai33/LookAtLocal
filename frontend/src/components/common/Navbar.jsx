@@ -18,7 +18,8 @@ import {
   Home,
   ChevronDown,
   Sun,
-  Moon
+  Moon,
+  UserShield
 } from 'lucide-react';
 
 const Navbar = () => {
@@ -183,6 +184,20 @@ const Navbar = () => {
                         </svg>
                         Settings
                       </Link>
+
+                      {
+                        user?.role === "ADMIN" && (
+
+                          <Link
+                            to="/admin"
+                            className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-200 cursor-pointer dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+                            onClick={() => setIsDropdownOpen(false)}
+                          >
+                            <UserShield className="w-4 h-4 mr-3" />
+                            Admin Panel
+                          </Link>
+                        )
+                      }
 
                       <hr className="my-2 border-gray-200 dark:border-gray-700" />
 

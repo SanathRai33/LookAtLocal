@@ -83,9 +83,20 @@ const getLatestPublicListings = async (userId) => {
     });
 
     if (user) {
-      city = user.city?.trim().toLowerCase() || null;
+      city = user.city?.trim() || null;
       postalCode = user.postalCode?.trim() || null;
     }
+  }
+
+  const locationWhere = {};
+
+  if (postalCode) {
+    locationWhere.postalCode = postalCode;
+  } else if (city) {
+    locationWhere.city = {
+      equals: city,
+      mode: "insensitive",
+    };
   }
 
   const [services, rentals, products, spaces, jobs] = await Promise.all([
@@ -94,6 +105,11 @@ const getLatestPublicListings = async (userId) => {
         status: "ACTIVE",
         isAvailable: true,
         deletedAt: null,
+        provider: {
+          status: "ACTIVE",
+          deletedAt: null,
+        },
+        ...locationWhere,
       },
       select: {
         id: true,
@@ -115,6 +131,11 @@ const getLatestPublicListings = async (userId) => {
         status: "ACTIVE",
         isAvailable: true,
         deletedAt: null,
+        owner: {
+          status: "ACTIVE",
+          deletedAt: null,
+        },
+        ...locationWhere,
       },
       select: {
         id: true,
@@ -137,6 +158,11 @@ const getLatestPublicListings = async (userId) => {
           in: ["ACTIVE", "RESERVED"],
         },
         deletedAt: null,
+        seller: {
+          status: "ACTIVE",
+          deletedAt: null,
+        },
+        ...locationWhere,
       },
       select: {
         id: true,
@@ -157,6 +183,11 @@ const getLatestPublicListings = async (userId) => {
       where: {
         status: "ACTIVE",
         deletedAt: null,
+        owner: {
+          status: "ACTIVE",
+          deletedAt: null,
+        },
+        ...locationWhere,
       },
       select: {
         id: true,
@@ -176,6 +207,11 @@ const getLatestPublicListings = async (userId) => {
       where: {
         status: "ACTIVE",
         deletedAt: null,
+        poster: {
+          status: "ACTIVE",
+          deletedAt: null,
+        },
+        ...locationWhere,
       },
       select: {
         id: true,
@@ -297,47 +333,25 @@ const getLatestPublicListings = async (userId) => {
     }
   }
 
-  const getLocationPriority = (listing) => {
-    const listingCity = listing.city?.trim().toLowerCase();
-    const listingPostalCode = listing.postalCode?.trim();
+  return listings
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 8)
+    .map((listing) => {
+      const {
+        city: _city,
+        state: _state,
+        postalCode: _postalCode,
+        ...publicListing
+      } = listing;
 
-    if (postalCode && listingPostalCode && listingPostalCode === postalCode) {
-      return 1;
-    }
-
-    if (city && listingCity && listingCity === city) {
-      return 2;
-    }
-
-    return 3;
-  };
-
-  listings.sort((a, b) => {
-    const priorityDifference = getLocationPriority(a) - getLocationPriority(b);
-
-    if (priorityDifference !== 0) {
-      return priorityDifference;
-    }
-
-    return new Date(b.createdAt) - new Date(a.createdAt);
-  });
-
-  return listings.slice(0, 8).map((listing) => {
-    const {
-      city: _city,
-      state: _state,
-      postalCode: _postalCode,
-      ...publicListing
-    } = listing;
-
-    return {
-      ...publicListing,
-      imageUrl:
-        listing.type === "JOB"
-          ? null
-          : imageMap.get(`${listing.type}:${listing.id}`) || null,
-    };
-  });
+      return {
+        ...publicListing,
+        imageUrl:
+          listing.type === "JOB"
+            ? null
+            : imageMap.get(`${listing.type}:${listing.id}`) || null,
+      };
+    });
 };
 
 module.exports = {

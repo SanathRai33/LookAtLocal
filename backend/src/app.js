@@ -71,7 +71,6 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/v1/services", serviceRoutes);
-app.use("/api/v1/service-bookings", serviceBookingRoutes);
 app.use("/api/v1/rentals", rentalRoutes);
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/spaces", spaceRoutes);

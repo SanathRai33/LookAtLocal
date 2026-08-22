@@ -643,9 +643,7 @@ const deleteService = async (serviceId, userId) => {
     where: {
       id: serviceId,
       providerId: userId,
-      deletedAt: null,
     },
-
     select: {
       id: true,
     },
@@ -658,16 +656,27 @@ const deleteService = async (serviceId, userId) => {
     );
   }
 
-  await prisma.serviceListing.update({
-    where: {
-      id: serviceId,
-    },
+  await prisma.$transaction(async (tx) => {
+    // Delete all records that reference this service
+    // BEFORE deleting the service itself.
 
-    data: {
-      deletedAt: new Date(),
-      isAvailable: false,
-      status: "CLOSED",
-    },
+    // await tx.favorite.deleteMany({
+    //   where: {
+    //     serviceId,
+    //   },
+    // });
+
+    // await tx.serviceBooking.deleteMany({
+    //   where: {
+    //     serviceId,
+    //   },
+    // });
+
+    await tx.serviceListing.delete({
+      where: {
+        id: serviceId,
+      },
+    });
   });
 };
 
