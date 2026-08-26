@@ -4,8 +4,8 @@ import {
     ArrowRight,
     BriefcaseBusiness,
     CalendarClock,
-    Home,
     MessageSquareText,
+    Package2,
 } from "lucide-react";
 
 const requests = [
@@ -22,10 +22,10 @@ const requests = [
         id: "rental-requests",
         label: "Rental Requests",
         description: "Rental requests from customers",
-        icon: Home,
+        icon: Package2,
         iconClass: "text-emerald-600",
         iconBg: "bg-emerald-50 dark:bg-emerald-950/40",
-        disabled: true,
+        to: "/rental-bookings/received",
     },
     {
         id: "product-enquiries",

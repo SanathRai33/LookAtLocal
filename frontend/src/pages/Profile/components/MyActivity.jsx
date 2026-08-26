@@ -5,6 +5,7 @@ import {
     BriefcaseBusiness,
     CalendarCheck,
     Home,
+    Package2,
     ShoppingCart,
 } from "lucide-react";
 
@@ -22,10 +23,10 @@ const activities = [
         id: "rentals",
         label: "Rentals",
         description: "Items you rented",
-        icon: Home,
+        icon: Package2,
         iconClass: "text-emerald-600",
         iconBg: "bg-emerald-50 dark:bg-emerald-950/40",
-        disabled: true,
+        to: "/rental-bookings",
     },
     {
         id: "purchases",

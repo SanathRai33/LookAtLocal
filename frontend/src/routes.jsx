@@ -31,6 +31,11 @@ const RentalDetail = React.lazy(() => import('./pages/Rentals/RentalDetails'));
 const MyRentals = React.lazy(() => import('./pages/Rentals/MyRentals'));
 const EditRental = React.lazy(() => import('./pages/Rentals/EditRental'));
 
+// Rental Booking
+const ReceivedRentalBookings = React.lazy(() => import('./pages/RentalBookings/ReceivedRentalBookings'));
+const MyRentalBookings = React.lazy(() => import('./pages/RentalBookings/MyRentalBookings'));
+
+
 // Jobs
 const Jobs = React.lazy(() => import('./pages/Jobs/Jobs'));
 const CreateJob = React.lazy(() => import('./pages/Jobs/CreateJob'));
@@ -200,6 +205,15 @@ export const routes = [
               { path: "my-rentals", element: <MyRentals /> },
               { path: ":rentalId", element: <RentalDetail /> },
               { path: "edit/:rentalId", element: <EditRental /> },
+            ],
+          },
+
+          // Services-Bookings
+          {
+            path: "/rental-bookings",
+            children: [
+              { index: true, element: <MyRentalBookings /> },
+              { path: "received", element: <ReceivedRentalBookings /> },
             ],
           },
 

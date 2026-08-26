@@ -4,7 +4,6 @@ import {
     MapPin,
     Star,
     Phone,
-    MessageSquare,
     Shield,
     IndianRupee,
     ChevronLeft,
@@ -13,23 +12,27 @@ import {
     Package,
     Truck,
     Home,
+    CalendarDays,
 } from 'lucide-react';
 import { useRentals } from '../../hooks/useRentals';
+import useRentalBooking from '../../hooks/useRentalBooking';
 import { useAuth } from '../../context/AuthContext';
 import { FaWhatsapp } from 'react-icons/fa';
 import ImageCarousel from '../../components/common/ImageCarousel';
 import ProviderCard from '../../components/common/ProviderCard';
-import RelatedListings from '../../components/common/RelatedListings';
 import RelatedRentals from './components/RelatedRentals';
+import RentalBookingModal from './components/RentalBookingModal';
 
 const RentalDetails = () => {
     const { rentalId } = useParams();
     const navigate = useNavigate();
     const { user } = useAuth();
     const { getRentalById, loading } = useRentals();
+    const { createBooking, getAvailability, loading: bookingLoading } = useRentalBooking();
     const [rental, setRental] = useState(null);
     const [error, setError] = useState('');
     const [showFullDescription, setShowFullDescription] = useState(false);
+    const [showBookingModal, setShowBookingModal] = useState(false);
 
     useEffect(() => {
         fetchRentalDetails();
@@ -161,8 +164,6 @@ const RentalDetails = () => {
     const hasPhone = !!user?.phone;
     const provider = rental?.owner || {};
 
-
-
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
             <div className="max-w-6xl px-4 py-6 mx-auto sm:px-6 lg:px-8 lg:py-8">
@@ -268,36 +269,53 @@ const RentalDetails = () => {
                                     </div>
                                 )}
 
-                                {rental.isAvailable && rental.status === 'ACTIVE' && (
-                                    <div className="flex flex-wrap gap-3 mt-6">
-                                        <button
-                                            onClick={handleCall}
-                                            disabled={!hasPhone}
-                                            className={`flex items-center gap-2 px-6 py-3 text-white transition rounded-xl hover:shadow-lg hover:shadow-blue-500/25 ${hasPhone
-                                                ? 'bg-blue-600 hover:bg-blue-700'
-                                                : 'bg-gray-400 cursor-not-allowed'
-                                                }`}
-                                        >
-                                            <Phone className="w-5 h-5" />
-                                            {hasPhone ? 'Call Now' : 'No Phone Number'}
-                                        </button>
-                                        <button
-                                            onClick={handleWhatsApp}
-                                            disabled={!hasPhone}
-                                            className={`flex items-center gap-2 px-6 py-3 text-white transition rounded-xl ${hasPhone
-                                                ? 'bg-green-600 hover:bg-green-700 hover:shadow-lg hover:shadow-green-500/25'
-                                                : 'bg-gray-400 cursor-not-allowed'
-                                                }`}
-                                        >
-                                            <FaWhatsapp className="w-5 h-5" />
-                                            {hasPhone ? 'WhatsApp' : 'No Phone Number'}
-                                        </button>
-                                        {/* <button className="flex items-center gap-2 px-6 py-3 text-gray-700 transition bg-gray-100 rounded-xl hover:bg-gray-200 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600">
-                                            <MessageSquare className="w-5 h-5" />
-                                            Send Message
-                                        </button> */}
-                                    </div>
-                                )}
+                                {rental?.isAvailable &&
+                                    rental?.status === 'ACTIVE' && (
+                                        <div className="flex flex-wrap gap-3 mt-6">
+                                            {user?.id !== provider?.id && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        setShowBookingModal(true)
+                                                    }
+                                                    className="flex items-center justify-center gap-2 px-6 py-3 font-semibold text-white transition bg-orange-600 rounded-xl hover:bg-orange-700 hover:shadow-lg hover:shadow-orange-500/25"
+                                                >
+                                                    <CalendarDays className="w-5 h-5" />
+                                                    Request Rental
+                                                </button>
+                                            )}
+
+                                            <button
+                                                type="button"
+                                                onClick={handleCall}
+                                                disabled={!hasPhone}
+                                                className={`flex items-center gap-2 px-6 py-3 text-white transition rounded-xl ${hasPhone
+                                                    ? 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/25'
+                                                    : 'bg-gray-400 cursor-not-allowed'
+                                                    }`}
+                                            >
+                                                <Phone className="w-5 h-5" />
+                                                {hasPhone
+                                                    ? 'Call Now'
+                                                    : 'No Phone Number'}
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={handleWhatsApp}
+                                                disabled={!hasPhone}
+                                                className={`flex items-center gap-2 px-6 py-3 text-white transition rounded-xl ${hasPhone
+                                                    ? 'bg-green-600 hover:bg-green-700 hover:shadow-lg hover:shadow-green-500/25'
+                                                    : 'bg-gray-400 cursor-not-allowed'
+                                                    }`}
+                                            >
+                                                <FaWhatsapp className="w-5 h-5" />
+                                                {hasPhone
+                                                    ? 'WhatsApp'
+                                                    : 'No Phone Number'}
+                                            </button>
+                                        </div>
+                                    )}
 
                                 {rental.reviewCount > 0 && (
                                     <div className="mt-8">
@@ -343,6 +361,9 @@ const RentalDetails = () => {
                     </div>
                 </div>
             </div>
+            <RentalBookingModal rental={rental} open={showBookingModal} onClose={() => setShowBookingModal(false)}
+                createBooking={createBooking} getAvailability={getAvailability} loading={bookingLoading}
+            />
         </div>
     );
 };
