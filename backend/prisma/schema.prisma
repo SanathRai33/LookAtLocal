@@ -513,7 +513,8 @@ model ServiceBooking {
   serviceId  String @map("service_id") @db.Uuid
   customerId String @map("customer_id") @db.Uuid
 
-  scheduledAt DateTime @map("scheduled_at")
+  scheduledAt DateTime  @map("scheduled_at")
+  endAt       DateTime? @map("end_at")
 
   addressLine String  @map("address_line")
   locality    String?
@@ -542,6 +543,7 @@ model ServiceBooking {
   @@index([city])
   @@index([postalCode])
   @@index([scheduledAt])
+  @@index([serviceId, status, scheduledAt])
   @@map("service_bookings")
 }
 

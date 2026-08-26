@@ -1,5 +1,4 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import AuthLayout from './components/layout/AuthLayout';
 import DashboardLayout from './components/layout/DashboardLayout';
@@ -19,6 +18,11 @@ const CreateService = React.lazy(() => import('./pages/Services/CreateService'))
 const ServiceDetail = React.lazy(() => import('./pages/Services/ServiceDetails'));
 const MyServices = React.lazy(() => import('./pages/Services/MyServices'));
 const EditService = React.lazy(() => import('./pages/Services/EditService'));
+
+// Service Bookings
+const ReceivedServiceBookings = React.lazy(() => import('./pages/ServiceBookings/ReceivedBookings'));
+const MyBookedServices = React.lazy(() => import('./pages/ServiceBookings/MyBookings'));
+
 
 // Rental
 const Rentals = React.lazy(() => import('./pages/Rentals/Rentals'));
@@ -63,7 +67,6 @@ const EditEmergency = React.lazy(() => import('./pages/Emergency/EditEmergency')
 const Profile = React.lazy(() => import('./pages/Profile/Profile'));
 const EditProfile = React.lazy(() => import('./pages/Profile/EditProfile'));
 const EditAddress = React.lazy(() => import('./pages/Profile/EditAddress'));
-const MyListings = React.lazy(() => import('./pages/MyListings/MyListings'));
 const CreatePost = React.lazy(() => import('./pages/Profile/CreatePost'));
 const MyPosts = React.lazy(() => import('./pages/Profile/MyPosts'));
 const CompleteAdress = React.lazy(() => import('./pages/Profile/CompleteAddress'));
@@ -101,735 +104,180 @@ export const routes = [
 
   // Auth Routes
   {
-    path: '/login',
-    element: (<AuthLayout title="Welcome Back" subtitle="Sign in to your account" />),
-    children: [
-      { index: true, element: <Login /> },
-    ],
-  },
-  {
-    path: '/register',
-    element: <AuthLayout title="Create Account" subtitle="Join the community" />,
-    children: [
-      { index: true, element: <Register /> }
-    ]
-  },
-  {
-    path: '/forgot-password',
-    element: <AuthLayout title="Create Account" subtitle="Join the community" />,
-    children: [
-      { index: true, element: <ForgotPassword /> }
-    ]
-  },
-  {
-    path: '/reset-password',
-    element: <AuthLayout title="Create Account" subtitle="Join the community" />,
-    children: [
-      { index: true, element: <ResetPassword /> }
-    ]
-  },
-  {
-    element: <ProtectedRoute />,
+    element: <AuthLayout />,
     children: [
       {
-        children: [
-          {
-            path: "/verify-email",
-            element: <VerifyEmail />,
-          },
-        ],
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "/reset-password",
+        element: <ResetPassword />,
       },
     ],
   },
 
-  // Protected User Routes
+  // Protected Routes
   {
     element: <ProtectedRoute />,
     children: [
       {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/profile',
-            element: <Profile />,
-          },
-        ],
+        path: "/verify-email",
+        element: <VerifyEmail />,
       },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
       {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/profile/edit-info',
-            element: <EditProfile />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/profile/edit-address',
-            element: <EditAddress />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/',
-            element: <Dashboard />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/create',
-            element: <CreatePost />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/my-posts',
-            element: <MyPosts />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        path: '/complete-address',
+        path: "/complete-address",
         element: <CompleteAdress />,
       },
     ],
   },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/users/:userId',
-            element: <PublicProfile />,
-          },
-        ],
-      },
-    ],
-  },
 
-  // Service routes
+  // Protected Routes with Main Layout
   {
     element: <ProtectedRoute />,
     children: [
       {
         element: <MainLayout />,
         children: [
-          {
-            path: '/services',
-            element: <Services />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/services/create',
-            element: <CreateService />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/services/my-services',
-            element: <MyServices />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/services/:serviceId',
-            element: <ServiceDetail />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: 'services/edit/:serviceId',
-            element: <EditService />,
-          },
-        ],
-      },
-    ],
-  },
+          // Dashboard
+          { path: '/', element: <Dashboard /> },
 
-  // Rental routes
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/rentals',
-            element: <Rentals />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/rentals/create',
-            element: <CreateRental />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/rentals/my-rentals',
-            element: <MyRentals />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/rentals/:rentalId',
-            element: <RentalDetail />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: 'rentals/edit/:rentalId',
-            element: <EditRental />,
-          },
-        ],
-      },
-    ],
-  },
+          // User
+          { path: '/users/:userId', element: <PublicProfile /> },
 
-  // Produt/Market routes
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/products',
-            element: <Product />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/product/create',
-            element: <CreateProduct />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/products/my-products',
-            element: <MyProducts />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/product/:productId',
-            element: <ProductDetails />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: 'product/edit/:productId',
-            element: <EditProduct />,
-          },
-        ],
-      },
-    ],
-  },
+          // Posts
+          { path: '/create', element: <CreatePost /> },
+          { path: '/my-posts', element: <MyPosts /> },
 
-  // Job routes
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
+          // Profile
           {
-            path: '/jobs',
-            element: <Jobs />,
+            path: "/profile",
+            children: [
+              { index: true, element: <Profile /> },
+              { path: "edit-info", element: <EditProfile /> },
+              { path: "edit-address", element: <EditAddress /> },
+            ],
           },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/jobs/create',
-            element: <CreateJob />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/jobs/my-jobs',
-            element: <MyJobs />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/jobs/:jobId',
-            element: <JobDetails />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: 'jobs/edit/:jobId',
-            element: <EditJob />,
-          },
-        ],
-      },
-    ],
-  },
 
+          // Services
+          {
+            path: "/services",
+            children: [
+              { index: true, element: <Services /> },
+              { path: "create", element: <CreateService /> },
+              { path: "my-services", element: <MyServices /> },
+              { path: ":serviceId", element: <ServiceDetail /> },
+              { path: "edit/:serviceId", element: <EditService /> },
+            ],
+          },
 
-  // Space/Property routes
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
+          // Services-Bookings
           {
-            path: '/spaces',
-            element: <Spaces />,
+            path: "/service-bookings",
+            children: [
+              { index: true, element: <MyBookedServices /> },
+              { path: "received", element: <ReceivedServiceBookings /> },
+              // { path: "my-services", element: <MyServices /> },
+              // { path: ":serviceId", element: <ServiceDetail /> },
+              // { path: "edit/:serviceId", element: <EditService /> },
+            ],
           },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/spaces/:spaceId',
-            element: <SpaceDetails />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/spaces/my-spaces',
-            element: <MySpaces />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/spaces/create',
-            element: <CreateSpace />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/spaces/edit/:spaceId',
-            element: <EditSpace />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/spaces/:spaceId/units',
-            element: <ManageSpaceUnits />,
-          },
-        ],
-      },
-    ],
-  },
 
+          // Rentals
+          {
+            path: "/rentals",
+            children: [
+              { index: true, element: <Rentals /> },
+              { path: "create", element: <CreateRental /> },
+              { path: "my-rentals", element: <MyRentals /> },
+              { path: ":rentalId", element: <RentalDetail /> },
+              { path: "edit/:rentalId", element: <EditRental /> },
+            ],
+          },
 
-  // Community
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
+          // Products
           {
-            path: '/community',
-            element: <Community />,
+            path: "/products",
+            children: [
+              { index: true, element: <Product /> },
+              { path: "create", element: <CreateProduct /> },
+              { path: "my-products", element: <MyProducts /> },
+              { path: ":productId", element: <ProductDetails /> },
+              { path: "edit/:productId", element: <EditProduct /> },
+            ],
           },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/community/create',
-            element: <CreateCommunityPost />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/community/edit/:postId',
-            element: <EditCommunityPost />,
-          },
-        ],
-      },
-    ],
-  },
 
+          // Jobs
+          {
+            path: "/jobs",
+            children: [
+              { index: true, element: <Jobs /> },
+              { path: "create", element: <CreateJob /> },
+              { path: "my-jobs", element: <MyJobs /> },
+              { path: ":jobId", element: <JobDetails /> },
+              { path: "edit/:jobId", element: <EditJob /> },
+            ],
+          },
 
-  // Emergency
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
+          // Space/Property routes
           {
-            path: '/emergency',
-            element: <Emergency />,
+            path: "/spaces",
+            children: [
+              { index: true, element: <Spaces /> },
+              { path: ":spaceId", element: <SpaceDetails /> },
+              { path: "my-spaces", element: <MySpaces /> },
+              { path: "create", element: <CreateSpace /> },
+              { path: "edit/:spaceId", element: <EditSpace /> },
+              { path: ":spaceId/units", element: <ManageSpaceUnits /> },
+            ],
           },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/emergency/create',
-            element: <CreateEmergency />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/emergency/edit/:emergencyId',
-            element: <EditEmergency />,
-          },
-        ],
-      },
-    ],
-  },
 
-  // Settings Routes
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
+          // Community
           {
-            path: '/settings',
-            element: <Settings />,
+            path: "/community",
+            children: [
+              { index: true, element: <Community /> },
+              { path: "create", element: <CreateCommunityPost /> },
+              { path: "edit/:postId", element: <EditCommunityPost /> },
+            ],
           },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/settings/change-password',
-            element: <ChangePassword />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/settings/verify-email',
-            element: <SettingsVerifyEmail />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/settings/email',
-            element: <EmailSettings />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/settings/phone',
-            element: <PhoneSettings />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/setting/privacy',
-            element: <PrivacySettings />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <MainLayout />,
-        children: [
-          {
-            path: '/settings/delete-account',
-            element: <DeleteAccount />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        children: [
-          {
-            path: "/settings/reactivate-account",
-            element: <ReactivateAccount />,
-          },
-        ],
-      },
-    ],
-  },
 
+          // Emergency
+          {
+            path: "/emergency",
+            children: [
+              { index: true, element: <Emergency /> },
+              { path: "create", element: <CreateEmergency /> },
+              { path: "edit/:emergencyId", element: <EditEmergency /> },
+            ],
+          },
 
+          // Settings
+          {
+            path: "/settings",
+            children: [
+              { index: true, element: <Settings /> },
+              { path: "change-password", element: <ChangePassword /> },
+              { path: "verify-email", element: <SettingsVerifyEmail /> },
+              { path: "email", element: <EmailSettings /> },
+              { path: "phone", element: <PhoneSettings /> },
+              { path: "privacy", element: <PrivacySettings /> },
+              { path: "delete-account", element: <DeleteAccount /> },
+              { path: "reactivate-account", element: <ReactivateAccount /> },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 
   // Admin Routes
   {
@@ -857,11 +305,11 @@ export const routes = [
     path: '/help',
     element: <Help />,
   },
-    {
+  {
     path: '/terms',
     element: <Terms />,
   },
-    {
+  {
     path: '/privacy',
     element: <PrivacyPolicy />,
   },

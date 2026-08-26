@@ -15,14 +15,23 @@ import { useServices } from '../../hooks/useServices';
 import ProviderCard from '../../components/common/ProviderCard';
 import ImageCarousel from '../../components/common/ImageCarousel';
 import SimilarServices from './components/SimilarServices';
+import BookingModal from "./components/BookingModal";
+import { useServiceBooking } from "../../hooks/useServiceBooking";
+import { useAuth } from '../../context/AuthContext';
 
 const ServiceDetails = () => {
   const { serviceId } = useParams();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { getServiceById, loading } = useServices();
+  const { createBooking, getAvailability, loading: bookingLoading } = useServiceBooking();
   const [service, setService] = useState(null);
   const [error, setError] = useState('');
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+
+
+
 
   useEffect(() => {
     fetchServiceDetails();
@@ -244,7 +253,7 @@ const ServiceDetails = () => {
                     </button>
                     <button
                       onClick={handleWhatsApp}
-                      // disabled={!hasPhone}
+                      disabled={!hasPhone}
                       className={`flex items-center gap-2 px-6 py-3 text-white transition rounded-xl ${hasPhone
                         ? 'bg-green-600 hover:bg-green-700 hover:shadow-lg hover:shadow-green-500/25'
                         : 'bg-gray-400 cursor-not-allowed'
@@ -253,10 +262,15 @@ const ServiceDetails = () => {
                       <FaWhatsapp className="w-5 h-5" />
                       {hasPhone ? 'WhatsApp' : 'No Phone Number'}
                     </button>
-                    {/* <button className="flex items-center gap-2 px-6 py-3 text-gray-700 transition bg-gray-100 rounded-xl hover:bg-gray-200 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600">
-                      <MessageSquare className="w-5 h-5" />
-                      Send Message
-                    </button> */}
+                    {user?.id !== provider?.id && (
+                      <button
+                        type="button"
+                        onClick={() => setShowBookingModal(true)}
+                        className="flex-1 px-6 py-3 font-bold text-center text-white transition bg-orange-600 rounded-xl hover:bg-orange-700 hover:shadow-lg hover:shadow-orange-500/25"
+                      >
+                        Request to Book
+                      </button>
+                    )}
                   </div>
                 )}
 
@@ -304,6 +318,9 @@ const ServiceDetails = () => {
           </div>
         </div>
       </div>
+      <BookingModal service={service} open={showBookingModal} onClose={() => setShowBookingModal(false)}
+        createBooking={createBooking} getAvailability={getAvailability} loading={bookingLoading}
+      />
     </div>
   );
 };

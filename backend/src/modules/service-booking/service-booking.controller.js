@@ -1,7 +1,5 @@
 const asyncHandler = require("../../utils/asyncHandler");
-
 const ApiResponse = require("../../utils/apiResponse");
-
 const bookingService = require("./service-booking.service");
 
 const createBooking = asyncHandler(async (req, res) => {
@@ -12,6 +10,20 @@ const createBooking = asyncHandler(async (req, res) => {
     201,
     "Service booking requested successfully",
     booking,
+  );
+});
+
+const getAvailability = asyncHandler(async (req, res) => {
+  const availability = await bookingService.getAvailability(
+    req.params.serviceId,
+    req.query,
+  );
+
+  return ApiResponse.success(
+    res,
+    200,
+    "Service availability fetched successfully",
+    availability,
   );
 });
 
@@ -113,6 +125,7 @@ const completeBooking = asyncHandler(async (req, res) => {
 
 module.exports = {
   createBooking,
+  getAvailability,
   getMyBookings,
   getReceivedBookings,
   getBookingById,

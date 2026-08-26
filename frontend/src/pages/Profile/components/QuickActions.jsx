@@ -8,7 +8,7 @@ const actions = [
     id: 1,
     label: 'Create Post',
     icon: Plus,
-    to: '/services/my-services',
+    to: '/create',
     bg: 'bg-slate-950 dark:bg-slate-800',
   },
   {

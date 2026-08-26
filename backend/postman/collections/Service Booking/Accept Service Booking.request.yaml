@@ -1,0 +1,12 @@
+$kind: http-request
+name: Accept Service Booking
+url: http://localhost:5000/api/v1/service-bookings/d9bde610-8089-455f-b3fb-395eab692627/accept
+method: PATCH
+body:
+  type: json
+  content: "{\r\n  \"agreedPrice\": 30\r\n}"
+auth:
+  type: bearer
+  credentials:
+    token: "{{supabase_service_role_api_key_107c}}"
+order: 1163156054105518

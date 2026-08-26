@@ -1,0 +1,32 @@
+$kind: http-request
+name: Create Service Book
+url: http://localhost:5000/api/v1/service-bookings
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"serviceId\": \"e0a47c10-c3fe-4908-8303-e11054b9ce5a\",\r
+
+    \  \"scheduledAt\": \"2026-08-25T10:00:00.000Z\",\r
+
+    \  \"endAt\": \"2026-08-25T12:00:00.000Z\",\r
+
+    \  \"addressLine\": \"Main Road\",\r
+
+    \  \"locality\": \"Amruthahalli\",\r
+
+    \  \"city\": \"Amruthahalli\",\r
+
+    \  \"state\": \"Karnataka\",\r
+
+    \  \"postalCode\": \"560092\",\r
+
+    \  \"latitude\": 12.8797,\r
+
+    \  \"longitude\": 74.8421,\r
+
+    \  \"customerNote\": \"Please call before arriving.\"\r
+
+    }"
+order: 1787464977493

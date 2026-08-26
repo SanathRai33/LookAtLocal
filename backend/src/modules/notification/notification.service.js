@@ -4,15 +4,14 @@ const { getPagination, getPaginationMeta } = require("../../utils/pagination");
 
 const notificationSelect = {
   id: true,
-
   userId: true,
 
   type: true,
   title: true,
   message: true,
 
-  referenceType: true,
-  referenceId: true,
+  entityType: true,
+  entityId: true,
 
   readAt: true,
 
@@ -21,32 +20,21 @@ const notificationSelect = {
 
 const createNotification = async ({
   tx = prisma,
-
   userId,
-
   type,
-
   title,
-
   message,
-
-  referenceType = null,
-
-  referenceId = null,
+  entityType = null,
+  entityId = null,
 }) => {
   return tx.notification.create({
     data: {
       userId,
-
       type,
-
       title,
-
       message,
-
-      referenceType,
-
-      referenceId,
+      entityType,
+      entityId,
     },
 
     select: notificationSelect,
@@ -55,18 +43,12 @@ const createNotification = async ({
 
 const createBulkNotifications = async ({
   tx = prisma,
-
   userIds,
-
   type,
-
   title,
-
   message,
-
-  referenceType = null,
-
-  referenceId = null,
+  entityType = null,
+  entityId = null,
 }) => {
   if (!userIds.length) {
     return;
@@ -75,16 +57,11 @@ const createBulkNotifications = async ({
   return tx.notification.createMany({
     data: userIds.map((userId) => ({
       userId,
-
       type,
-
       title,
-
       message,
-
-      referenceType,
-
-      referenceId,
+      entityType,
+      entityId,
     })),
   });
 };
@@ -98,8 +75,19 @@ const getMyNotifications = async (userId, filters) => {
     userId,
   };
 
+  /*
+   * readAt query:
+   *
+   * ?readAt=true  -> unread notifications
+   * ?readAt=false -> read notifications
+   */
   if (readAt !== undefined) {
-    where.readAt = readAt === "true";
+    where.readAt =
+      readAt === "true"
+        ? null
+        : {
+            not: null,
+          };
   }
 
   const [notifications, total] = await prisma.$transaction([
@@ -112,14 +100,12 @@ const getMyNotifications = async (userId, filters) => {
         {
           readAt: "asc",
         },
-
         {
           createdAt: "desc",
         },
       ],
 
       skip: pagination.skip,
-
       take: pagination.limit,
     }),
 
@@ -133,9 +119,7 @@ const getMyNotifications = async (userId, filters) => {
 
     pagination: getPaginationMeta({
       page: pagination.page,
-
       limit: pagination.limit,
-
       total,
     }),
   };
@@ -145,8 +129,7 @@ const getUnreadCount = async (userId) => {
   const count = await prisma.notification.count({
     where: {
       userId,
-
-      readAt: false,
+      readAt: null,
     },
   });
 
@@ -159,7 +142,6 @@ const markAsRead = async (notificationId, userId) => {
   const notification = await prisma.notification.findFirst({
     where: {
       id: notificationId,
-
       userId,
     },
 
@@ -178,7 +160,7 @@ const markAsRead = async (notificationId, userId) => {
     },
 
     data: {
-      readAt: true,
+      readAt: new Date(),
     },
 
     select: notificationSelect,
@@ -189,12 +171,11 @@ const markAllAsRead = async (userId) => {
   await prisma.notification.updateMany({
     where: {
       userId,
-
-      readAt: false,
+      readAt: null,
     },
 
     data: {
-      readAt: true,
+      readAt: new Date(),
     },
   });
 
@@ -205,7 +186,6 @@ const deleteNotification = async (notificationId, userId) => {
   const notification = await prisma.notification.findFirst({
     where: {
       id: notificationId,
-
       userId,
     },
 

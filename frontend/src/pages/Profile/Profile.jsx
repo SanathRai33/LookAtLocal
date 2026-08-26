@@ -5,6 +5,8 @@ import ProfileHero from './components/ProfileHero';
 import QuickActions from './components/QuickActions';
 // import NearbyOpportunities from './components/NearbyOpportunities';
 import ProfileSidebar from './components/ProfileSidebar';
+import MyActivity from './components/MyActivity';
+import ManageRequests from './components/ManageRequests';
 
 const Profile = () => {
   const { user, loading } = useAuth();
@@ -74,10 +76,10 @@ const Profile = () => {
       { id: 3, label: 'Add bio', completed: !!userData.bio },
       // { id: 4, label: 'Upload ID proof', completed: false },
     ];
-    
+
     const completedTasks = tasks.filter(task => task.completed).length;
     const percentage = Math.round((completedTasks / tasks.length) * 100);
-    
+
     setProfileStrength({
       percentage,
       tasks,
@@ -106,6 +108,10 @@ const Profile = () => {
 
             <QuickActions />
 
+            <MyActivity />
+
+            <ManageRequests />
+            
             {/* <NearbyOpportunities opportunities={opportunities} /> */}
           </main>
 

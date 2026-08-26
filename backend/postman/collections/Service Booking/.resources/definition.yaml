@@ -1,0 +1,6 @@
+$kind: collection
+name: Service Booking
+variables:
+  - key: supabase_service_role_api_key_107c
+    secret: true
+    disabled: false
