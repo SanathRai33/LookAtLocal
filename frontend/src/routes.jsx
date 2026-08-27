@@ -50,6 +50,11 @@ const CreateProduct = React.lazy(() => import('./pages/Product/CreateProduct'));
 const EditProduct = React.lazy(() => import('./pages/Product/EditProduct'));
 const MyProducts = React.lazy(() => import('./pages/Product/MyProducts'));
 
+// Product Booking
+const ReceivedProductBookings = React.lazy(() => import('./pages/ProductBookings/ReceivedProductBookings'));
+const MyProductBookings = React.lazy(() => import('./pages/ProductBookings/MyProductBookings'));
+
+
 // Space/Property
 const Spaces = React.lazy(() => import('./pages/Spaces/Spaces'));
 const SpaceDetails = React.lazy(() => import('./pages/Spaces/SpaceDetails'));
@@ -226,6 +231,15 @@ export const routes = [
               { path: "my-products", element: <MyProducts /> },
               { path: ":productId", element: <ProductDetails /> },
               { path: "edit/:productId", element: <EditProduct /> },
+            ],
+          },
+
+          // Product-Bookings
+          {
+            path: "/product-bookings",
+            children: [
+              { index: true, element: <MyProductBookings /> },
+              { path: "received", element: <ReceivedProductBookings /> },
             ],
           },
 

@@ -100,7 +100,7 @@ const ProductCard = ({ product }) => {
 
       <div className="p-4">
         <div className="flex items-start justify-between gap-2">
-          <Link to={`/product/${id}`}>
+          <Link to={`/products/${id}`}>
             <h3 className="flex-1 text-base font-semibold text-gray-900 dark:text-white line-clamp-1 hover:text-blue-600 dark:hover:text-blue-400">
               {title}
             </h3>
@@ -171,7 +171,7 @@ const ProductCard = ({ product }) => {
             </div>
           </div>
           <Link
-            to={`/product/${id}`}
+            to={`/products/${id}`}
             className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25"
           >
             View

@@ -339,7 +339,7 @@ const MyProducts = () => {
                   </div>
 
                   <div className={`flex gap-2 ${viewMode === 'grid' ? 'pt-3 border-t border-gray-100 dark:border-slate-800' : 'sm:border-l sm:pl-4 border-gray-100 dark:border-slate-800'}`}>
-                    <button onClick={() => navigate(`/product/${product.id}`)} className="p-2 text-gray-400 transition rounded-lg hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-slate-800 dark:hover:text-gray-300">
+                    <button onClick={() => navigate(`/products/${product.id}`)} className="p-2 text-gray-400 transition rounded-lg hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-slate-800 dark:hover:text-gray-300">
                       <Eye className="w-4 h-4" />
                     </button>
                     <button onClick={() => navigate(`/product/edit/${product.id}`)} className="p-2 text-gray-400 transition rounded-lg hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-slate-800 dark:hover:text-gray-300">

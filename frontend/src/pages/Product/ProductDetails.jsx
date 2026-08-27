@@ -13,21 +13,25 @@ import {
   Truck,
   Home,
 } from 'lucide-react';
+import useProductBooking from '../../hooks/useProductBooking';
 import { useProducts } from '../../hooks/useProducts';
 import { useAuth } from '../../context/AuthContext';
 import { FaWhatsapp } from 'react-icons/fa';
 import ImageCarousel from '../../components/common/ImageCarousel';
 import ProviderCard from '../../components/common/ProviderCard';
 import RelatedProducts from './components/RelatedProducts';
+import ProductBookingModal from './components/ProductBookingModal'
 
 const ProductDetails = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { getProductById, loading } = useProducts();
+  const { createBooking, loading: bookingLoading } = useProductBooking();
   const [product, setProduct] = useState(null);
   const [error, setError] = useState('');
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [showBookingModal, setShowBookingModal] = useState(false);
 
   useEffect(() => {
     fetchProductDetails();
@@ -117,6 +121,43 @@ const ProductDetails = () => {
       `https://wa.me/${cleanNumber}?text=${message}`,
       '_blank',
       'noopener,noreferrer'
+    );
+  };
+
+  const handleRequestToBuy = () => {
+    if (!user) {
+      navigate("/login", {
+        state: {
+          from: `/products/${productId}`,
+        },
+      });
+
+      return;
+    }
+
+    if (product?.seller?.id === user?.id) {
+      return;
+    }
+
+    setShowBookingModal(true);
+  };
+
+  const handleConfirmBooking = async () => {
+    setBookingError('');
+    setBookingSuccess('');
+
+    const result = await createBooking({
+      productId: product.id,
+    });
+
+    if (!result.success) {
+      setBookingError(result.error);
+      return;
+    }
+
+    setShowBookingModal(false);
+    setBookingSuccess(
+      'Purchase request sent successfully.'
     );
   };
 
@@ -270,33 +311,53 @@ const ProductDetails = () => {
 
                 {product.status === 'ACTIVE' && (
                   <div className="flex flex-wrap gap-3 mt-6">
+                    {
+                      product.seller?.id !== user?.id && (
+                        <button
+                          type="button"
+                          onClick={handleRequestToBuy}
+                          disabled={product?.seller?.id === user?.id}
+                          className={`flex items-center justify-center gap-2 px-6 py-3 font-semibold text-white transition rounded-xl ${product?.seller?.id === user?.id
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/25"
+                            }`}
+                        >
+                          <Package className="w-5 h-5" />
+                          {product?.seller?.id === user?.id
+                            ? "Your Product"
+                            : "Request to Buy"}
+                        </button>)
+                    }
+
                     <button
                       onClick={handleCall}
                       disabled={!hasPhone}
-                      className={`flex items-center gap-2 px-6 py-3 text-white transition rounded-xl hover:shadow-lg hover:shadow-blue-500/25 ${hasPhone ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
+                      className={`flex items-center gap-2 px-6 py-3 text-white transition rounded-xl hover:shadow-lg hover:shadow-blue-500/25 ${hasPhone
+                        ? 'bg-blue-600 hover:bg-blue-700'
+                        : 'bg-gray-400 cursor-not-allowed'
+                        }`}
                     >
                       <Phone className="w-5 h-5" />
-                      {hasPhone ? 'Call Now' : 'No Phone Number'}
+
+                      {hasPhone
+                        ? 'Call Now'
+                        : 'No Phone Number'}
                     </button>
+
                     <button
                       onClick={handleWhatsApp}
                       disabled={!hasPhone}
-                      className={`flex items-center gap-2 px-6 py-3 text-white transition rounded-xl ${hasPhone ? 'bg-green-600 hover:bg-green-700 hover:shadow-lg hover:shadow-green-500/25' : 'bg-gray-400 cursor-not-allowed'}`}
+                      className={`flex items-center gap-2 px-6 py-3 text-white transition rounded-xl ${hasPhone
+                        ? 'bg-green-600 hover:bg-green-700 hover:shadow-lg hover:shadow-green-500/25'
+                        : 'bg-gray-400 cursor-not-allowed'
+                        }`}
                     >
                       <FaWhatsapp className="w-5 h-5" />
-                      {hasPhone ? 'WhatsApp' : 'No Phone Number'}
+
+                      {hasPhone
+                        ? 'WhatsApp'
+                        : 'No Phone Number'}
                     </button>
-                    {/* <button className="flex items-center gap-2 px-6 py-3 text-gray-700 transition bg-gray-100 rounded-xl hover:bg-gray-200 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600">
-                      <MessageSquare className="w-5 h-5" />
-                      Send Message
-                    </button> */}
-                    {/* <button
-                      onClick={() => setIsWishlisted(!isWishlisted)}
-                      className="flex items-center gap-2 px-6 py-3 text-gray-700 transition bg-gray-100 rounded-xl hover:bg-gray-200 dark:bg-slate-700 dark:text-gray-300 dark:hover:bg-slate-600"
-                    >
-                      < className={`w-5 h-5 ${isWishlisted ? 'fill-red-500 text-red-500' : 'dark:text-gray-300 text-gray-700'}`} />
-                      {isWishlisted ? 'Saved' : 'Save'}
-                    </button> */}
                   </div>
                 )}
 
@@ -342,10 +403,17 @@ const ProductDetails = () => {
               profilePath={`/users/${product.seller?.id}`}
             />
 
-            <RelatedProducts products={product.similarProducts}/>
+            <RelatedProducts products={product.similarProducts} />
           </div>
         </div>
       </div>
+      <ProductBookingModal
+        product={product}
+        open={showBookingModal}
+        onClose={() => setShowBookingModal(false)}
+        createBooking={createBooking}
+        loading={bookingLoading}
+      />
     </div>
   );
 };

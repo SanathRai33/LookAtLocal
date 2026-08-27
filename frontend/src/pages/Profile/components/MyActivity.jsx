@@ -35,7 +35,7 @@ const activities = [
         icon: ShoppingCart,
         iconClass: "text-indigo-600",
         iconBg: "bg-indigo-50 dark:bg-indigo-950/40",
-        disabled: true,
+        to: "/product-bookings",
     },
     {
         id: "applications",

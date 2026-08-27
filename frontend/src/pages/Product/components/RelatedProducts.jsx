@@ -45,7 +45,7 @@ const RelatedProducts = ({ products = [] }) => {
                         <button
                             key={product.id}
                             type="button"
-                            onClick={() => navigate(`/product/${product.id}`)}
+                            onClick={() => navigate(`/products/${product.id}`)}
                             className="flex items-center w-full gap-3 p-3 text-left transition rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700"
                         >
                             <div className="flex items-center justify-center flex-shrink-0 w-16 h-16 overflow-hidden bg-gray-100 rounded-xl dark:bg-slate-700">

@@ -123,6 +123,7 @@ enum ProductListingStatus {
 enum ProductTransactionStatus {
   REQUESTED
   ACCEPTED
+  REJECTED
   CANCELLED
   COMPLETED
 }
