@@ -44,7 +44,7 @@ const activities = [
         icon: BriefcaseBusiness,
         iconClass: "text-orange-600",
         iconBg: "bg-orange-50 dark:bg-orange-950/40",
-        disabled: true,
+        to: "/job-applications",
     },
 ];
 

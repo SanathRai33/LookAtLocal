@@ -43,6 +43,11 @@ const JobDetails = React.lazy(() => import('./pages/Jobs/JobDetails'));
 const MyJobs = React.lazy(() => import('./pages/Jobs/MyJobs'));
 const EditJob = React.lazy(() => import('./pages/Jobs/EditJob'));
 
+// Job Application 
+const ReceivedJobApplications = React.lazy(() => import('./pages/JobApplication/ReceivedApplications'));
+const MyJobApplications = React.lazy(() => import('./pages/JobApplication/MyApplications'));
+
+
 // Product/Market
 const Product = React.lazy(() => import('./pages/Product/Product'));
 const ProductDetails = React.lazy(() => import('./pages/Product/ProductDetails'));
@@ -252,6 +257,15 @@ export const routes = [
               { path: "my-jobs", element: <MyJobs /> },
               { path: ":jobId", element: <JobDetails /> },
               { path: "edit/:jobId", element: <EditJob /> },
+            ],
+          },
+
+          // Job-Applications
+          {
+            path: "/job-applications",
+            children: [
+              { index: true, element: <MyJobApplications /> },
+              { path: "received", element: <ReceivedJobApplications /> },
             ],
           },
 

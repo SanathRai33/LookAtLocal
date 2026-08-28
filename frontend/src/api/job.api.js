@@ -1,4 +1,4 @@
-import api from './axios';
+import api from './axios.js';
 
 export const jobApi = {
   createJob: (data) => api.post('/jobs', data),
