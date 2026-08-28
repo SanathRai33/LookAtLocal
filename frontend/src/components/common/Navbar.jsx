@@ -19,6 +19,7 @@ import {
   ChevronDown,
   Sun,
   Moon,
+  Award,
   UserShield
 } from 'lucide-react';
 
@@ -173,6 +174,12 @@ const Navbar = () => {
                         Dashboard
                       </Link>
 
+
+                      {/* <Link to="/points" className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-200 cursor-pointer dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700">
+                        <Award className="w-4 h-4 mr-2" />
+                        My Points
+                      </Link> */}
+
                       <Link
                         to="/settings"
                         className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-200 cursor-pointer dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
@@ -281,6 +288,11 @@ const Navbar = () => {
                   <Home className="w-5 h-5 mr-3" />
                   Dashboard
                 </Link>
+
+                {/* <Link to="/points" className="flex items-center px-4 py-3 text-sm font-medium text-gray-700 transition-all duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 cu">
+                  <Award className="w-4 h-4 mr-2" />
+                  My Points
+                </Link> */}
 
                 <button
                   onClick={handleLogout}

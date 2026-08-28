@@ -12,6 +12,10 @@ const ChangePassword = React.lazy(() => import('./pages/Auth/ChangePassword'));
 const VerifyEmail = React.lazy(() => import('./pages/Auth/VerifyEmail'));
 const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard'));
 
+// Points
+const Points = React.lazy(() => import('./pages/Points/Points'));
+
+
 // Services
 const Services = React.lazy(() => import('./pages/Services/Services'));
 const CreateService = React.lazy(() => import('./pages/Services/CreateService'));
@@ -68,6 +72,7 @@ const CreateSpace = React.lazy(() => import('./pages/Spaces/CreateSpace'));
 const EditSpace = React.lazy(() => import('./pages/Spaces/EditSpace'));
 const ManageSpaceUnits = React.lazy(() => import('./pages/Spaces/ManageSpaceUnits'));
 
+
 // Community
 const Community = React.lazy(() => import('./pages/Community/Community'));
 const CreateCommunityPost = React.lazy(() => import('./pages/Community/CreateCommunityPost'));
@@ -77,6 +82,7 @@ const EditCommunityPost = React.lazy(() => import('./pages/Community/EditCommuni
 const Emergency = React.lazy(() => import('./pages/Emergency/Emergency'));
 const CreateEmergency = React.lazy(() => import('./pages/Emergency/CreateEmergency'));
 const EditEmergency = React.lazy(() => import('./pages/Emergency/EditEmergency'));
+
 
 // Profile
 const Profile = React.lazy(() => import('./pages/Profile/Profile'));
@@ -181,6 +187,9 @@ export const routes = [
               { path: "edit-address", element: <EditAddress /> },
             ],
           },
+
+          // Points
+          { path: '/points', element: <Points /> },
 
           // Services
           {
