@@ -69,6 +69,8 @@ const Navbar = () => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
+  console.log(user?.unreadNotificationCount)
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex justify-center ${isScrolled
       ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-sm'
@@ -117,11 +119,18 @@ const Navbar = () => {
 
             {isAuthenticated ? (
               <>
-                {/* Notification Bell */}
-                <button className="relative p-2 transition-colors duration-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800">
+                <Link to="/notifications" aria-label="Notifications"
+                  className="relative flex items-center justify-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800"
+                >
                   <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-                  <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-red-500 rounded-full animate-pulse"></span>
-                </button>
+                  {user?.unreadNotificationCount > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold leading-none text-white bg-red-500 border-2 border-white rounded-full dark:border-slate-900">
+                      {user.unreadNotificationCount > 99
+                        ? "99+"
+                        : user.unreadNotificationCount}
+                    </span>
+                  )}
+                </Link>
 
                 {/* User Dropdown */}
                 <div className="relative">

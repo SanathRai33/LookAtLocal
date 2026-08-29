@@ -67,7 +67,7 @@ const createBulkNotifications = async ({
 };
 
 const getMyNotifications = async (userId, filters) => {
-  const { page = 1, limit = 20, readAt } = filters;
+  const { page = 1, limit = 20, isRead } = filters;
 
   const pagination = getPagination(page, limit);
 
@@ -75,27 +75,19 @@ const getMyNotifications = async (userId, filters) => {
     userId,
   };
 
-  /*
-   * readAt query:
-   *
-   * ?readAt=true  -> unread notifications
-   * ?readAt=false -> read notifications
-   */
-  if (readAt !== undefined) {
+  if (isRead !== undefined) {
     where.readAt =
-      readAt === "true"
-        ? null
-        : {
+      isRead === "true"
+        ? {
             not: null,
-          };
+          }
+        : null;
   }
 
   const [notifications, total] = await prisma.$transaction([
     prisma.notification.findMany({
       where,
-
       select: notificationSelect,
-
       orderBy: [
         {
           readAt: "asc",
@@ -104,7 +96,6 @@ const getMyNotifications = async (userId, filters) => {
           createdAt: "desc",
         },
       ],
-
       skip: pagination.skip,
       take: pagination.limit,
     }),
@@ -116,7 +107,6 @@ const getMyNotifications = async (userId, filters) => {
 
   return {
     notifications,
-
     pagination: getPaginationMeta({
       page: pagination.page,
       limit: pagination.limit,

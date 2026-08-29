@@ -43,18 +43,29 @@ const publicProfileSelect = {
 };
 
 const getMyProfile = async (userId) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    select: privateProfileSelect,
-  });
+  const [user, unreadNotificationCount] = await Promise.all([
+    prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: privateProfileSelect,
+    }),
+    prisma.notification.count({
+      where: {
+        userId,
+        readAt: null,
+      },
+    }),
+  ]);
 
   if (!user) {
     throw new AppError("User profile not found", 404);
   }
 
-  return user;
+  return {
+    ...user,
+    unreadNotificationCount,
+  };
 };
 
 const updateMyProfile = async (userId, data) => {

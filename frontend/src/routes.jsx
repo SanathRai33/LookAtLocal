@@ -12,6 +12,11 @@ const ChangePassword = React.lazy(() => import('./pages/Auth/ChangePassword'));
 const VerifyEmail = React.lazy(() => import('./pages/Auth/VerifyEmail'));
 const Dashboard = React.lazy(() => import('./pages/Dashboard/Dashboard'));
 
+
+// Points
+const Notifications = React.lazy(() => import('./pages/Notification/Notifications'));
+
+
 // Points
 const Points = React.lazy(() => import('./pages/Points/Points'));
 
@@ -190,6 +195,9 @@ export const routes = [
 
           // Points
           { path: '/points', element: <Points /> },
+
+          // Points
+          { path: '/notifications', element: <Notifications /> },
 
           // Services
           {
