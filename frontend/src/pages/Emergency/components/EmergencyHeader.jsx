@@ -105,7 +105,7 @@ const EmergencyHeader = ({
                 </div>
             </div>
             <div className="mt-3 text-sm text-gray-500 dark:text-gray-400">
-                {loading ? 'Loading...' : `${totalCount} emergency requests found`}
+                {loading ? 'Loading...' : `${totalCount} unresolved emergency requests found`}
             </div>
         </div>
     );

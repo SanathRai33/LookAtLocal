@@ -14,13 +14,14 @@ import {
     MoreVertical,
     Edit,
     Trash2,
+    Loader2
 } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { useEmergency } from '../../../hooks/useEmergency';
 
 const EmergencyCard = ({ request, onStatusChange }) => {
     const { user } = useAuth();
-    const { resolveEmergencyRequest } = useEmergency();
+    const { resolveEmergencyRequest, deleteEmergencyRequest } = useEmergency();
     const [showMenu, setShowMenu] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleting, setDeleting] = useState(false);
@@ -121,12 +122,32 @@ const EmergencyCard = ({ request, onStatusChange }) => {
         }
     };
 
+    const handleDelete = async () => {
+        setDeleting(true);
+
+        try {
+            const result = await deleteEmergencyRequest(id);
+
+            if (result.success) {
+                setShowDeleteModal(false);
+
+                if (onStatusChange) {
+                    onStatusChange();
+                }
+            }
+        } catch (error) {
+            console.error('Error deleting request:', error);
+        } finally {
+            setDeleting(false);
+        }
+    };
+
     return (
         <>
             <div
                 className={`group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border ${urgency === 'CRITICAL' ? 'border-red-200 dark:border-red-800' :
-                        urgency === 'URGENT' ? 'border-orange-200 dark:border-orange-800' :
-                            'border-gray-200 dark:border-gray-700'
+                    urgency === 'URGENT' ? 'border-orange-200 dark:border-orange-800' :
+                        'border-gray-200 dark:border-gray-700'
                     } hover:border-red-300 dark:hover:border-red-700`}
             >
                 <div className="p-5 pb-4 border-b border-gray-100 dark:border-gray-700">

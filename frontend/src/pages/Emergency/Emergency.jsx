@@ -136,11 +136,10 @@ const Emergency = () => {
     });
   };
 
-  const urgentCount =
-    emergencies?.filter(
-      (emergency) =>
-        emergency.urgency === 'CRITICAL' || emergency.urgency === 'URGENT'
-    )?.length || 0;
+  const urgentCount = emergencies?.filter((emergency) =>
+    (emergency.urgency === 'CRITICAL' || emergency.urgency === 'URGENT') && emergency.status !== 'RESOLVED')?.length || 0;
+
+  const unresolvedCount = emergencies?.filter((emergency) => emergency.status !== 'RESOLVED')?.length || 0;
 
   const breadcrumbItems = [
     { label: 'Home', path: '/' },
@@ -158,7 +157,7 @@ const Emergency = () => {
           searchQuery={searchQuery}
           setSearchQuery={handleSearchChange}
           onSearch={handleSearchSubmit}
-          totalCount={pagination?.total || 0}
+          totalCount={unresolvedCount || 0}
           sortBy={sortBy}
           onSortChange={handleSortChange}
           loading={loading}
@@ -172,8 +171,7 @@ const Emergency = () => {
 
             <p className="text-sm text-red-700 dark:text-red-300">
               <span className="font-bold">{urgentCount}</span>{' '}
-              {urgentCount === 1 ? 'urgent request' : 'urgent requests'} need
-              immediate attention. Please help if you can.
+              {urgentCount === 1 ? 'urgent request' : 'urgent requests'} need immediate attention. Please help if you can.
             </p>
           </div>
         )}
@@ -187,10 +185,7 @@ const Emergency = () => {
           setUrgencyFilter={handleUrgencyChange}
         />
 
-        <EmergencyGrid
-          emergencies={emergencies}
-          loading={loading}
-        />
+        <EmergencyGrid emergencies={emergencies} loading={loading} onStatusChange={fetchEmergencies}/>
 
         {pagination && pagination.totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 mt-8">

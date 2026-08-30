@@ -114,6 +114,29 @@ const createCommunityPost = async ({ userId, data }) => {
 const getCommunityPosts = async (userId, filters) => {
   const { search, postType, isMine, showClosed, sort, page, limit } = filters;
 
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+      deletedAt: null,
+    },
+    select: {
+      city: true,
+      locality: true,
+      postalCode: true,
+    },
+  });
+
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  if (!user.city && !user.locality && !user.postalCode) {
+    throw new AppError(
+      "Please complete your profile location to view local community posts",
+      400,
+    );
+  }
+
   const pagination = getPagination(page, limit);
 
   const where = {
@@ -124,6 +147,15 @@ const getCommunityPosts = async (userId, filters) => {
       deletedAt: null,
     },
   };
+
+  if (user.postalCode) {
+    where.author.postalCode = user.postalCode;
+  } else if (user.city) {
+    where.author.city = {
+      equals: user.city,
+      mode: "insensitive",
+    };
+  }
 
   if (isMine === "true") {
     where.authorId = userId;
@@ -157,10 +189,14 @@ const getCommunityPosts = async (userId, filters) => {
   }
 
   let orderBy;
+
   switch (sort) {
     case "oldest":
-      orderBy = { createdAt: "asc" };
+      orderBy = {
+        createdAt: "asc",
+      };
       break;
+
     case "most_liked":
       orderBy = [
         {
@@ -168,9 +204,12 @@ const getCommunityPosts = async (userId, filters) => {
             _count: "desc",
           },
         },
-        { createdAt: "desc" },
+        {
+          createdAt: "desc",
+        },
       ];
       break;
+
     case "least_liked":
       orderBy = [
         {
@@ -178,12 +217,17 @@ const getCommunityPosts = async (userId, filters) => {
             _count: "asc",
           },
         },
-        { createdAt: "desc" },
+        {
+          createdAt: "desc",
+        },
       ];
       break;
+
     case "newest":
     default:
-      orderBy = { createdAt: "desc" };
+      orderBy = {
+        createdAt: "desc",
+      };
   }
 
   const [posts, total] = await prisma.$transaction([
@@ -201,7 +245,10 @@ const getCommunityPosts = async (userId, filters) => {
       skip: pagination.skip,
       take: pagination.limit,
     }),
-    prisma.communityPost.count({ where }),
+
+    prisma.communityPost.count({
+      where,
+    }),
   ]);
 
   const postsWithCount = posts.map((post) => ({
@@ -224,11 +271,10 @@ const getCommunityPostById = async (postId, userId) => {
     where: {
       id: postId,
       deletedAt: null,
-    },
-
-    author: {
-      status: "ACTIVE",
-      deletedAt: null,
+      author: {
+        status: "ACTIVE",
+        deletedAt: null,
+      },
     },
 
     select: {

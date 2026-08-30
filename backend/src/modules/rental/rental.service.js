@@ -311,25 +311,39 @@ const getRentals = async (userId, filters) => {
   const {
     search,
     categoryId,
-
-    city,
-    locality,
-    postalCode,
-
     condition,
     deliveryOption,
-
     minPricePerDay,
     maxPricePerDay,
-
     isNegotiable,
     isAvailable,
-
     sort = "newest",
-
     page = 1,
     limit = 20,
   } = filters;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+      deletedAt: null,
+    },
+    select: {
+      city: true,
+      locality: true,
+      postalCode: true,
+    },
+  });
+
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  if (!user.city && !user.locality && !user.postalCode) {
+    throw new AppError(
+      "Please complete your profile location to find local rentals",
+      400,
+    );
+  }
 
   const pagination = getPagination(page, limit);
 
@@ -353,22 +367,13 @@ const getRentals = async (userId, filters) => {
     where.categoryId = categoryId;
   }
 
-  if (city) {
+  if (user.postalCode) {
+    where.postalCode = user.postalCode;
+  } else if (user.city) {
     where.city = {
-      equals: city,
+      equals: user.city,
       mode: "insensitive",
     };
-  }
-
-  if (locality) {
-    where.locality = {
-      contains: locality,
-      mode: "insensitive",
-    };
-  }
-
-  if (postalCode) {
-    where.postalCode = postalCode;
   }
 
   if (condition) {

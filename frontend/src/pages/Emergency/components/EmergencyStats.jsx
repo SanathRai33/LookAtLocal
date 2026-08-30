@@ -10,11 +10,14 @@ const emergencyTypes = [
 
 const EmergencyStats = ({ emergencies }) => {
     const counts = useMemo(() => {
-        const result = {};
-        emergencyTypes.forEach((type) => {
-            result[type.id] = emergencies?.filter(e => e.emergencyType === type.id)?.length;
-        });
-        return result;
+        if (!emergencies) return {};
+
+        return emergencies.reduce((acc, emergency) => {
+            if (emergency.status !== 'RESOLVED' && emergency.emergencyType) {
+                acc[emergency.emergencyType] = (acc[emergency.emergencyType] || 0) + 1;
+            }
+            return acc;
+        }, {});
     }, [emergencies]);
 
     const getColorClasses = (color) => {
@@ -30,7 +33,7 @@ const EmergencyStats = ({ emergencies }) => {
 
     return (
         <div className="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-3 md:grid-cols-5">
-            {emergencyTypes?.map((type) => (
+            {emergencyTypes.map((type) => (
                 <div key={type.id} className="p-4 bg-white border border-gray-200 dark:bg-slate-800 rounded-2xl dark:border-gray-700">
                     <div className="flex items-center gap-3">
                         <div className={`p-3 rounded-xl ${getColorClasses(type.color)}`}>

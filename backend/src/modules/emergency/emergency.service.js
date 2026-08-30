@@ -113,8 +113,30 @@ const createEmergencyRequest = async ({ userId, data }) => {
 };
 
 const getEmergencyRequests = async (userId, filters) => {
-  const { search, emergencyType, urgency, status, city, sort, page, limit } =
-    filters;
+  const { search, emergencyType, urgency, status, sort, page, limit } = filters;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+      deletedAt: null,
+    },
+    select: {
+      city: true,
+      locality: true,
+      postalCode: true,
+    },
+  });
+
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  if (!user.city && !user.locality && !user.postalCode) {
+    throw new AppError(
+      "Please complete your profile location to find local emergency requests",
+      400,
+    );
+  }
 
   const pagination = getPagination(page, limit);
 
@@ -141,9 +163,11 @@ const getEmergencyRequests = async (userId, filters) => {
     where.status = status;
   }
 
-  if (city) {
+  if (user.postalCode) {
+    where.postalCode = user.postalCode;
+  } else if (user.city) {
     where.city = {
-      contains: city,
+      equals: user.city,
       mode: "insensitive",
     };
   }

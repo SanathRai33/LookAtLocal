@@ -97,56 +97,56 @@ const Settings = () => {
                     to: '#',
                     tag: { label: 'Coming Soon', variant: 'blue' }
                 },
-                {
-                    id: 'notifications',
-                    label: 'Notifications',
-                    description: 'Manage notification preferences',
-                    icon: Bell,
-                    to: '#',
-                    tag: { label: 'Next Version', variant: 'purple' }
-                },
+                // {
+                //     id: 'notifications',
+                //     label: 'Notifications',
+                //     description: 'Manage notification preferences',
+                //     icon: Bell,
+                //     to: '#',
+                //     tag: { label: 'Next Version', variant: 'purple' }
+                // },
             ],
         },
-        {
-            id: 'security',
-            title: 'Security & Privacy',
-            icon: Shield,
-            items: [
-                {
-                    id: 'privacy',
-                    label: 'Privacy Settings',
-                    description: 'Control your privacy preferences',
-                    icon: ShieldCheck,
-                    to: '/settings/privacy',
-                    tag: { label: 'Coming Soon', variant: 'blue' }
-                },
-                {
-                    id: 'sessions',
-                    label: 'Active Sessions',
-                    description: 'Manage your active sessions',
-                    icon: Database,
-                    to: '/settings/sessions',
-                    tag: { label: 'Next Version', variant: 'purple' }
-                },
-                {
-                    id: 'two-factor',
-                    label: 'Two-Factor Authentication',
-                    description: 'Add an extra layer of security',
-                    icon: Shield,
-                    to: '/settings/2fa',
-                    tag: { label: 'Next Version', variant: 'purple' }
-                },
-                {
-                    id: 'delete-account',
-                    label: 'Delete Account',
-                    description: 'Permanently delete your account',
-                    icon: UserX,
-                    to: '/settings/delete-account',
-                    danger: true,
-                    tag: { label: 'Working On', variant: 'yellow' }
-                },
-            ],
-        },
+        // {
+        //     id: 'security',
+        //     title: 'Security & Privacy',
+        //     icon: Shield,
+        //     items: [
+        //         {
+        //             id: 'privacy',
+        //             label: 'Privacy Settings',
+        //             description: 'Control your privacy preferences',
+        //             icon: ShieldCheck,
+        //             to: '/settings/privacy',
+        //             tag: { label: 'Coming Soon', variant: 'blue' }
+        //         },
+        //         {
+        //             id: 'sessions',
+        //             label: 'Active Sessions',
+        //             description: 'Manage your active sessions',
+        //             icon: Database,
+        //             to: '/settings/sessions',
+        //             tag: { label: 'Next Version', variant: 'purple' }
+        //         },
+        //         {
+        //             id: 'two-factor',
+        //             label: 'Two-Factor Authentication',
+        //             description: 'Add an extra layer of security',
+        //             icon: Shield,
+        //             to: '/settings/2fa',
+        //             tag: { label: 'Next Version', variant: 'purple' }
+        //         },
+        //         {
+        //             id: 'delete-account',
+        //             label: 'Delete Account',
+        //             description: 'Permanently delete your account',
+        //             icon: UserX,
+        //             to: '/settings/delete-account',
+        //             danger: true,
+        //             tag: { label: 'Working On', variant: 'yellow' }
+        //         },
+        //     ],
+        // },
         {
             id: 'support',
             title: 'Support & About',

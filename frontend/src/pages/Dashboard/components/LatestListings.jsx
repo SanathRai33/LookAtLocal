@@ -1,5 +1,6 @@
 import React from 'react';
-import { ChevronRight, Heart, MapPin, Clock, Loader2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ChevronRight, MapPin, Clock, Loader2 } from 'lucide-react';
 
 const formatRelativeDate = (value) => {
   if (!value) return 'Recently added';
@@ -56,6 +57,18 @@ const getTypeStyle = (type) => {
 };
 
 const jobImage = 'https://imgs.search.brave.com/gCsJ2RD0U0BB0FzIW51XN-YQTklrnAfOx88S1vFMnWM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pMC53/cC5jb20vcGljanVt/Ym8uY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy9zZWFyY2hpbmct/Zm9yLWEtbmV3LWpv/Yi1mcmVlLXBob3Rv/LmpwZz93PTYwMCZx/dWFsaXR5PTgw';
+
+const getListingPath = (listing) => {
+  const paths = {
+    SERVICE: `/services/${listing.id}`,
+    RENTAL: `/rentals/${listing.id}`,
+    PRODUCT: `/products/${listing.id}`,
+    JOB: `/jobs/${listing.id}`,
+    SPACE: `/spaces/${listing.id}`,
+  };
+
+  return paths[listing.type] || "#";
+};
 
 const LatestListings = ({ listings = [], loading = false }) => {
   if (loading) {
@@ -120,9 +133,10 @@ const LatestListings = ({ listings = [], loading = false }) => {
             {listings.map((listing) => {
               const price = formatPrice(listing);
               return (
-                <article
+                <Link
                   key={`${listing.type}-${listing.id}`}
-                  className="flex-shrink-0 w-full overflow-hidden transition bg-white border border-gray-200 shadow-sm rounded-2xl hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-800 snap-start sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)] xl:w-[calc(25%-15px)]"
+                  to={getListingPath(listing)}
+                  className="flex-shrink-0 block w-full overflow-hidden transition bg-white border border-gray-200 shadow-sm rounded-2xl hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-800 snap-start sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)] xl:w-[calc(25%-15px)]"
                 >
                   <div className="relative flex items-center justify-center bg-gray-100 h-52 dark:bg-slate-700">
                     <div className="w-full overflow-hidden text-center h-52">
@@ -139,13 +153,13 @@ const LatestListings = ({ listings = [], loading = false }) => {
                     >
                       {listing.category}
                     </span>
-                    <button
+                    {/* <button
                       type="button"
                       aria-label={`Favorite ${listing.title}`}
                       className="absolute flex items-center justify-center text-gray-500 transition rounded-full shadow-sm right-4 top-4 h-9 w-9 bg-white/95 hover:text-red-500"
                     >
                       <Heart className="w-4 h-4" />
-                    </button>
+                    </button> */}
                   </div>
                   <div className="p-5">
                     <h3 className="text-base font-semibold truncate text-gray-950 dark:text-white">
@@ -173,7 +187,7 @@ const LatestListings = ({ listings = [], loading = false }) => {
                       )}
                     </div>
                   </div>
-                </article>
+                </Link>
               );
             })}
           </div>

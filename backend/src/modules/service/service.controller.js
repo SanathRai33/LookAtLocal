@@ -18,7 +18,7 @@ const createService = asyncHandler(async (req, res) => {
 });
 
 const getServices = asyncHandler(async (req, res) => {
-  const result = await serviceService.getServices(req.user.id, req.query);
+  const result = await serviceService.getServices(req.user?.id, req.query);
 
   return ApiResponse.success(
     res,
