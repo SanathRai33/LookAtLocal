@@ -1,157 +1,172 @@
 # Look@Local
 
-> A local-first community platform that connects people with nearby
-> services, rentals, products, spaces, jobs, community updates, and
-> emergency requests.
+> A local-first community platform that connects people with nearby services, rentals, products, spaces, jobs, community updates, and emergency requests.
 
 ## Overview
 
-Look@Local brings multiple local-use cases into one platform:
+Look@Local is a comprehensive local marketplace that brings multiple use cases into one integrated platform:
 
--   Services
--   Rentals
--   Buy & Sell
--   Spaces / Properties
--   Jobs
--   Community
--   Emergency requests
--   User profiles and listings
--   Admin management
+-   **Services** - Book local professionals
+-   **Rentals** - Rent or lease items locally
+-   **Buy & Sell** - Local marketplace for products
+-   **Spaces** - Rent shops, offices, warehouses
+-   **Jobs** - Local job listings and applications
+-   **Community** - Local posts and updates
+-   **Emergency Requests** - Community emergency assistance
+-   **User Profiles** - Manage listings and reputation
+-   **Admin Dashboard** - Platform management and analytics
 
-The project uses React and Vite for the frontend, Node.js and Express
-for the backend, Prisma with PostgreSQL for data access, and Cloudinary
-for image storage.
+The project uses **React** with **Vite** for the frontend, **Node.js** with **Express** for the backend, **Prisma** with **PostgreSQL** for data persistence, and **Cloudinary** for image management.
 
 ## Tech Stack
 
 ### Frontend
 
--   React
--   Vite
--   React Router
--   Tailwind CSS
--   Axios
--   Lucide React
+-   **React** 19 - UI library
+-   **Vite** 8 - Build tool and dev server
+-   **React Router** 7 - Client-side routing
+-   **Redux Toolkit** - State management
+-   **Tailwind CSS** - Styling
+-   **Axios** - HTTP client
+-   **React Hook Form** - Form management
+-   **Framer Motion** - Animations
+-   **Recharts** - Data visualization
+-   **Socket.io Client** - Real-time communication
+-   **Google Maps API** - Location services
+-   **Lucide React** - Icon library
+-   **React Hot Toast** - Notifications
+-   **React Slick** - Carousel component
 
 ### Backend
 
--   Node.js
--   Express
--   Prisma
--   PostgreSQL
--   JWT
--   Nodemailer
--   Cloudinary
--   Multer
--   Zod
--   Helmet
--   CORS
--   Express Rate Limit
--   Morgan
+-   **Node.js** - Runtime
+-   **Express** 5 - Web framework
+-   **Prisma** 7 - ORM and migrations
+-   **PostgreSQL** - Database
+-   **JWT** - Authentication
+-   **bcrypt/bcryptjs** - Password hashing
+-   **Resend** - Email delivery
+-   **Cloudinary** - Image storage
+-   **Multer** - File uploads
+-   **Zod** - Data validation
+-   **Helmet** - Security headers
+-   **CORS** - Cross-origin requests
+-   **Express Rate Limit** - Rate limiting
+-   **Morgan** - HTTP logging
 
 ### Infrastructure
 
--   GitHub
--   Vercel
--   Render
--   Neon PostgreSQL
--   Cloudinary
+-   **GitHub** - Version control and repository
+-   **Vercel** - Frontend hosting
+-   **Render** - Backend hosting
+-   **Neon PostgreSQL** - Cloud database
+-   **Cloudinary** - Image and file storage
+-   **Resend** - Email service
 
 ## Main Features
 
-### Services
+### 🏢 Services
 
-Users can browse, create, edit, and manage local service listings.
+Browse and manage local service listings with categories like:
+Electrician, Plumber, Carpenter, Cleaning, Gardening, Appliance Repair
 
-Categories include:
+**Features:**
+- Create, edit, and manage service listings
+- Search and filter by location and category
+- Service reviews and ratings
+- Booking system with confirmation
 
--   Electrician
--   Plumber
--   Carpenter
--   Cleaning
--   Gardening
--   Appliance Repair
+### 🚗 Rentals
 
-### Rentals
+Discover and manage rental opportunities:
+Tools, Machinery, Vehicles, Electronics, Event Equipment
 
-Users can discover and manage rental listings for items such as tools,
-machinery, vehicles, electronics, and event equipment.
+**Features:**
+- List rental items with availability
+- Booking and scheduling
+- Rental history and tracking
+- Reviews and ratings
 
-### Buy & Sell
+### 🛍️ Buy & Sell (Products)
 
-Users can create and manage marketplace listings.
+Local marketplace for buying and selling products:
+Electronics, Furniture, Appliances, Vehicles, Other
 
-Categories include:
+**Features:**
+- Create and manage product listings
+- Product images and descriptions
+- Search and filtering
+- Transaction management
 
--   Electronics
--   Furniture
--   Appliances
--   Vehicles
--   Other
+### 🏠 Spaces
 
-### Spaces
+Rent commercial and residential spaces:
+Shops, Offices, Warehouses, Storage units
 
-Users can discover and manage spaces such as:
+**Features:**
+- Space listings with amenities
+- Unit management for multi-unit properties
+- Availability calendar
+- Booking and scheduling
 
--   Shops
--   Offices
--   Warehouses
+### 💼 Jobs
 
-The platform also supports space unit management.
+Local job opportunities and applications
 
-### Jobs
+**Features:**
+- Post and browse job listings
+- Job categories and filtering
+- Application tracking
+- Applicant management
 
-Users can browse and manage local job listings.
+### 👥 Community
 
-Categories include:
+Local posts and community engagement
 
--   Skilled Work
--   Delivery
--   Sales
--   Office Work
--   Part Time
+**Features:**
+- Create and share community posts
+- Local updates and alerts
+- Community feed
+- Engagement and discussions
 
-### Community
+### 🚨 Emergency Requests
 
-Users can create and manage community posts for local information and
-alerts.
+Post and respond to emergency situations
 
-### Emergency
+**Features:**
+- Create emergency requests
+- Location-based assistance
+- Request tracking
+- Rapid response coordination
 
-Users can create and manage emergency requests.
+### 👤 User Accounts
 
-### User Accounts
+Comprehensive user management
 
-The application includes:
+**Features:**
+- Registration and email verification
+- Login with JWT authentication
+- User profiles with ratings
+- Address management
+- Password reset and change
+- Public user profiles
+- Favorite listings
+- Points/Rewards system
+- Transaction history
 
--   Registration
--   Login
--   Protected routes
--   User profiles
--   Profile editing
--   Address management
--   Complete-address flow
--   Password reset
--   Change password
--   Email verification
--   Public profiles
--   User listings
+### ⚙️ Admin Dashboard
 
-Location is an important part of the platform because local relevance is
-one of its core goals.
+Platform management and analytics
 
-### Admin
-
-The admin area includes:
-
--   Admin dashboard
--   User management
--   Listing approvals
--   Analytics
--   Emergency requests
--   Reports
--   Categories
--   Admin settings
+**Features:**
+- User management
+- Listing approvals and moderation
+- Analytics and reports
+- Emergency request management
+- Category management
+- Platform settings
+- Revenue reports
+- Performance metrics
 
 Admin routes are protected separately from normal user routes.
 
@@ -196,296 +211,325 @@ LookAtLocal/
 
 ### Prerequisites
 
-Install:
+Install on your system:
+-   **Node.js** (v18 or higher) and npm
+-   **PostgreSQL** (for local development)
+-   **Git** for version control
 
--   Node.js
--   npm
--   PostgreSQL for local development
+### Installation
 
-### Clone
+1. **Clone the repository:**
 
-``` bash
+```bash
 git clone https://github.com/SanathRai33/LookAtLocal.git
 cd LookAtLocal
 ```
 
 ## Backend Setup
 
-``` bash
+### Install dependencies:
+
+```bash
 cd backend
 npm install
 ```
 
-Create:
+### Configure environment variables:
 
-``` text
-backend/.env
-```
+Create `backend/.env` file:
 
-Example:
-
-``` env
+```env
+# Server
 NODE_ENV=development
 PORT=5000
 
-DATABASE_URL=your_database_url
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5432/lookatlocal
 
-JWT_ACCESS_SECRET=your_access_secret
-JWT_REFRESH_SECRET=your_refresh_secret
-
+# JWT
+JWT_ACCESS_SECRET=your_access_secret_key_here
+JWT_REFRESH_SECRET=your_refresh_secret_key_here
 JWT_ACCESS_EXPIRES_IN=15m
 JWT_REFRESH_EXPIRES_IN=7d
 REFRESH_COOKIE_MAX_AGE=604800000
 
+# Password Reset
 PASSWORD_RESET_EXPIRES_MINUTES=15
 
-SMTP_HOST=your_smtp_host
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=your_smtp_user
-SMTP_PASSWORD=your_smtp_password
-SMTP_FROM=your_email
+# Email (Resend)
+RESEND_API_KEY=your_resend_api_key
 
+# Cloudinary
 CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ```
 
-Never commit real credentials.
+### Prisma setup:
 
-### Prisma
-
-Generate the Prisma client:
-
-``` bash
+```bash
+# Generate Prisma client
 npx prisma generate
-```
 
-Run local migrations:
-
-``` bash
+# Run migrations
 npx prisma migrate dev
-```
 
-Check migration status:
+# Seed categories
+npm run seed
 
-``` bash
+# Check migration status
 npx prisma migrate status
-```
 
-Apply production migrations:
-
-``` bash
+# Apply migrations to production
 npx prisma migrate deploy
 ```
 
-Seed categories:
+### Start the backend:
 
-``` bash
-npm run seed
-```
-
-### Start Backend
-
-Development:
-
-``` bash
+```bash
+# Development (with hot reload)
 npm run dev
-```
 
-Production:
-
-``` bash
+# Production
 npm start
 ```
 
-Local API:
-
-``` text
-http://localhost:5000/api/v1
-```
+**API Base URL:** `http://localhost:5000/api/v1`
 
 ## Frontend Setup
 
-``` bash
+### Install dependencies:
+
+```bash
 cd frontend
 npm install
 ```
 
-Create:
+### Configure environment variables:
 
-``` text
-frontend/.env
-```
+Create `frontend/.env` file:
 
-Example:
-
-``` env
+```env
+# API
 VITE_API_URL=http://localhost:5000/api/v1
+
+# Google Maps (optional)
+VITE_GOOGLE_MAPS_API_KEY=your_google_maps_key
 ```
 
-Start:
+### Development:
 
-``` bash
+```bash
 npm run dev
 ```
 
-Build:
+Access at `http://localhost:5173`
 
-``` bash
+### Production build:
+
+```bash
 npm run build
+npm run preview
+```
+
+### Linting:
+
+```bash
+npm run lint
 ```
 
 ## API Architecture
 
-The backend follows a modular request flow:
+### Backend Architecture
 
-``` text
-Frontend
-   ↓
-API
-   ↓
-Route
-   ↓
-Middleware
-   ↓
-Controller
-   ↓
-Service
-   ↓
-Prisma
-   ↓
-PostgreSQL
+The backend follows a **modular, layered architecture**:
+
+```
+HTTP Request
+    ↓
+Express Server (src/server.js)
+    ↓
+Routes (src/modules/*/routes.js)
+    ↓
+Middlewares (src/middlewares/)
+    ├─ Auth Middleware
+    ├─ Authorization Middleware
+    ├─ Validation Middleware
+    ├─ Error Handler Middleware
+    └─ Rate Limiting, CORS, Security
+    ↓
+Controllers (src/modules/*/controllers.js)
+    ↓
+Services (src/services/, business logic)
+    ↓
+Prisma ORM
+    ↓
+PostgreSQL Database
 ```
 
-The frontend generally follows:
+**Key Modules:**
+- `auth/` - Authentication, JWT, password management
+- `user/` - User profiles and management
+- `service/` & `service-booking/` - Service listings and bookings
+- `rental/` & `rental-booking/` - Rental management
+- `product/` & `product-booking/` - Marketplace products
+- `space/` & `job/` - Spaces and job listings
+- `community/`, `emergency/` - Community features
+- `notification/` - Email and in-app notifications
+- `points/` - Rewards system
+- `admin/` - Admin operations
+- `review/` - Reviews and ratings
 
-``` text
-Component / Page
-   ↓
-Hook
-   ↓
-API Service
-   ↓
-Backend API
+### Frontend Architecture
+
+```
+Component / Page (React)
+    ↓
+Redux Store (State Management)
+    ↓
+Custom Hooks (src/hooks/)
+    ↓
+API Service (src/api/)
+    ↓
+Axios HTTP Client
+    ↓
+Backend REST API
 ```
 
-This keeps UI, API communication, and business logic separated.
+**Key Layers:**
+- **Pages** - Route-based components
+- **Components** - Reusable UI elements
+- **Redux** - Global state management
+- **Hooks** - Custom logic (useServices, useJobs, etc.)
+- **API Services** - HTTP communication
+- **Context** - Theme and Auth context
 
-## Authentication
+This separation ensures:
+- Clean code organization
+- Reusable components and logic
+- Testable business logic
+- Scalable architecture
 
-The application separates:
+## Authentication & Authorization
 
--   Authentication routes
--   Protected user routes
--   Admin routes
+### JWT Flow
 
-Admin routes require administrator privileges.
+1. **Registration** → User creates account with email/password
+2. **Login** → Backend validates credentials, issues JWT tokens
+3. **Access Token** → Short-lived (15 min) for API requests
+4. **Refresh Token** → Long-lived (7 days) stored in HTTP-only cookies
+5. **Protected Routes** → Verified via `auth.middleware.js`
+6. **Admin Routes** → Additional role check via `admin.middleware.js`
 
-## Location
+### Security Features
 
-Location data can include:
+- Password hashing with bcryptjs
+- JWT tokens with expiration
+- HTTP-only cookies for refresh tokens
+- CORS protection
+- Helmet.js for security headers
+- Rate limiting
+- Request validation with Zod
+- SQL injection protection via Prisma ORM
 
--   City
--   State
--   Postal code
+## Location & Geolocation
 
-Listings can be prioritized according to the user's location so that
-locally relevant content appears first.
+Look@Local prioritizes **local relevance** by leveraging location data:
 
-## Images
+**Location Data:**
+- City, State, Postal Code
+- Google Maps integration for coordinates
+- Distance-based search and filtering
 
-Listing and profile images are handled using Cloudinary. Image URLs are
-stored with the relevant application data instead of storing image files
-directly in PostgreSQL.
+**Features:**
+- Users set their home location during signup
+- Listings sorted by proximity to user
+- Location-based recommendations
+- Emergency requests mapped by area
+- Community posts filtered by locality
 
-## Categories
+## Image Management
 
-Initial categories are defined in:
+### Cloudinary Integration
 
-``` text
-backend/prisma/seed.js
+- **Profile Images** - User avatars and covers
+- **Listing Images** - Services, rentals, products, spaces
+- **Gallery Support** - Multiple images per listing
+- **Optimization** - Automatic resizing and compression
+- **CDN** - Fast global delivery
+
+Images are referenced by Cloudinary URLs stored in PostgreSQL, not embedded as files.
+
+## Categories & Seeding
+
+### Initial Data Setup
+
+Categories are defined in [backend/prisma/seed.js](backend/prisma/seed.js) and include:
+
+**Services:** Electrician, Plumber, Carpenter, Cleaning, Gardening, Appliance Repair
+
+**Rentals:** Tools, Machinery, Vehicles, Electronics, Event Equipment
+
+**Products:** Electronics, Furniture, Appliances, Vehicles, Other
+
+**Jobs:** Skilled Work, Delivery, Sales, Office Work, Part Time
+
+**Spaces:** Shops, Offices, Warehouses
+
+Seed the database:
+
+```bash
+npm run seed
 ```
 
-The seed uses Prisma `upsert`, allowing categories to be inserted or
-updated safely.
+Uses Prisma `upsert` for safe category management.
 
 ## Production Deployment
 
-### Backend --- Render
+### Backend on Render
 
-The backend is deployed on Render.
+Deployed at: **https://lookatlocal-api.onrender.com**
 
-Production API:
+**Configuration:**
+- Root Directory: `backend`
+- Build Command: `npm install && npx prisma generate`
+- Start Command: `npm start`
+- Environment: Production `.env` variables
 
-``` text
-https://lookatlocal-api.onrender.com
-```
-
-Health endpoint:
-
-``` text
-https://lookatlocal-api.onrender.com/api/v1/health
-```
-
-Typical Render configuration:
-
-``` text
-Root Directory: backend
-Build Command: npm install && npx prisma generate
-Start Command: npm start
-```
-
-Production environment variables must be configured in Render.
-
-### Database --- Neon
-
-The production PostgreSQL database is hosted on Neon.
-
-Apply migrations:
-
-``` bash
+**Migrations:**
+```bash
 npx prisma migrate deploy
 ```
 
-### Frontend --- Vercel
+**Health Check:**
+```
+https://lookatlocal-api.onrender.com/api/v1/health
+```
 
-The frontend is deployed on Vercel.
+### Database on Neon
 
-Production API variable:
+PostgreSQL hosted on **Neon** cloud platform.
 
-``` env
+Connection via `DATABASE_URL` in production environment.
+
+### Frontend on Vercel
+
+Deployed at: **https://lookatlocal.vercel.app**
+
+**Build:** `npm run build`
+
+**Environment Variable:**
+```env
 VITE_API_URL=https://lookatlocal-api.onrender.com/api/v1
 ```
 
-## React Router on Vercel
+### SPA Routing Configuration
 
-Look@Local is a React single-page application. Direct access and
-refreshes on routes such as:
+Look@Local is a single-page application with client-side routing.
 
-``` text
-/services
-/rentals
-/products
-/jobs
-/spaces
-/community
-/emergency
-/admin
-/admin/users
-```
+**Vercel Configuration** ([frontend/vercel.json](frontend/vercel.json)):
 
-require Vercel to serve the React entry point.
-
-The frontend contains:
-
-``` text
-frontend/vercel.json
-```
-
-with:
-
-``` json
+```json
 {
   "rewrites": [
     {
@@ -495,6 +539,65 @@ with:
   ]
 }
 ```
+
+This ensures React Router handles all routes (e.g., `/services`, `/jobs`, `/admin`).
+
+## Development Tips
+
+### Environment Setup
+
+1. Copy `.env.example` to `.env` in both `backend/` and `frontend/`
+2. Fill in actual values for secrets and API keys
+3. Never commit `.env` files
+
+### Common Commands
+
+```bash
+# Backend
+cd backend
+npm run dev                    # Start dev server
+npx prisma studio            # Open Prisma Studio
+npm run seed                  # Seed database
+
+# Frontend
+cd frontend
+npm run dev                   # Start dev server
+npm run build                 # Build for production
+npm run lint                  # Run ESLint
+```
+
+### Database Management
+
+```bash
+# View database with GUI
+npx prisma studio
+
+# Create migration
+npx prisma migrate dev --name migration_name
+
+# Reset database (dev only)
+npx prisma migrate reset
+
+# Check migration status
+npx prisma migrate status
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Commit changes: `git commit -m 'Add feature'`
+4. Push to branch: `git push origin feature-name`
+5. Open a Pull Request
+
+## License
+
+ISC License - See LICENSE file for details
+
+## Support
+
+For issues, questions, or contributions, please visit:
+https://github.com/SanathRai33/LookAtLocal
 
 ## Useful Commands
 
