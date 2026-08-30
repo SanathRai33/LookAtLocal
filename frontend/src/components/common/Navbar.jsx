@@ -69,8 +69,6 @@ const Navbar = () => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
-  console.log(user?.unreadNotificationCount)
-
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex justify-center ${isScrolled
       ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-sm'

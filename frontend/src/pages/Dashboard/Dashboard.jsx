@@ -2,7 +2,6 @@ import React from 'react';
 import HeroSection from './components/HeroSection';
 import CategorySection from './components/CategorySection';
 import LatestListings from './components/LatestListings';
-import PopularServices from './components/PopularServices';
 import HowLookAtLocalWorks from './components/HowLookAtLocalWorks';
 import CommunityCTA from './components/CommunityCTA';
 import { usePublicStats } from '../../hooks/usePublicStats';

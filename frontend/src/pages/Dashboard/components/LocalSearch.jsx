@@ -75,7 +75,11 @@ const LocalSearch = () => {
                 <div className="flex items-center flex-1 gap-2 px-3 rounded-xl bg-gray-50">
                     <Search className="w-5 h-5 text-gray-400 shrink-0" />
 
+                    <label htmlFor="module-select" className="sr-only">
+                        Select type
+                    </label>
                     <select
+                        id="module-select"
                         value={selectedModule}
                         onChange={(e) => setSelectedModule(e.target.value)}
                         className="w-full py-3.5 text-sm text-gray-900 bg-transparent outline-none cursor-pointer sm:text-base"
@@ -100,7 +104,11 @@ const LocalSearch = () => {
                         <ChevronDown className="w-5 h-5 text-gray-400 shrink-0" />
                     )}
 
+                    <label htmlFor="category-select" className="sr-only">
+                        Select category
+                    </label>
                     <select
+                        id="category-select"
                         value={selectedCategory}
                         onChange={(e) =>
                             setSelectedCategory(e.target.value)

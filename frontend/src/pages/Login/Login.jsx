@@ -68,14 +68,14 @@ const Login = () => {
             />
 
             <div className="flex items-center gap-4 my-8">
-                <div className="flex-1 h-px bg-gray-200 dark:bg-slate-800" />
+                {/* <div className="flex-1 h-px bg-gray-200 dark:bg-slate-800" />
                 <span className="text-xs text-gray-500 whitespace-nowrap sm:text-sm">
                     or continue with
                 </span>
-                <div className="flex-1 h-px bg-gray-200 dark:bg-slate-800" />
+                <div className="flex-1 h-px bg-gray-200 dark:bg-slate-800" /> */}
             </div>
 
-            <SocialLogin />
+            {/* <SocialLogin /> */}
 
             <p className="mt-8 text-sm text-center text-gray-500 dark:text-gray-400 sm:text-base">
                 Don't have an account?{' '}

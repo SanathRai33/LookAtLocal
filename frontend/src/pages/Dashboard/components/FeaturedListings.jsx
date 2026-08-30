@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronRight, Heart, MapPin, Star } from 'lucide-react';
-import { featuredListings } from '../data/mockData';
+// import { featuredListings } from '../data/mockData';
 
 const FeaturedListings = () => {
     return (

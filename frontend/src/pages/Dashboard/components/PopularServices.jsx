@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronRight, MapPin, Star } from 'lucide-react';
-import { services } from '../data/mockData';
+// import { services } from '../data/mockData';
 
 const PopularServices = () => {
     return (

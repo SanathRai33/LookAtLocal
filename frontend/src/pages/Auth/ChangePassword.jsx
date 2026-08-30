@@ -13,16 +13,6 @@ const ChangePassword = () => {
     const [success, setSuccess] = useState(false);
 
     const handleSubmit = async (formData) => {
-        if (formData.newPassword !== formData.confirmNewPassword) {
-            setError('New passwords do not match');
-            return;
-        }
-
-        if (formData.currentPassword === formData.newPassword) {
-            setError('New password must be different from current password');
-            return;
-        }
-
         setLoading(true);
         setError('');
 
@@ -44,8 +34,6 @@ const ChangePassword = () => {
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950">
             <div className="w-full max-w-3xl px-4 py-6 mx-auto sm:px-6 lg:px-8 lg:py-8">
-
-                {/* Header */}
                 <div className="mb-8">
                     <button
                         onClick={() => navigate('/settings')}
@@ -64,7 +52,6 @@ const ChangePassword = () => {
                     </p>
                 </div>
 
-                {/* Error */}
                 {error && (
                     <div className="flex items-start gap-2 p-3 mb-4 text-sm text-red-600 rounded-lg bg-red-50 dark:bg-red-900/20 dark:text-red-400">
                         <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
@@ -72,7 +59,6 @@ const ChangePassword = () => {
                     </div>
                 )}
 
-                {/* Success */}
                 {success && (
                     <div className="flex items-start gap-2 p-3 mb-4 text-sm rounded-lg text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 dark:text-emerald-400">
                         <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
@@ -86,7 +72,6 @@ const ChangePassword = () => {
                     success={success}
                     onCancel={() => navigate('/settings')}
                 />
-
             </div>
         </div>
     );

@@ -194,7 +194,7 @@ const CommunityCTA = ({ stats, loading }) => {
                         })}
                     </div>
 
-                    <div className="flex flex-col items-center justify-center gap-4 mt-10 text-center">
+                    {/* <div className="flex flex-col items-center justify-center gap-4 mt-10 text-center">
                         <p className="text-sm text-blue-100 sm:text-base">
                             Ready to be part of your local community?
                         </p>
@@ -207,7 +207,7 @@ const CommunityCTA = ({ stats, loading }) => {
                             Join Look@Local
                             <ArrowRight className="w-4 h-4" />
                         </Link>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </section>

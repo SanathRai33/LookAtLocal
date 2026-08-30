@@ -1,6 +1,6 @@
 import React from 'react';
 import { Star } from 'lucide-react';
-import { testimonials } from '../data/mockData';
+// import { testimonials } from '../data/mockData';
 
 const Testimonials = () => {
     return (
