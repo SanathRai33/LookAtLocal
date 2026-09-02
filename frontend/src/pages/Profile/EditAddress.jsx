@@ -335,7 +335,7 @@ const EditAddress = () => {
 
                         <button
                             type="button"
-                            onClick={() => navigate('/profile/edit-address')}
+                            onClick={() => navigate('/profile')}
                             disabled={loading || updateLoading}
                             className="flex h-12 min-w-[140px] items-center justify-center rounded-2xl border border-gray-300 bg-white text-base font-semibold text-gray-700 transition hover:bg-gray-50 disabled:opacity-70 disabled:cursor-not-allowed dark:border-slate-700 dark:bg-slate-900 dark:text-gray-300 dark:hover:bg-slate-800"
                         >

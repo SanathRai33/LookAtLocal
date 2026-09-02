@@ -40,7 +40,7 @@ const CreatePost = () => {
       icon: Package,
       color: 'bg-purple-500',
       hoverColor: 'hover:bg-purple-600',
-      path: '/marketplace/create',
+      path: '/products/create',
     },
     {
       id: 'space',

@@ -25,7 +25,7 @@ const createRateLimiter = ({ windowMs, limit, message }) => {
 
 const apiLimiter = createRateLimiter({
   windowMs: 10 * 60 * 1000,
-  limit: 100,
+  limit: 600,
   message: "Too many requests. Please try again later.",
 });
 

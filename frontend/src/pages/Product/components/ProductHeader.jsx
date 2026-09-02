@@ -89,7 +89,7 @@ const ProductHeader = ({
           </div>
 
           <Link
-            to="/product/create"
+            to="/products/create"
             className="flex items-center justify-center gap-2 px-5 py-2.5 font-medium text-white transition-all duration-200 bg-blue-600 hover:bg-blue-700 rounded-xl hover:shadow-lg hover:shadow-blue-500/25 whitespace-nowrap"
           >
             <Plus className="w-5 h-5" />

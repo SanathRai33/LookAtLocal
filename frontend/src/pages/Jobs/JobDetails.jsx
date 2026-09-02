@@ -172,9 +172,14 @@ const JobDetails = () => {
   const isWithdrawn =
     applicationStatus === 'WITHDRAWN';
 
+  const isDeadlinePassed =
+    job?.applicationDeadline &&
+    new Date(job.applicationDeadline) < new Date();
+
   const canApply =
     !application &&
-    job?.status === 'ACTIVE';
+    job?.status === 'ACTIVE' &&
+    !isDeadlinePassed;
 
   const getApplicationButton = () => {
     if (applicationStatus === 'ACCEPTED') {
@@ -227,6 +232,15 @@ const JobDetails = () => {
         <div className="inline-flex items-center gap-2 px-6 py-3 font-semibold text-gray-700 bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-gray-300">
           <AlertCircle className="w-5 h-5" />
           Application Withdrawn
+        </div>
+      );
+    }
+
+    if (isDeadlinePassed) {
+      return (
+        <div className="inline-flex items-center gap-2 px-6 py-3 font-semibold text-red-700 bg-red-100 rounded-xl dark:bg-red-900/30 dark:text-red-400">
+          <AlertCircle className="w-5 h-5" />
+          Application Deadline Passed
         </div>
       );
     }
@@ -385,13 +399,13 @@ const JobDetails = () => {
 
                     <div className="flex flex-wrap gap-2 mt-2">
                       {job.benefits.split(',').map((benefit, index) => (
-                            <span key={index}
-                              className="text-xs bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-full"
-                            >
-                              {benefit.trim()}
-                            </span>
-                          )
-                        )}
+                        <span key={index}
+                          className="text-xs bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-full"
+                        >
+                          {benefit.trim()}
+                        </span>
+                      )
+                      )}
                     </div>
                   </div>
                 )}
@@ -462,7 +476,7 @@ const JobDetails = () => {
               isPhoneVerified={job.poster?.isPhoneVerified} isEmailVerified={job.poster?.isEmailVerified}
               isTopRated={false} profilePath={`/users/${job.poster?.id}`}
             />
-            <RelatedJobs jobs={job.similarJobs}/>
+            <RelatedJobs jobs={job.similarJobs} />
           </div>
         </div>
       </div>
