@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1',
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1",
   headers: {
-    Accept: 'application/json',
+    Accept: "application/json",
   },
   timeout: 30000,
   withCredentials: true,
@@ -28,7 +28,7 @@ const onRefreshFailed = (error) => {
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -36,7 +36,7 @@ api.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 api.interceptors.response.use(
@@ -44,10 +44,17 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    const isAuthRequest =
+      originalRequest?.url?.includes("/auth/login") ||
+      originalRequest?.url?.includes("/auth/register") ||
+      originalRequest?.url?.includes("/auth/forgot-password") ||
+      originalRequest?.url?.includes("/auth/reset-password") ||
+      originalRequest?.url?.includes("/auth/refresh");
+
     if (
       error.response?.status !== 401 ||
       originalRequest?._retry ||
-      originalRequest?.url?.includes('/auth/refresh')
+      isAuthRequest
     ) {
       return Promise.reject(error);
     }
@@ -71,15 +78,15 @@ api.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      const response = await api.post('/auth/refresh');
+      const response = await api.post("/auth/refresh");
 
       const newAccessToken = response.data?.data?.accessToken;
 
       if (!newAccessToken) {
-        throw new Error('Refresh succeeded but no access token was returned');
+        throw new Error("Refresh succeeded but no access token was returned");
       }
 
-      localStorage.setItem('token', newAccessToken);
+      localStorage.setItem("token", newAccessToken);
 
       onRefreshed(newAccessToken);
 
@@ -89,35 +96,35 @@ api.interceptors.response.use(
     } catch (refreshError) {
       onRefreshFailed(refreshError);
 
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
 
       if (
-        window.location.pathname !== '/login' &&
-        window.location.pathname !== '/register'
+        window.location.pathname !== "/login" &&
+        window.location.pathname !== "/register"
       ) {
-        window.location.href = '/login';
+        window.location.href = "/login";
       }
 
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;
     }
-  }
+  },
 );
 
 export const uploadFile = async (url, file, onProgress) => {
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append("file", file);
 
   const config = {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      "Content-Type": "multipart/form-data",
     },
     onUploadProgress: (progressEvent) => {
       if (onProgress && progressEvent.total) {
         const progress = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total
+          (progressEvent.loaded * 100) / progressEvent.total,
         );
 
         onProgress(progress);
