@@ -159,7 +159,7 @@ const CompleteAddress = () => {
             });
 
             if (result.success) {
-                navigate('/', { replace: true });
+                navigate('/dashboard', { replace: true });
             } else {
                 setError(
                     result.error || 'Failed to save your address. Please try again.',

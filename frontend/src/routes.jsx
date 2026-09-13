@@ -119,6 +119,7 @@ const Categories = React.lazy(() => import('./pages/Admin/Categories'));
 const AdminSettings = React.lazy(() => import('./pages/Admin/AdminSettings'));
 
 // Public Pages
+const Home = React.lazy(() => import('./pages/Home/Home'));
 const Help = React.lazy(() => import('./pages/Public/Help'));
 const Terms = React.lazy(() => import('./pages/Public/Terms'));
 const PrivacyPolicy = React.lazy(() => import('./pages/Public/Privacy'));
@@ -174,7 +175,7 @@ export const routes = [
         element: <MainLayout />,
         children: [
           // Dashboard
-          { path: '/', element: <Dashboard /> },
+          { path: '/dashboard', element: <Dashboard /> },
 
           // User
           { path: '/users/:userId', element: <PublicProfile /> },
@@ -360,6 +361,10 @@ export const routes = [
   },
 
   // Public Routes
+  {
+    path: '/',
+    element: <Home />,
+  },
   {
     path: '/help',
     element: <Help />,

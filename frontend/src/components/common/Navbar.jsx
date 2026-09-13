@@ -66,7 +66,7 @@ const Navbar = () => {
   ];
 
   const isActive = (path) => {
-    return location.pathname === path || location.pathname.startsWith(path + '/');
+    return location.pathname === path || location.pathname.startsWith(path + '/dashboard');
   };
 
   return (

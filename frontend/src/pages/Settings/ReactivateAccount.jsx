@@ -23,7 +23,7 @@ const ReactivateAccount = () => {
 
     useEffect(() => {
         if (user?.status === "ACTIVE") {
-            return navigate('/');
+            return navigate('/dashboard');
         }
     }, [])
 
