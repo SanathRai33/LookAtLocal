@@ -1,10 +1,8 @@
 class ApiResponse {
   static success(
-    res,
-    statusCode = 200,
+    res, statusCode = 200,
     message = "Request successful",
-    data = null,
-    meta = null,
+    data = null, meta = null,
   ) {
     const response = {
       success: true,

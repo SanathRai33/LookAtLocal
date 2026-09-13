@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import * as LucideIcons from 'lucide-react';
 import {
   FolderTree,
   Search,
@@ -46,6 +47,16 @@ const Categories = () => {
     { value: 'SPACE', label: 'Space' },
     { value: 'JOB', label: 'Job' },
   ];
+
+  const renderIcon = (iconName) => {
+    if (!iconName) return '📌';
+    const formattedName = iconName
+      .split('-')
+      ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join('');
+    const IconComponent = LucideIcons[formattedName];
+    return IconComponent ? <IconComponent className="w-4 h-4" /> : <span>{formattedName}</span>;
+  };
 
   useEffect(() => {
     fetchCategories();
@@ -179,7 +190,7 @@ const Categories = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search categories..."
-              className="w-full h-10 pl-9 pr-3 text-sm border border-gray-200 rounded-lg dark:border-slate-700 bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              className="w-full h-10 pr-3 text-sm text-gray-900 border border-gray-200 rounded-lg outline-none pl-9 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
         </form>
@@ -191,7 +202,7 @@ const Categories = () => {
               setFilterModule(e.target.value);
               setPagination(prev => ({ ...prev, page: 1 }));
             }}
-            className="h-10 px-3 text-sm border border-gray-200 rounded-lg dark:border-slate-700 bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+            className="h-10 px-3 text-sm text-gray-900 border border-gray-200 rounded-lg outline-none dark:border-slate-700 bg-gray-50 dark:bg-slate-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
           >
             <option value="">All Modules</option>
             {modules.map((module) => (
@@ -200,7 +211,7 @@ const Categories = () => {
           </select>
           <button
             onClick={fetchCategories}
-            className="flex items-center gap-2 px-4 h-10 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-slate-800 dark:border-slate-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
+            className="flex items-center h-10 gap-2 px-4 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-slate-800 dark:border-slate-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700"
           >
             <RefreshCw className="w-4 h-4" />
             Refresh
@@ -208,7 +219,7 @@ const Categories = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-2xl shadow-sm dark:bg-slate-800">
+      <div className="overflow-x-auto bg-white shadow-sm rounded-2xl dark:bg-slate-800">
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-200 dark:border-slate-700">
@@ -227,7 +238,7 @@ const Categories = () => {
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     {category.icon && (
-                      <span className="text-lg">{category.icon}</span>
+                      <span>{renderIcon(category?.icon)}</span>
                     )}
                     <span className="text-sm font-medium text-gray-900 dark:text-white">{category.name}</span>
                   </div>
@@ -242,11 +253,10 @@ const Categories = () => {
                 <td className="px-4 py-3">
                   <button
                     onClick={() => handleToggleStatus(category.id)}
-                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium transition ${
-                      category.isActive
-                        ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'
-                    }`}
+                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium transition ${category.isActive
+                      ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
+                      : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400'
+                      }`}
                   >
                     {category.isActive ? (
                       <CheckCircle className="w-3 h-3" />
@@ -293,7 +303,7 @@ const Categories = () => {
             <button
               onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
               disabled={pagination.page === 1}
-              className="p-2 rounded-lg border border-gray-200 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-slate-700"
+              className="p-2 border border-gray-200 rounded-lg dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-slate-700"
             >
               <ChevronLeft className="w-4 h-4 text-gray-500" />
             </button>
@@ -303,7 +313,7 @@ const Categories = () => {
             <button
               onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
               disabled={pagination.page === pagination.totalPages}
-              className="p-2 rounded-lg border border-gray-200 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-slate-700"
+              className="p-2 border border-gray-200 rounded-lg dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-slate-700"
             >
               <ChevronRight className="w-4 h-4 text-gray-500" />
             </button>
@@ -342,7 +352,7 @@ const Categories = () => {
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="Category name"
                   required
-                  className="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg dark:border-slate-700 bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full h-10 px-3 text-sm text-gray-900 border border-gray-300 rounded-lg outline-none dark:border-slate-700 bg-gray-50 dark:bg-slate-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
 
@@ -354,7 +364,7 @@ const Categories = () => {
                   onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
                   placeholder="category-slug"
                   required
-                  className="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg dark:border-slate-700 bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full h-10 px-3 text-sm text-gray-900 border border-gray-300 rounded-lg outline-none dark:border-slate-700 bg-gray-50 dark:bg-slate-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
 
@@ -365,7 +375,7 @@ const Categories = () => {
                   value={formData.icon}
                   onChange={(e) => setFormData(prev => ({ ...prev, icon: e.target.value }))}
                   placeholder="📌"
-                  className="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg dark:border-slate-700 bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full h-10 px-3 text-sm text-gray-900 border border-gray-300 rounded-lg outline-none dark:border-slate-700 bg-gray-50 dark:bg-slate-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
 
@@ -374,7 +384,7 @@ const Categories = () => {
                 <select
                   value={formData.module}
                   onChange={(e) => setFormData(prev => ({ ...prev, module: e.target.value }))}
-                  className="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg dark:border-slate-700 bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full h-10 px-3 text-sm text-gray-900 border border-gray-300 rounded-lg outline-none dark:border-slate-700 bg-gray-50 dark:bg-slate-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 >
                   {modules.map((module) => (
                     <option key={module.value} value={module.value}>{module.label}</option>
@@ -389,7 +399,7 @@ const Categories = () => {
                   value={formData.sortOrder}
                   onChange={(e) => setFormData(prev => ({ ...prev, sortOrder: parseInt(e.target.value) || 0 }))}
                   min="0"
-                  className="w-full h-10 px-3 text-sm border border-gray-300 rounded-lg dark:border-slate-700 bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full h-10 px-3 text-sm text-gray-900 border border-gray-300 rounded-lg outline-none dark:border-slate-700 bg-gray-50 dark:bg-slate-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
 
