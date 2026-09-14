@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import Loader from './components/common/Loader';
 import { routes } from './routes';
+import { RouteSEO } from './components/SEO/SEO';
 
 // Component to use routes
 const AppRoutes = () => {
@@ -16,6 +17,7 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
+          <RouteSEO />
           <Suspense fallback={<Loader />}>
             <AppRoutes />
           </Suspense>

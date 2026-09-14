@@ -78,7 +78,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16 gap-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2 group">
+            <Link to='/dashboard' className="flex items-center space-x-2 group">
               <span className="text-2xl font-bold text-transparent bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300 bg-clip-text">
                 Look@Local
               </span>
@@ -173,7 +173,7 @@ const Navbar = () => {
                       </Link>
 
                       <Link
-                        to="/"
+                        to='/dashboard'
                         className="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-200 cursor-pointer dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
                         onClick={() => setIsDropdownOpen(false)}
                       >
@@ -289,7 +289,7 @@ const Navbar = () => {
                 </Link>
 
                 <Link
-                  to="/"
+                  to='/dashboard'
                   className="flex items-center px-4 py-3 text-sm font-medium text-gray-700 transition-all duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 cu"
                 >
                   <Home className="w-5 h-5 mr-3" />

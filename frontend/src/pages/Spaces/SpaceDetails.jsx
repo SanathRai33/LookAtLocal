@@ -19,6 +19,7 @@ import SpaceUnitCard from './components/SpaceUnitCard';
 import ImageCarousel from '../../components/common/ImageCarousel';
 import ProviderCard from '../../components/common/ProviderCard';
 import RelatedSpaces from './components/RelatedSpaces';
+import SEO from '../../components/SEO/SEO';
 
 const SpaceDetails = () => {
   const { spaceId } = useParams();
@@ -135,8 +136,22 @@ const SpaceDetails = () => {
   const hasPhone = !!user?.phone;
 
 
+  const spaceLocation = [space.city, space.state].filter(Boolean).join(', ');
+  const spaceDescription = [
+    space.description,
+    spaceLocation && `Available in ${spaceLocation}.`,
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <>
+      <SEO
+        title={`${space.title}${spaceLocation ? ` in ${spaceLocation}` : ''} - LookAtLocal`}
+        description={spaceDescription || `Explore ${space.title} and other local properties on LookAtLocal.`}
+        canonical={`/spaces/${spaceId}`}
+        image={space.images?.[0]}
+        type="article"
+      />
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
       <div className="max-w-6xl px-4 py-6 mx-auto sm:px-6 lg:px-8 lg:py-8">
         <button
           onClick={() => navigate('/spaces')}
@@ -289,7 +304,8 @@ const SpaceDetails = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

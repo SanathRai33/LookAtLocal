@@ -18,6 +18,7 @@ import SimilarServices from './components/SimilarServices';
 import BookingModal from "./components/BookingModal";
 import { useServiceBooking } from "../../hooks/useServiceBooking";
 import { useAuth } from '../../context/AuthContext';
+import SEO from '../../components/SEO/SEO';
 
 const ServiceDetails = () => {
   const { serviceId } = useParams();
@@ -135,9 +136,22 @@ const ServiceDetails = () => {
 
   const provider = service.provider || {};
   const hasPhone = !!provider?.phone;
+  const serviceLocation = [service.city, service.state].filter(Boolean).join(', ');
+  const serviceDescription = [
+    service.description,
+    serviceLocation && `Available in ${serviceLocation}.`,
+  ].filter(Boolean).join(' ');
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <>
+      <SEO
+        title={`${service.title} Services${serviceLocation ? ` in ${serviceLocation}` : ''} - LookAtLocal`}
+        description={serviceDescription || `Explore ${service.title} and connect with a local provider on LookAtLocal.`}
+        canonical={`/services/${serviceId}`}
+        image={service.images?.[0]}
+        type="article"
+      />
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
       <div className="max-w-6xl px-4 py-6 mx-auto sm:px-6 lg:px-8 lg:py-8">
         <button
           onClick={() => navigate('/services')}
@@ -321,7 +335,8 @@ const ServiceDetails = () => {
       <BookingModal service={service} open={showBookingModal} onClose={() => setShowBookingModal(false)}
         createBooking={createBooking} getAvailability={getAvailability} loading={bookingLoading}
       />
-    </div>
+      </div>
+    </>
   );
 };
 

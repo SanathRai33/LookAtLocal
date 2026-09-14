@@ -22,6 +22,7 @@ import ImageCarousel from '../../components/common/ImageCarousel';
 import ProviderCard from '../../components/common/ProviderCard';
 import RelatedRentals from './components/RelatedRentals';
 import RentalBookingModal from './components/RentalBookingModal';
+import SEO from '../../components/SEO/SEO';
 
 const RentalDetails = () => {
     const { rentalId } = useParams();
@@ -164,8 +165,22 @@ const RentalDetails = () => {
     const hasPhone = !!user?.phone;
     const provider = rental?.owner || {};
 
+    const rentalLocation = [rental.city, rental.state].filter(Boolean).join(', ');
+    const rentalDescription = [
+        rental.description,
+        rentalLocation && `Available in ${rentalLocation}.`,
+    ].filter(Boolean).join(' ');
+
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+        <>
+            <SEO
+                title={`${rental.title}${rentalLocation ? ` in ${rentalLocation}` : ''} - LookAtLocal`}
+                description={rentalDescription || `Explore ${rental.title} for rent on LookAtLocal.`}
+                canonical={`/rentals/${rentalId}`}
+                image={rental.images?.[0]}
+                type="article"
+            />
+            <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
             <div className="max-w-6xl px-4 py-6 mx-auto sm:px-6 lg:px-8 lg:py-8">
                 <button
                     onClick={() => navigate('/rentals')}
@@ -364,7 +379,8 @@ const RentalDetails = () => {
             <RentalBookingModal rental={rental} open={showBookingModal} onClose={() => setShowBookingModal(false)}
                 createBooking={createBooking} getAvailability={getAvailability} loading={bookingLoading}
             />
-        </div>
+            </div>
+        </>
     );
 };
 

@@ -21,6 +21,7 @@ import ImageCarousel from '../../components/common/ImageCarousel';
 import ProviderCard from '../../components/common/ProviderCard';
 import RelatedProducts from './components/RelatedProducts';
 import ProductBookingModal from './components/ProductBookingModal'
+import SEO from '../../components/SEO/SEO';
 
 const ProductDetails = () => {
   const { productId } = useParams();
@@ -194,8 +195,22 @@ const ProductDetails = () => {
   const hasPhone = !!user?.phone;
 
 
+  const productLocation = [product.city, product.state].filter(Boolean).join(', ');
+  const productDescription = [
+    product.description,
+    productLocation && `Available in ${productLocation}.`,
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <>
+      <SEO
+        title={`${product.title}${productLocation ? ` in ${productLocation}` : ''} - LookAtLocal`}
+        description={productDescription || `Discover ${product.title} in the LookAtLocal marketplace.`}
+        canonical={`/products/${productId}`}
+        image={product.images?.[0]}
+        type="product"
+      />
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
       <div className="max-w-6xl px-4 py-6 mx-auto sm:px-6 lg:px-8 lg:py-8">
         <button
           onClick={() => navigate('/products')}
@@ -414,7 +429,8 @@ const ProductDetails = () => {
         createBooking={createBooking}
         loading={bookingLoading}
       />
-    </div>
+      </div>
+    </>
   );
 };
 

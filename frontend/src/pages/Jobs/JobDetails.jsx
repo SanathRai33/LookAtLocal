@@ -23,6 +23,7 @@ import useJobApplication from '../../hooks/useJobApplication';
 import ProviderCard from '../../components/common/ProviderCard';
 import RelatedJobs from './components/RelatedJobs';
 import JobApplicationModal from './components/JobApplicationModal';
+import SEO from '../../components/SEO/SEO';
 
 const JobDetails = () => {
   const { jobId } = useParams();
@@ -304,8 +305,22 @@ const JobDetails = () => {
     );
   }
 
+  const jobLocation = [job.city, job.state].filter(Boolean).join(', ');
+  const jobDescription = [
+    job.description,
+    jobLocation && `Located in ${jobLocation}.`,
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <>
+      <SEO
+        title={`${job.title}${jobLocation ? ` in ${jobLocation}` : ''} - LookAtLocal`}
+        description={jobDescription || `Explore the ${job.title} opportunity on LookAtLocal.`}
+        canonical={`/jobs/${jobId}`}
+        image={job.images?.[0]}
+        type="article"
+      />
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
       <div className="max-w-6xl px-4 py-6 mx-auto sm:px-6 lg:px-8 lg:py-8">
         <button
           onClick={() => navigate('/jobs')}
@@ -488,7 +503,8 @@ const JobDetails = () => {
         onClose={() => setShowApplicationModal(false)}
         onSubmit={handleApplicationSubmit}
       />
-    </div>
+      </div>
+    </>
   );
 };
 
